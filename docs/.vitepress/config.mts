@@ -1,11 +1,13 @@
 import { defineConfig } from 'vitepress'
+import { withMermaid } from 'vitepress-plugin-mermaid'
 
 const blogList = [
   { text: '关于`x-mixed-replace`', link: 'x-mixed-replace' },
+  { text: '`--ff`和`--no-ff`', link: 'ff-and-no-ff' },
 ]
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default withMermaid(defineConfig({
   title: "blog",
   description: "blog",
   themeConfig: {
@@ -31,4 +33,4 @@ export default defineConfig({
       { icon: 'github', link: 'https://github.com/AlanQtten' }
     ]
   }
-})
+}))
