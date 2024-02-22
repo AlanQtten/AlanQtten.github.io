@@ -48,12 +48,14 @@ function refreshIcon(isDark?: boolean) {
 }
 
 export default function iconSetup() {
-  const media = window.matchMedia('(prefers-color-scheme: dark)')
+  if(globalThis && globalThis.matchMedia) {
+    const media = globalThis.matchMedia('(prefers-color-scheme: dark)')
   
-  media.addEventListener('change', e => {
-    refreshIcon(e.matches)
-  })
+    media.addEventListener('change', e => {
+      refreshIcon(e.matches)
+    })
 
-  refreshIcon(media.matches)
+    refreshIcon(media.matches)
+  }
 }
 
