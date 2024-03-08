@@ -5,6 +5,7 @@ const blogList = [
   { text: '关于`x-mixed-replace`', link: 'x-mixed-replace' },
   { text: '`--ff`和`--no-ff`', link: 'ff-and-no-ff' },
   { text: '一个计算器', link: 'a-calculator' },
+  { text: '`import`和`require`', link: 'import-and-require' },
 ]
 
 // https://vitepress.dev/reference/site-config
