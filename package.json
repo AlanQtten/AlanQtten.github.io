@@ -17,6 +17,6 @@
     "vitepress-plugin-mermaid": "^2.0.16"
   },
   "dependencies": {
-    "big.js": "^6.2.1"
+    "simple-calculate": "0.0.3"
   }
 }
