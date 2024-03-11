@@ -51,7 +51,7 @@ import dayjs from "dayjs"
 
 // usage in cjs
 const dayjs = require('dayjs')
-// why not `const { default as dayjs } = require('dayjs')`
+// why not `const { default: dayjs } = require('dayjs')`
 ```
 
 ## dayjs的打包方式
