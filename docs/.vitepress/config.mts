@@ -1,5 +1,6 @@
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
+import markDownItTaskLists from 'markdown-it-task-lists'
 
 const blogList = [
   { text: '关于x-mixed-replace', link: 'x-mixed-replace' },
@@ -35,5 +36,10 @@ export default withMermaid(defineConfig({
     socialLinks: [
       { icon: 'github', link: 'https://github.com/AlanQtten' }
     ]
+  },
+  markdown: {
+    config(md) {
+      md.use(markDownItTaskLists)
+    }
   }
 }))
