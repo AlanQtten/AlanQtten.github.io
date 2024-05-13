@@ -4,6 +4,7 @@ import { withMermaid } from 'vitepress-plugin-mermaid'
 const blogList = [
   { text: '关于`x-mixed-replace`', link: 'x-mixed-replace' },
   { text: '`--ff`和`--no-ff`', link: 'ff-and-no-ff' },
+  { text: '一个计算器', link: 'a-calculator' },
 ]
 
 // https://vitepress.dev/reference/site-config
