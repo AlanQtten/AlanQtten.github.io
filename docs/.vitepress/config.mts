@@ -6,6 +6,7 @@ const blogList = [
   { text: '--ff和--no-ff', link: 'ff-and-no-ff' },
   { text: '一个计算器', link: 'a-calculator' },
   { text: 'import和require', link: 'import-and-require' },
+  { text: '岛', link: 'island' }
 ]
 
 // https://vitepress.dev/reference/site-config
