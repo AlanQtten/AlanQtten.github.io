@@ -2,10 +2,10 @@ import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 
 const blogList = [
-  { text: '关于`x-mixed-replace`', link: 'x-mixed-replace' },
-  { text: '`--ff`和`--no-ff`', link: 'ff-and-no-ff' },
+  { text: '关于x-mixed-replace', link: 'x-mixed-replace' },
+  { text: '--ff和--no-ff', link: 'ff-and-no-ff' },
   { text: '一个计算器', link: 'a-calculator' },
-  { text: '`import`和`require`', link: 'import-and-require' },
+  { text: 'import和require', link: 'import-and-require' },
 ]
 
 // https://vitepress.dev/reference/site-config
