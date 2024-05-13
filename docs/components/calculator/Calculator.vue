@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { defineModel, watch, ref } from 'vue'
-import calc from './calc'
+import { calculate, preCheck } from 'simple-calculate'
 
 const input = defineModel<string>()
 const result = ref()
@@ -40,13 +40,13 @@ watch(input, () => {
     return _str.replaceAll(searchValue, replaceValue)
   }, _inputValue)
 
-  if(!/^[\.()*/+\-\d]+$/.test(_inputValue)) {
+  if(!preCheck(_inputValue)) {
     result.value = '请勿输入特殊字符'
     return
   }
 
   try {
-    result.value = calc(_inputValue)
+    result.value = calculate(_inputValue)
   }catch(error) {
     result.value = ''
   }
