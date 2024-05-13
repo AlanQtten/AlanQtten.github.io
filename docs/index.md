@@ -4,7 +4,7 @@ layout: home
 
 hero:
   name: "blog"
-  tagline: blog
+  tagline: some blog about code & life
 
 ---
 
