@@ -38,7 +38,7 @@ const transformer: ShikiTransformer = {
           type: 'element',
           tagName: 'span',
           properties: {
-            style: 'color: #fff;border: 1px solid #fff;padding: 4px;font-size: 12px;border-radius: 2px;margin-right: 4px'
+            style: 'color: var(--vp-c-text-1);border: 1px solid var(--vp-c-text-1);padding: 4px;font-size: 12px;border-radius: 2px;margin-right: 4px'
           },
           children: [{ type: 'text', value: pushInfo.value }]
         })

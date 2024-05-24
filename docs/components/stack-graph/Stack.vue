@@ -29,8 +29,6 @@ const $props = defineProps<{
   title: string,
   memory: { scopeName: string, stack: { key: string, value: string }[] }[]
 }>()
-
-console.log(typeof $props.memory)
 </script>
 
 <style scoped>
@@ -43,14 +41,14 @@ section {
 }
 
 .title {
-  border: 1px solid #fff;
+  border: 1px solid var(--vp-c-text-1);
   border-radius: 2px;
   padding: 0 8px;
 }
 
 .stack-wrapper {
   padding: 8px;
-  border: 1px dashed #fff;
+  border: 1px dashed var(--vp-c-text-1);
   margin-left: 8px;
 }
 
@@ -64,7 +62,7 @@ section {
   gap: 1px;
 }
 
-.stack-array-value span::after {
+.stack-array-value span:not(:last-child)::after {
   content: '|';
   display: inline-block;
 }
@@ -77,6 +75,6 @@ table {
 
 table td {
   padding: 2px 8px;
-  border: 1px solid #fff;
+  border: 1px solid var(--vp-c-text-1);
 }
 </style>

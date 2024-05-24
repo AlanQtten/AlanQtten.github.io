@@ -44,7 +44,7 @@ export default withMermaid(defineConfig({
       },
 
       '/rust': {
-        base: '/rust',
+        base: '/rust/',
         items: rustList
       }
     },

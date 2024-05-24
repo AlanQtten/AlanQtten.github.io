@@ -1,3 +1,3 @@
-- [ ] `Stack` support light mode
+- [ ] `table` border style bug
 - [ ] `Wrapper` support mobile
 - [ ] never stop learning rust...
