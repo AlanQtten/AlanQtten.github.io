@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import markDownItTaskLists from 'markdown-it-task-lists'
+import transformerFlag from './transformers/transformerFlag'
 
 const blogList = [
   { text: '关于x-mixed-replace', link: 'x-mixed-replace' },
@@ -14,6 +15,10 @@ const projects = [
   { text: "list", link: 'list' }
 ]
 
+const rustList = [
+  { text: '什么是所有权？🚧', link: 'what-is-ownership' },
+]
+
 // https://vitepress.dev/reference/site-config
 export default withMermaid(defineConfig({
   title: "blog",
@@ -22,7 +27,8 @@ export default withMermaid(defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'blog', link: `/blog/${blogList[0].link}`, activeMatch: '/blog/' },
-      { text: "project", link: `/project/${projects[0].link}`, activeMatch: '/project/' }
+      { text: "project", link: `/project/${projects[0].link}`, activeMatch: '/project/' },
+      { text: "rust", link: `/rust/${rustList[0].link}`, activeMatch: '/rust/' }
       // { text: 'Examples', link: '/markdown-examples' }
     ],
 
@@ -36,6 +42,11 @@ export default withMermaid(defineConfig({
           }
         ] 
       },
+
+      '/rust': {
+        base: '/rust',
+        items: rustList
+      }
     },
 
     socialLinks: [
@@ -45,6 +56,9 @@ export default withMermaid(defineConfig({
   markdown: {
     config(md) {
       md.use(markDownItTaskLists)
-    }
+    },
+    codeTransformers: [
+      transformerFlag
+    ]
   }
 }))
