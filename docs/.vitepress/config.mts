@@ -10,6 +10,10 @@ const blogList = [
   { text: '岛', link: 'island' }
 ]
 
+const projects = [
+  { text: "list", link: 'list' }
+]
+
 // https://vitepress.dev/reference/site-config
 export default withMermaid(defineConfig({
   title: "blog",
@@ -18,6 +22,7 @@ export default withMermaid(defineConfig({
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'blog', link: `/blog/${blogList[0].link}`, activeMatch: '/blog/' },
+      { text: "project", link: `/project/${projects[0].link}`, activeMatch: '/project/' }
       // { text: 'Examples', link: '/markdown-examples' }
     ],
 
@@ -30,7 +35,7 @@ export default withMermaid(defineConfig({
             items: blogList
           }
         ] 
-      }
+      },
     },
 
     socialLinks: [
