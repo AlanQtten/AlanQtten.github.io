@@ -1,3 +1,1 @@
-- [ ] `table` border style bug
-- [ ] `Wrapper` support mobile
 - [ ] never stop learning rust...

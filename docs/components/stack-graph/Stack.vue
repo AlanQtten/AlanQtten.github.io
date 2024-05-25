@@ -1,18 +1,18 @@
 <template>
-<section>
-  <span class="title">{{ $props.title }}</span>
+<section :class="$style.section">
+  <span :class="$style.title">{{ $props.title }}</span>
 
-  <div class="stack-wrapper">
+  <div :class="$style.stackWrapper">
     <h6>Stack</h6>
 
-    <div v-for="scope in $props.memory" :key="scope.scopeName" class="stack-scope">
+    <div v-for="scope in $props.memory" :key="scope.scopeName" :class="$style.stackScope">
       <span>{{ scope.scopeName }}</span>
 
-      <table>
+      <table :class="$style.table">
         <tbody>
           <tr v-for="stack in scope.stack" :key="stack.key">
             <td>{{ stack.key }}</td>
-            <td v-if="Array.isArray(stack.value)" class="stack-array-value">
+            <td v-if="Array.isArray(stack.value)" :class="$style.stackArrayValue">
               <span v-for="(value, index) in stack.value" :key="index">{{ value }}</span>
             </td>
             <td v-else>{{ stack.value }}</td>
@@ -31,8 +31,8 @@ const $props = defineProps<{
 }>()
 </script>
 
-<style scoped>
-section {
+<style module>
+.section {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -46,34 +46,29 @@ section {
   padding: 0 8px;
 }
 
-.stack-wrapper {
+.stackWrapper {
   padding: 8px;
   border: 1px dashed var(--vp-c-text-1);
   margin-left: 8px;
 }
 
-.stack-scope {
+.stackScope {
   display: flex;
   flex-direction: column;
 }
 
-.stack-array-value {
-  display: flex;
-  gap: 1px;
-}
-
-.stack-array-value span:not(:last-child)::after {
+.stackArrayValue span:not(:last-child)::after {
   content: '|';
   display: inline-block;
 }
 
-table {
+.table {
   margin: 0;
   width: 100%;
   margin-bottom: 4px;
 }
 
-table td {
+.table td {
   padding: 2px 8px;
   border: 1px solid var(--vp-c-text-1);
 }
