@@ -16,12 +16,15 @@ dependencies:
     version: 0.0.3
 
 devDependencies:
+  '@types/node':
+    specifier: ^20.12.12
+    version: 20.12.12
   mermaid:
     specifier: ^10.9.1
     version: 10.9.1
   vitepress:
     specifier: 1.1.4
-    version: 1.1.4(@algolia/client-search@4.23.3)(search-insights@2.13.0)
+    version: 1.1.4(@algolia/client-search@4.23.3)(@types/node@20.12.12)(search-insights@2.13.0)
   vitepress-plugin-mermaid:
     specifier: ^2.0.16
     version: 2.0.16(mermaid@10.9.1)(vitepress@1.1.4)
@@ -670,6 +673,12 @@ packages:
     resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==}
     dev: true
 
+  /@types/node@20.12.12:
+    resolution: {integrity: sha512-eWLDGF/FOSPtAvEqeRAQ4C8LSA7M1I7i0ky1I8U7kD1J5ITyW3AsRhQrKVoWf5pFKZ2kILsEGJhsI9r93PYnOw==}
+    dependencies:
+      undici-types: 5.26.5
+    dev: true
+
   /@types/unist@2.0.10:
     resolution: {integrity: sha512-IfYcSBWE3hLpBg8+X2SEa8LVkJdJEkT2Ese2aaLs3ptGdVtABxndrMaxuFlQ1qdFf9Q5rDvDpxI3WwgvKFAsQA==}
     dev: true
@@ -684,7 +693,7 @@ packages:
       vite: ^5.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 5.2.11
+      vite: 5.2.11(@types/node@20.12.12)
       vue: 3.4.27
     dev: true
 
@@ -1742,6 +1751,10 @@ packages:
     engines: {node: '>=6.10'}
     dev: true
 
+  /undici-types@5.26.5:
+    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+    dev: true
+
   /unist-util-stringify-position@3.0.3:
     resolution: {integrity: sha512-k5GzIBZ/QatR8N5X2y+drfpWG8IDBzdnVj6OInRNWm1oXrzydiaAT2OQiA8DPRRZyAKb9b6I2a6PxYklZD0gKg==}
     dependencies:
@@ -1764,7 +1777,7 @@ packages:
       sade: 1.8.1
     dev: true
 
-  /vite@5.2.11:
+  /vite@5.2.11(@types/node@20.12.12):
     resolution: {integrity: sha512-HndV31LWW05i1BLPMUCE1B9E9GFbOu1MbenhS58FuK6owSO5qHm7GiCotrNY1YE5rMeQSFBGmT5ZaLEjFizgiQ==}
     engines: {node: ^18.0.0 || >=20.0.0}
     hasBin: true
@@ -1792,6 +1805,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 20.12.12
       esbuild: 0.20.2
       postcss: 8.4.38
       rollup: 4.13.2
@@ -1806,12 +1820,12 @@ packages:
       vitepress: ^1.0.0 || ^1.0.0-alpha
     dependencies:
       mermaid: 10.9.1
-      vitepress: 1.1.4(@algolia/client-search@4.23.3)(search-insights@2.13.0)
+      vitepress: 1.1.4(@algolia/client-search@4.23.3)(@types/node@20.12.12)(search-insights@2.13.0)
     optionalDependencies:
       '@mermaid-js/mermaid-mindmap': 9.3.0
     dev: true
 
-  /vitepress@1.1.4(@algolia/client-search@4.23.3)(search-insights@2.13.0):
+  /vitepress@1.1.4(@algolia/client-search@4.23.3)(@types/node@20.12.12)(search-insights@2.13.0):
     resolution: {integrity: sha512-bWIzFZXpPB6NIDBuWnS20aMADH+FcFKDfQNYFvbOWij03PR29eImTceQHIzCKordjXYBhM/TjE5VKFTUJ3EheA==}
     hasBin: true
     peerDependencies:
@@ -1836,7 +1850,7 @@ packages:
       mark.js: 8.11.1
       minisearch: 6.3.0
       shiki: 1.5.2
-      vite: 5.2.11
+      vite: 5.2.11(@types/node@20.12.12)
       vue: 3.4.27
     transitivePeerDependencies:
       - '@algolia/client-search'

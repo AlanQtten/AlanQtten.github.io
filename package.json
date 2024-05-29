@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^20.12.12",
     "mermaid": "^10.9.1",
     "vitepress": "1.1.4",
     "vitepress-plugin-mermaid": "^2.0.16"

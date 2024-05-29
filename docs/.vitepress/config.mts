@@ -16,8 +16,10 @@ const projects = [
 ]
 
 const rustList = [
-  { text: '什么是所有权？🚧', link: 'what-is-ownership' },
+  { text: '什么是所有权？', link: 'what-is-ownership' },
 ]
+
+type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid(defineConfig({
@@ -28,9 +30,9 @@ export default withMermaid(defineConfig({
     nav: [
       { text: 'blog', link: `/blog/${blogList[0].link}`, activeMatch: '/blog/' },
       { text: "project", link: `/project/${projects[0].link}`, activeMatch: '/project/' },
-      { text: "rust", link: `/rust/${rustList[0].link}`, activeMatch: '/rust/' }
-      // { text: 'Examples', link: '/markdown-examples' }
-    ],
+      { text: "rust", link: `/rust/${rustList[0].link}`, activeMatch: '/rust/' },
+      process.env.NODE_ENV === 'development' && { text: 'playground', link: '/playground' }
+    ].filter(Boolean) as NavItem[],
 
     sidebar: {
       '/blog/': { 

@@ -1,6 +1,12 @@
 <script setup>
 import Stack from '../components/stack-graph/Stack.vue'
 import Wrapper from '../components/stack-graph/Wrapper.vue'
+import Quiz from '../components/quiz/QuizHolder.vue'
+import Radio from '../components/quiz/Radio.vue'
+import Input from '../components/quiz/Input.vue'
+import IsCompile from '../components/quiz/IsCompile.vue'
+import Checkbox from '../components/quiz/Checkbox.vue'
+import CheckboxHolder from '../components/quiz/CheckboxHolder.vue'
 </script>
 
 >（译）
@@ -259,6 +265,668 @@ let b = a; /*[!flag L2]*/
 </Wrapper>
 
 可以看到，复制a到b的行为导致main函数的帧中存放了两百万个元素。
+
+为了在不复制数据的情况下转移其访问权，Rust使用了指针。一个指针就是一个描述内存位置的值。被指针指向的值成为被指值。一个常见的创建指针的方式就是在堆中分配内存。堆是内存中一片分隔开的区域，其中的数据可以无限期地存储。堆数据并不会和某一个栈帧绑定死。Rust提供了一个内置构造函数**Box**来便捷地把数据放入堆。比如，我们可以使用`Box::new`来封装一百万个元素的数据：
+
+<Wrapper>
+
+<template #code>
+
+```rust
+let a = Box::new([0; 1_000_000]); /*[!flag L1]*/
+let b = a; /*[!flag L2]*/
+```
+
+</template>
+
+<template #graph>
+<div style="display: flex;flex-direction: column;gap: 16px;">
+  <Stack
+    title="L1"
+    :memory="[
+      { scopeName: 'main', stack: [{ key: 'a', pointTo: '0' }] }
+    ]"
+    :heap="[
+      { 
+        id: '0',
+        value: [
+          0,0,0,0,0,0,0,0,0,0,0,'...',0
+        ]
+      }
+    ]"
+  />
+
+  <Stack
+    title="L2"
+    :memory="[
+      { 
+        scopeName: 'main', 
+        stack: [
+          { key: 'a', pointTo: '0', moved: true }, 
+          { key: 'b', pointTo: '0' }
+        ] 
+      }
+    ]"
+    :heap="[
+      { 
+        id: '0',
+        value: [
+          0,0,0,0,0,0,0,0,0,0,0,'...',0
+        ]
+      }
+    ]"
+  />
+</div>
+</template>
+
+</Wrapper>
+
+可以观察到，在同一时间，只有一个数组存在。在L1，`a`的值是一个指向堆内数组数据的指针（用点和带箭头的线表示）。`let b = a`这个声明将a的指针复制给了b，但指针指向的数据并没有复制。请注意`a`的样式变淡了因为它被**移动了**，后面我们会讨论这是什么含义。
+
+::: details 小测(2)
+
+<Quiz
+  question="下述哪种说法最准确的描述了栈和堆的不同？"
+  answer="C"
+  description="解析：栈帧是与特定的函数相关联的，当函数结束时会被释放。而堆中的数据可以无限期地存活。注意堆栈中的数据都是可变、可被复制的。堆中也能存储指针（甚至有指向栈的指针，后面我们会看到）。"
+>
+  <template #quiz="{ onChange, value, disabled }">
+    <Radio
+      :value={value}
+      :options="[
+        { key: 'A', message: '栈存储着可复制的数据，堆存储着不可复制的数据', },
+        { key: 'B', message: '栈存储着不可变的数据，堆存储着可变数据', },
+        { key: 'C', message: '栈存储着和某个特定函数关联的数据，堆存储着与函数生命周期无关的数据', },
+        { key: 'D', message: '栈可以存储指向堆的指针，而堆只能存储非指针数据', },
+      ]"
+      :onChange="onChange"
+      :disabled="disabled"
+    />
+  </template>
+</Quiz>
+
+<StrongHr />
+
+<Quiz
+  question="请查看如下代码"
+  answer="2"
+  questionMark="2"
+>
+<template #description>
+
+两个`盒子`存储了两份15，而`let b = a`只复制了堆指针，并没有复制堆中的值。
+
+</template>
+
+<template #quiz="{ onChange, value, disabled }">
+<Wrapper>
+
+<template #code>
+
+```rust
+let a = Box::new(15);
+let b = a;
+let c = Box::new(15); /*[!flag L1]*/
+```
+
+</template>
+
+<template #graph>
+<Stack
+  title="L1"
+  :memory="[
+    { 
+      scopeName: 'main', 
+      stack: [
+        { key: 'a', pointTo: '0', moved: true },
+        { key: 'b', pointTo: '0' },
+        { key: 'c', pointTo: '1' },
+      ] 
+    }
+  ]"
+  :heap="[
+    { id: '0', value: 15 },
+    { id: '1', value: 15 },
+  ]"
+/>
+</template>
+</Wrapper>
+
+<span>最终，内存中有多少份数字15的复制体？用数字表示你的答案，比如0或1</span>
+<Input
+  :value="value"
+  :onChange="onChange"
+  :disabled="disabled"
+/>
+</template>
+</Quiz>
+
+:::
+
+## Rust不允许手动的内存管理
+
+内存管理就是分配和释放内存的过程。或者换句话说，是找到空闲内存和后续归还不再被使用内存的过程。Rust会自动管理栈帧。当一个函数被调用，Rust会为其分配栈帧。当调用结束，Rust会释放栈帧。
+
+正如我们之前看到的，在调用`Box::new(..)`时会分配堆内存。但堆内存是何时被释放的？假设Rust有一个`free()`函数用来释放堆内存，并且允许程序员随时可以调用`free`。这种“手动”的内存管理很容易产生漏洞。比如，读取一个指向被释放内存的指针：
+
+<Wrapper>
+<template #code>
+
+```rust
+let b = Box::new([0; 100]); /*[!flag L1]*/
+free(b); /*[!flag L2]*/
+assert!(b[0] == 0); /*[!flag_error L3]*/
+```
+
+</template>
+
+<template #graph>
+<div style="display: flex;flex-direction: column; gap: 16px;">
+<Stack
+  title="L1"
+  :memory="[
+    { scopeName: 'main', stack: [{ key: 'b', pointTo: '0' }] }
+  ]"
+  :heap="[
+    { 
+      id: '0',
+      value: [
+        0,0,0,0,0,0,0,0,0,0,0,'...',0
+      ]
+    }
+  ]"
+/>
+
+<Stack
+  title="L2"
+  :memory='[
+    { scopeName: "main", stack: [{ key: "b", pointTo: "null", moved: true }] }
+  ]'
+/>
+
+<Stack
+  title="L3"
+  titleError="未定义行为：指针在其指向的对象被释放后被使用"
+  :memory='[
+    { scopeName: "main", stack: [{ key: "b", pointTo: "null_error", moved: true }] }
+  ]'
+/>
+</div>
+</template>
+</Wrapper>
+
+在这里，我们在堆中分配了一个数组。然后调用了`free(b)`，释放了`b`指向的堆内存。因此`b`成了一个空指针，我们用”⦻“来表示。此时还没有未定义行为发生！在L2时，程序仍然是安全的。一个空指针的存在也不是一个问题。
+
+未定义行为发生在我们视图访问b，即读取`b[0]`。这回导致对不可用内存的访问，从而导致程序崩溃。或导致更糟的情况：程序没有崩溃且返回了不相干的随机数据。这样的程序就是**不安全的**。
+
+Rust不允许程序内手动释放内存。这种策略避免了类似上面的未定义行为。
+
+## 内存的释放由拥有者管理
+
+作为替代手段，Rust自动释放堆内存。下面是一条对Rust内存释放策略**几乎**正确的描述：
+
+>（几乎正确的）内存释放原则：如果一个变量和内存绑定，那么当Rust释放变量的栈帧时，Rust会释放堆内存
+
+举个例子，让我们通过下面的程序查看内存的创建和释放
+
+<Wrapper>
+<template #code>
+
+```rust
+fn main() {
+  let a_num = 4; /*[!flag L1]*/
+  make_and_drop(); /*[!flag L3]*/
+}
+
+fn make_and_drop() {
+  let a_box = Box::new(5); /*[!flag L2]*/
+}
+```
+
+</template>
+
+<template #graph>
+<div style="display: flex;flex-direction: column;gap: 16px;">
+<Stack
+  title="L3"
+  :memory="[
+    { scopeName: 'main', stack: [{ key: 'a_num', value: 4 }] }
+  ]"
+/>
+
+<Stack
+  title="L2"
+  :memory="[
+    { scopeName: 'main', stack: [{ key: 'a_num', value: 4}] },
+    { scopeName: 'make_and_drop', stack: [{ key: 'a_box', pointTo: '0' }] }
+  ]"
+  :heap="[
+    { id: '0', value: '5' }
+  ]"
+/>
+
+<Stack
+  title="L3"
+  :memory="[
+    { scopeName: 'main', stack: [{ key: 'a_num', value: 4 }] }
+  ]"
+/>
+</div>
+</template>
+</Wrapper>
+
+在L1，调用`make_and_drop`之前，内存的中只有`main`的栈帧。接着在L2，调用了`make_and_drop`，`a_box`指向了堆中的`5`。当`make_and_drop`完成调用后，Rust释放了它的栈帧。`make_and_drop`包含了变量`a_box`，所以Rust释放了`a_box`指向的堆内存。因此在L3堆已经是空的了。
+
+堆内存被成功的管理了。但如果我们滥用这个机制呢？回到之前的例子，如果我们将两个变量绑定到同一份堆内存上呢？
+
+```rust
+let a = Box::new([0; 1_000_000]);
+let b = a;
+```
+
+堆中的数组被绑定到了`a`和`b`上。根据我们“几乎正确的”原则，Rust会试图释放两次内存（因为有两个变量）。这也是未定义行为！
+
+为了避免这种情况，我们总算讲到了所有权。当`a`被绑定到`Box::new([0; 1_000_000])`时，我们会说`a`**拥有**了内存。而`let b = a`语句将内存的所有权从`a`**移动**到了`b`。综上所述，Rust释放内存的策略可以有一个更精准的描述：
+
+>（完全正确的）内存释放原则：如果一个变量拥有一份内存，当Rust释放这个变量的栈帧时，对应的堆内存也会被释放。
+
+在上面的例子中，`b`持有数组内存的所有权。因此在作用域结束时，Rust只会出于b的原因释放**一次**内存。
+
+## 集合对内存的使用
+
+为了存储一系列的元素，一些Rust内置的数据结构，比如`Vec`、`String`和`HashMap`也会使用堆内存<Thinking>这些数据结构并不是真的使用了`Box`这个函数。比如，`String`用`Vec`实现，而`Vec`则用`VecRaw`实现。但它们和`Box`的相似性很高：它们的数据都放置在堆中</Thinking>。比如，下面是一个创建、移动、修改字符串的例子：
+
+<Wrapper>
+<template #code>
+
+```rust
+fn main() {
+  let first = String::from("Ferris"); /*[!flag L1]*/
+  let full = add_suffix(first); /*[!flag L4]*/
+  println!("{full}");
+}
+
+fn add_suffix(mut name: String) -> String {
+  /*[!flag L2]*/name.push_str(" Jr.");/*[!flag L3]*/
+  name
+}
+```
+
+</template>
+
+<template #graph>
+<div style="display: flex; flex-direction: column; gap: 32px">
+<Stack
+  title="L1"
+  :memory="[
+    { scopeName: 'main', stack: [{ key: 'first', pointTo: '0' }] }
+  ]"
+  :heap="[
+    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] }
+  ]"
+/>
+
+<Stack
+  title="L2"
+  :memory="[
+    { scopeName: 'main', stack: [{ key: 'first', pointTo: '0', moved: true }] },
+    { scopeName: 'add_suffix', stack: [{ key: 'name', pointTo: '0' }] },
+  ]"
+  :heap="[
+    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] }
+  ]"
+/>
+
+<Stack
+  title="L3"
+  :memory="[
+    { scopeName: 'main', stack: [{ key: 'first', pointTo: 'null', moved: true }] },
+    { scopeName: 'add_suffix', stack: [{ key: 'name', pointTo: '0' }] }
+  ]"
+  :heap="[
+    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
+  ]"
+/>
+
+<Stack
+  title="L4"
+  :memory="[
+    { scopeName: 'main', stack: [
+      { key: 'first', pointTo: 'null', moved: true },
+      { key: 'full', pointTo: '0' },
+    ] },
+  ]"
+  :heap="[
+    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
+  ]"
+/>
+</div>
+</template>
+</Wrapper>
+
+这个程序更加深入，请确保跟上每一步：
+
+1. 在L1，字符串”Ferris“被分配了堆内存。`first`拥有它。
+2. 在L2，`add_suffix(first)`函数被调用了。字符串的所有权从`first`移动到了`name`。字符串的内容并没有被复制，但指针被复制了。
+3. 在L3，`name.push_str(" Jr.")`扩展了字符串的堆内空间。这会导致三件事：
+   - 分配了一个新的、更大的内存
+   - ”Ferris Jr.“被写入了新的内存空间
+   - 旧的内存空间被释放了
+4. 在L4，`add_suffix`的栈帧被销毁了。函数返回了`name`，将所有权交给了`full`
+
+## 所有权移动后的变量无法继续使用
+
+前面的程序帮助说明了所有权是如何保证安全的。想象一下如果在调用`add_suffix`后，`first`在`main`函数中被使用了。我们可以模拟一段程序来看看其导致的未定义行为：
+
+<Wrapper>
+<template #code>
+
+```rust
+fn main() {
+  let first = String::from("Ferris");
+  let full = add_suffix(first);
+  println!("{full}, originally {first}"); /*[!flag_error L1]*/ // first 在这里被使用了
+}
+
+fn add_suffix(mut name: String) -> String {
+  name.push_str(" Jr.");
+  name
+}
+```
+
+</template>
+
+<template #graph>
+<Stack
+  title="L1"
+  titleError="未定义行为：指针在其指向的对象被释放后被使用"
+  :memory="[
+    { scopeName: 'main', stack: [
+      { key: 'first', pointTo: 'null_error', moved: true },
+      { key: 'full', pointTo: '0' }
+    ] }
+  ]"
+  :heap="[
+    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
+  ]"
+/>
+</template>
+</Wrapper>
+
+在`add_suffix`调用结束后，`first`指向了被释放的内存。在`println!`中读取`first`因此违反了内存安全（也就成为了未定义行为）。请记住：导致问题的不是`first`指向了被释放的内存，而是试图在`first`无效后还使用它的行为。
+
+谢天谢地的是，Rust会拒绝编译这段程序，并给出如下报错：
+
+```
+error[E0382]: borrow of moved value: `first`
+--> test.rs:4:35
+ |
+2|		let first = String::from("Ferris");
+ |		    ----- move occurs because `first` has type `String`, which does not implement the `Copy` trait
+3|		let full = add_suffix(first);
+ |		                      ----- value moved here
+4|		println!("{full}, originally {first}"); // first 在这里被使用了
+ |		                              ^^^^^ value borrowed here after move
+```
+
+让我们跟随这个错误的脚步。Rust告诉我们在程序第三行调用`add_suffix`时，`first`被移动了。错误信息阐明了`first`被移动的原因是它的类型是`String`，这个类型没有实现`Copy`。我们很快会讨论`Copy`，简而言之，如果你使用`i32`而不是`String`，就不会得到这个错误。最后，错误信息指出在`first`被移动后我们使用了它（错误中说的是”借用“，后面我们会讨论）。
+
+所以如果你移动了一个变量，Rust会阻止你继续使用原始变量。更普遍来说，编译器会坚持以下原则：
+
+> 堆内存移动原则：如果变量`x`把它对堆内存数据有所有权移动到了变量`y`，那么在移动后`x`无法继续被使用。
+
+现在你应该能感觉到所有权、移动和安全之间的联系了。移动堆数据的所有权避免了”读取空指针“这种未定义行为。
+
+## 克隆取代移动
+
+有一种避免移动数据的方式就是克隆它，调用`.clone()`方法，比如，我们可以使用克隆修复前面的程序：
+
+<Wrapper>
+<template #code>
+
+```rust
+fn main() {
+  let first = String::from("Ferris");
+  let first_clone = first.clone(); /*[!flag L1]*/
+  let full = add_suffix(first_clone); /*[!flag L2]*/
+  println!("{full}, originally {first}");
+}
+
+fn add_suffix(mut name: String) -> String {
+  name.push_str(" Jr.");
+  name
+}
+```
+
+</template>
+
+<template #graph>
+<div style="display: flex;flex-direction: column;gap: 32px;">
+<Stack
+  title="L1"
+  :memory="[
+    { scopeName: 'main', stack: [
+      { key: 'first', pointTo: '0' },
+      { key: 'first_clone', pointTo: '1' }
+    ] }
+  ]"
+  :heap="[
+    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] },
+    { id: '1', value: ['F', 'e', 'r', 'r', 'i', 's'] },
+  ]"
+/>
+
+<Stack
+  title="L2"
+  :memory="[
+    { scopeName: 'main', stack: [
+      { key: 'first', pointTo: '0' },
+      { key: 'first_clone', pointTo: 'null', moved: true },
+      { key: 'full', pointTo: '1' }
+    ] }
+  ]"
+  :heap="[
+    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] },
+    { id: '1', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] },
+  ]"
+/>
+</div>
+</template>
+</Wrapper>
+
+可以观察到在L1，`first_clone`并不是”浅“复制了`first`的指针，而是”深“复制了堆内存中的数据。因此在L2，当`first_clone`被移动且被`add_suffix`无效化后，原始的`first`变量并没有被改变。继续使用`first`是安全的。
+
+::: details 小测(4)
+<Quiz
+  question="下面哪一个选项【不是】未定义行为？"
+  answer="A"
+  description="解析：在栈帧中存放一个空指针是完全安全的，重点在于不要使用空指针。（不管是读取还是释放）"
+>
+  <template #quiz="{ onChange, value, disabled }">
+    <Radio
+      :value={value}
+      :options="[
+        { key: 'A', message: '栈帧中存储着一个空指针', },
+        { key: 'B', message: '释放同一片内存两次', },
+        { key: 'C', message: '在if()中使用非bool类型的值', },
+        { key: 'D', message: '使用一个空指针', },
+      ]"
+      :onChange="onChange"
+      :disabled="disabled"
+    />
+  </template>
+</Quiz>
+
+<StrongHr />
+
+<Quiz
+  question="判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。"
+  questionMark="2"
+  :answer="{ compiled: true, compiledResult: 'hello world' }"
+  showingAnswer="编译成功，输出：hello world"
+>
+<template #quiz="{ onChange, value, disabled }">
+
+```rust
+fn add_suffix(mut s: String) -> String {
+  s.push_str(" world");
+  s
+}
+
+fn main() {
+  let s = String::from("hello");
+  let s2 = add_suffix(s);
+  println!("{}", s2);
+}
+```
+
+<IsCompile 
+  :value="value"
+  :onChange="onChange"
+  :disabled="disabled"
+/>
+
+</template>
+</Quiz>
+
+<StrongHr />
+
+<Quiz
+  question="判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。"
+  questionMark="3"
+  :answer="{ compiled: false }"
+  showingAnswer="编译失败"
+  description="解析：变量s在if体里被移动了，所以在第8行使用它是不合法的。尽管在这个程序中，b永远是false，所以if永远不会被执行，但Rust通常不会尝试解析if是否会被执行，只会认为它“可能”会被执行，所以“可能”存在移动。"
+>
+
+<template #quiz="{ onChange, value, disabled }">
+
+```rust
+fn main() {
+  let s = String::from("hello");
+  let s2;
+  let b = false;
+  if b {
+    s2 = s;
+  }
+  println!("{}", s)
+}
+```
+
+<IsCompile 
+  :value="value"
+  :onChange="onChange"
+  :disabled="disabled"
+/>
+
+</template>
+</Quiz>
+
+<StrongHr />
+
+<Quiz
+  question="现有如下函数，移动了堆数据"
+  questionMark="4"
+  :answer="['C', 'D', 'E']"
+  showingAnswer="C,D,E"
+>
+<template #description>
+
+解析：核心概念在于，当堆内存传递给`move_a_box`后，它会在`move_a_box`调用结束后被释放，因此
+
+- 在`move_a_box`调用后试图使用`println`访问`b`是未定义行为，因为它所指向的内存已经被释放了
+- 移动`b`的所有权两次是未定义行为，这会导致Rust重复释放内存。（不管`let b2 = b`在`move_a_box`的前面还是后面）
+
+然而，在`let b2 = b`后进行`println!(b)`并不是未定义行为。尽管`b`被移动了，它所指向的数据还没有被释放，直到`move_a_box`调用结束。因此从技术层面讲这段代码是安全的，但Rust仍会让它编译失败。
+
+</template>
+
+<template #quiz="{ value, onChange, disabled }">
+
+```rust
+fn move_a_box(b: Box<i32>) {
+  // 什么都没有
+}
+```
+
+下面有四个被Rust编译器拒绝的程序，想象一下如果Rust允许这些代码编译通过。请选择哪些代码会导致未定义行为，或选择“都不会”
+
+<div style="display: flex;flex-direction: column;">
+<CheckboxHolder
+  :value="value"
+  :onChange="onChange"
+  :disabled="disabled"
+  name="quiz-411-2-4"
+>
+<Checkbox label="都不会" value="A"/>
+
+<Checkbox value="B">
+
+```rust
+let b = Box::new(0);
+let b2 = b;
+println!("{}", b);
+move_a_box(b2);
+```
+
+</Checkbox>
+
+<Checkbox value="C">
+
+```rust
+let b = Box::new(0);
+let b2 = b;
+move_a_box(b);
+```
+
+</Checkbox>
+
+<Checkbox value="D">
+
+```rust
+let b = Box::new(0);
+move_a_box(b);
+let b2 = b;
+```
+
+</Checkbox>
+
+<Checkbox value="E">
+
+```rust
+let b = Box::new(0);
+move_a_box(b);
+println!("{}", b)
+```
+
+</Checkbox>
+</CheckboxHolder>
+</div>
+
+
+</template>
+</Quiz>
+:::
+
+## 总结
+
+所有权是堆内存管理的主要规则<Thinking>从另一个角度说，所有权也是指针管理的规则。但我们还没有讲解如何创建指向各种地方（而不仅仅是堆数据）的指针，下一节我们会讲到</Thinking>
+
+- 所有的堆数据都必须被**一个**变量拥有
+- 一旦堆数据的拥有者结束了它的生命周期，Rust就会释放这些内存
+- 所有权可以被移动，具体表现为赋值（变量->变量）和函数调用（变量->形参变量）
+- 堆数据只能被当前拥有者访问，过去的拥有者无法访问
+
+我们不仅强调了Rust的保护机制是如何工作的，也强调了为什么要避免未定义行为。当程序没有通过Rust编译器的编译，而你不理解Rust抛出的错误信息，很容易为之变得苦恼。本节讨论的基础概念应该能够帮助你解释Rust的错误信息，帮助你设计更加“Rust风格”的API。
+
+
+
+
+
+
+
+
+
 
 
 
