@@ -144,7 +144,7 @@ fn plus_one(x: i32) -> i32 {
 </template>
 
 <template #graph>
-<div style="display: flex;gap: 32px;">
+<div class="flex gap-8">
   <Stack 
     title="L1"
     :memory="[{ scopeName: 'main', stack: [{ key: 'n', value: 5 }] }]"
@@ -192,7 +192,7 @@ b += 1; /*[!flag L3]*/
 </template>
 
 <template #graph>
-<div style="display: flex;gap: 32px;">
+<div class="flex gap-8">
   <Stack 
     title="L1"
     :memory="[{ scopeName: 'main', stack: [{ key: 'a', value: 5 }] }]"
@@ -230,7 +230,7 @@ let b = a; /*[!flag L2]*/
 </template>
 
 <template #graph>
-<div style="display: flex;flex-direction: column;gap: 16px;">
+<div class="flex flex-col gap-8">
   <Stack 
     title="L1"
     :memory="[{ scopeName: 'main', stack: [
@@ -280,7 +280,7 @@ let b = a; /*[!flag L2]*/
 </template>
 
 <template #graph>
-<div style="display: flex;flex-direction: column;gap: 16px;">
+<div class="flex flex-col gap-8">
   <Stack
     title="L1"
     :memory="[
@@ -421,7 +421,7 @@ assert!(b[0] == 0); /*[!flag_error L3]*/
 </template>
 
 <template #graph>
-<div style="display: flex;flex-direction: column; gap: 16px;">
+<div class="flex flex-col gap-8">
 <Stack
   title="L1"
   :memory="[
@@ -486,7 +486,7 @@ fn make_and_drop() {
 </template>
 
 <template #graph>
-<div style="display: flex;flex-direction: column;gap: 16px;">
+<div class="flex flex-col gap-8">
 <Stack
   title="L3"
   :memory="[
@@ -555,7 +555,7 @@ fn add_suffix(mut name: String) -> String {
 </template>
 
 <template #graph>
-<div style="display: flex; flex-direction: column; gap: 32px">
+<div class="flex flex-col gap-8">
 <Stack
   title="L1"
   :memory="[
@@ -701,7 +701,7 @@ fn add_suffix(mut name: String) -> String {
 </template>
 
 <template #graph>
-<div style="display: flex;flex-direction: column;gap: 32px;">
+<div class="flex flex-col gap-8">
 <Stack
   title="L1"
   :memory="[
@@ -851,7 +851,7 @@ fn move_a_box(b: Box<i32>) {
 
 下面有四个被Rust编译器拒绝的程序，想象一下如果Rust允许这些代码编译通过。请选择哪些代码会导致未定义行为，或选择“都不会”
 
-<div style="display: flex;flex-direction: column;">
+<div class="flex flex-col">
 <CheckboxHolder
   :value="value"
   :onChange="onChange"

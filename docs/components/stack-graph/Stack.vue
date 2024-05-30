@@ -1,16 +1,21 @@
 <template>
 <section>
-  <div :class="$style.titleWrapper">
-    <span :class="[$style.title, titleError && $style.titleError]">{{ title }}</span>
+  <div class="flex gap-2 mb-2">
+    <span 
+      class="border border-aq border-solid px-2 rounded inline-block"
+      :class="titleError && 'bg-aq.error-800'"
+    >
+      {{ title }}
+    </span>
 
-    <span :class="$style.titleErrorMessage" v-if="titleError">{{ titleError }}</span>
+    <span class="text-aq.error-800" v-if="titleError">{{ titleError }}</span>
   </div>
 
-  <div :class="$style.memoryWrapper" ref="wrapper">
-    <div :class="$style.scopeWrapper">
+  <div class="flex items-start gap-16 relative" ref="wrapper">
+    <div class="p-2 border border-aq border-solid ml-2">
       <h6>Stack</h6>
 
-      <div v-for="scope in memory" :key="scope.scopeName" :class="$style.stackScope">
+      <div v-for="scope in memory" :key="scope.scopeName">
         <span>{{ scope.scopeName }}</span>
 
         <table :class="$style.table">
@@ -24,7 +29,7 @@
               </td>
               <td 
                 v-else-if="stack.pointTo" 
-                :class="$style.pointer" 
+                :class="$style.pointer"
                 :ref="el => joinPointer(el, scope, frameIndex)"
               ></td>
               <td v-else-if="Array.isArray(stack.value)" :class="$style.arrayValue">
@@ -38,7 +43,7 @@
     </div>
 
 
-    <div :class="$style.scopeWrapper" v-if="heap?.length">
+    <div class="p-2 border border-aq border-solid ml-2" v-if="heap?.length">
       <h6>Heap</h6>
 
       <table :class="$style.table">
@@ -61,14 +66,14 @@
       >
         <path
           :d="linker.svg.path.d"
-          stroke="var(--vp-c-text-1)"
+          stroke="var(--aq)"
           stroke-width="1"
           fill="none"
         />
 
         <polygon
           points="-8,-5 8,0 -8,5 -5,0" 
-          fill="var(--vp-c-text-1)"
+          fill="var(--aq)"
           :transform="linker.svg.polygon.transform"
         />
       </svg>
@@ -172,46 +177,6 @@ watchEffect(() => {
 </script>
 
 <style module>
-.memoryWrapper {
-  width: auto;
-  display: flex;
-  align-items: flex-start;
-  gap: 64px;
-  position: relative;
-}
-
-.titleWrapper {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.title {
-  border: 1px solid var(--vp-c-text-1);
-  border-radius: 2px;
-  padding: 0 8px;
-  display: inline-block;
-}
-
-.titleError {
-  background-color: var(--aq-error);
-}
-
-.titleErrorMessage {
-  color: var(--aq-error);
-}
-
-.scopeWrapper {
-  padding: 8px;
-  border: 1px dashed var(--vp-c-text-1);
-  margin-left: 8px;
-}
-
-.stackScope {
-  display: flex;
-  flex-direction: column;
-}
-
 .pointer {
   position: relative;
   padding: 0 16px!important;
@@ -221,8 +186,8 @@ watchEffect(() => {
   opacity: 0.3;
   background: repeating-linear-gradient(
     45deg, 
-    var(--vp-c-text-1), 
-    var(--vp-c-text-1) 1px, 
+    var(--aq), 
+    var(--aq) 1px, 
     transparent 1px,
     transparent 10px
   );
@@ -240,7 +205,7 @@ watchEffect(() => {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    border: 2px solid var(--vp-c-text-1);
+    border: 2px solid var(--aq);
     border-radius: 50%;
   }
 
@@ -251,7 +216,7 @@ watchEffect(() => {
     left: 50%;
     width: 2px;
     height: 65%;
-    background-color: var(--vp-c-text-1);
+    background-color: var(--aq);
   }
 
   &::before { transform: translate(-50%, -50%) rotate(45deg); }
@@ -273,7 +238,7 @@ watchEffect(() => {
   content: "";
   width: 8px;
   height: 8px;
-  background-color: var(--vp-c-text-1);
+  background-color: var(--aq);
   border-radius: 50%;
   position: absolute;
   left: 50%;
@@ -293,6 +258,6 @@ watchEffect(() => {
 
 .table td {
   padding: 2px 8px;
-  border: 1px solid var(--vp-c-text-1);
+  border: 1px solid var(--aq);
 }
 </style>

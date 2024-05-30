@@ -1,6 +1,6 @@
 <template>
-  <div :class="$style.optionHolder">
-    <label v-for="option in options" :key="option.key" :class="$style.option">
+  <div class="flex flex-col">
+    <label v-for="option in options" :key="option.key" class="flex items-center">
       <input
         type="radio" 
         :value="option.key" 
@@ -8,6 +8,7 @@
         :checked="value === option.key"
         :name="`radio-${uniqueId}`"
         @change="handleChange"
+        class="m-0 mr-2"
       />
       
       <span>{{ option.key }}. {{ option.message }}</span>
@@ -36,20 +37,3 @@ const handleChange = e => {
 }
 
 </script>
-
-<style module>
-.optionHolder {
-  display: flex;
-  flex-direction: column; 
-}
-
-.option {
-  display: flex;
-  align-items: center;
-}
-
-.option input[type='radio'] {
-  margin: 0;
-  margin-right: 8px;
-}
-</style>

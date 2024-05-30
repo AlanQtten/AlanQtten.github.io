@@ -1,5 +1,5 @@
 <template>
-  <span @click="collapsed = true" v-if="!collapsed" style="cursor: pointer;">🤔</span>
+  <span @click="collapsed = true" v-if="!collapsed" class="cursor-pointer">🤔</span>
 
   <span v-else>（<slot></slot>）</span>
 </template>

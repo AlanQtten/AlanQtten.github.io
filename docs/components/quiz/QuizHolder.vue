@@ -10,7 +10,7 @@
     :disabled="freezeAnswer"
   ></slot>
 
-  <button @click="handleAnswer" :class="$style.mt8">提交</button>
+  <button @click="handleAnswer" class="mt-2">提交</button>
 
   <fragment v-if="freezeAnswer === true">
     <div v-if="isCorrect">
@@ -78,9 +78,3 @@ const isCorrect = computed(() => {
 })
 
 </script>
-
-<style module>
-.mt8 {
-  margin-top: 8px;
-}
-</style>

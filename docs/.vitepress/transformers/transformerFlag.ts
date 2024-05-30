@@ -1,25 +1,27 @@
+// @unocss-include
 import { ShikiTransformer } from 'shiki'
+import cx from 'classnames'
 
 const regexWithStyle = [
   {
     regex: /\/\*\[!flag ([a-zA-Z0-9]+)\]\*\/$/,
-    style: 'color: var(--vp-c-text-1);border: 1px solid var(--vp-c-text-1);padding: 4px;font-size: 12px;border-radius: 2px;margin-right: 4px'
+    className: '!text-aq border border-solid border-aq p-1 text-xs rounded mr-2'
   },
   {
     regex: /\/\*\[!flag_error ([a-zA-Z0-9]+)\]\*\/$/,
-    style: 'color: var(--vp-c-text-1);border: 1px solid var(--vp-c-text-1);padding: 4px;font-size: 12px;border-radius: 2px;margin-right: 4px;background: var(--aq-error);'
+    className: '!text-aq border border-solid border-aq p-1 text-xs rounded mr-2 bg-aq.error-800'
   }
 ]
 
 const matchPipe = (str: string) => {
   let l = regexWithStyle.length
   for(let i = 0; i < l; i++) {
-    let { regex, style } = regexWithStyle[i]
+    let { regex, className } = regexWithStyle[i]
     let match = str.match(regex)
     if(match) {
       return {
         value: match[1],
-        style,
+        className,
         replaceValue: str.replace(regex, ''),
         match: true
       }
@@ -38,12 +40,12 @@ const transformer: ShikiTransformer = {
         return allEle
       }
 
-      let pushInfo: { value: string, style: any } | undefined 
+      let pushInfo: { value: string, className: string } | undefined 
 
       allEle.push({
         ...ele,
         children: ele.children.reduce<any>((subChildren, subEle) => {
-          let { match, value, replaceValue, style } = matchPipe((subEle as any).value)
+          let { match, value, replaceValue, className } = matchPipe((subEle as any).value)
 
           if(match) {
             subChildren.push(
@@ -54,7 +56,7 @@ const transformer: ShikiTransformer = {
             )
             pushInfo = {
               value: value as string,
-              style,
+              className: className as string,
             }
           
           }else {
@@ -67,13 +69,13 @@ const transformer: ShikiTransformer = {
       if(pushInfo) {
         line.properties = {
           ...line.properties,
-          style: `${line.properties.style};line-height: 30px;`
+          class: cx(line.properties.class, 'leading-8')
         }
         allEle.push({
           type: 'element',
           tagName: 'span',
           properties: {
-            style: pushInfo.style
+            className: pushInfo.className
           },
           children: [{ type: 'text', value: pushInfo.value }]
         })

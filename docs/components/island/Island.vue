@@ -1,15 +1,16 @@
 <template>
-<div class="wrapper">
+<div class="pt-4">
 
-  <button class="mb-16 btn" @click="reload">click me to refresh or resize screen to refresh</button>
+  <button class="mb-4" @click="reload">click me to refresh or resize screen to refresh</button>
 
-  <div class="mb-16">There are <span class="island-count">{{ islandCount }}</span> islands here.</div>
+  <div class="mb-4">There are <span class="text-aq.error-900">{{ islandCount }}</span> islands here.</div>
 
-  <div class="map" ref="el">
+  <div class="flex flex-wrap" ref="el">
     <div 
       v-for="(point, index) in map" 
       :key="index" 
       :style="{ backgroundColor: point === 1 ? '#8B7355' : '#1E88E5' }"
+      class="w-[50px] h-[50px]"
     >
     </div>
   </div>
@@ -55,27 +56,3 @@ useResizeObserver(el, entries => {
 })
 
 </script>
-
-<style scoped>
-  .wrapper {
-    padding: 16px 0;
-  }
-
-  .mb-16 {
-    margin-bottom: 16px;
-  }
-
-  .map {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .map div {
-    width: 50px;
-    height: 50px;
-  }
-
-  .island-count {
-    color: #ff0000;
-  }
-</style>

@@ -5,7 +5,7 @@
     @input="handleChange"
     :disabled="disabled"
     placeholder="请输入答案"
-    style="display: block;"
+    class="block"
   />
 </template>
 

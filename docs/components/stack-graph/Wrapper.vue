@@ -1,5 +1,5 @@
 <template>
-  <div :class="$style.wrapper">
+  <div :class="$style.wrapper" class="border-dashed border border-aq p-4">
     <slot name="code" />
 
     <slot name="graph" />
@@ -7,11 +7,6 @@
 </template>
 
 <style module>
-.wrapper {
-  border: 2px dashed var(--vp-c-text-1);
-  padding: 16px;
-}
-
 .wrapper :global(div[class*='language-']) {
   margin: 16px 0;
 }

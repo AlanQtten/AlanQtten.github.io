@@ -2,6 +2,7 @@ import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import markDownItTaskLists from 'markdown-it-task-lists'
 import transformerFlag from './transformers/transformerFlag'
+import UnoCss from 'unocss/vite'
 
 const blogList = [
   { text: '关于x-mixed-replace', link: 'x-mixed-replace' },
@@ -61,6 +62,11 @@ export default withMermaid(defineConfig({
     },
     codeTransformers: [
       transformerFlag
+    ]
+  },
+  vite: {
+    plugins: [
+      UnoCss()
     ]
   }
 }))

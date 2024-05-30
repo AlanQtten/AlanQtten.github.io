@@ -1,5 +1,5 @@
 <template>
-  <label :class="$style.wrapper">
+  <label class="flex items-center gap-4">
     <input 
       type="checkbox" 
       :value="value"
@@ -10,8 +10,10 @@
     />
 
     <span v-if="label">{{ label }}</span>
-    <slot></slot>
-  
+
+    <div class="flex-1">
+      <slot></slot>
+    </div>
   </label>
 </template>
 
@@ -38,15 +40,3 @@ const handleCheckboxChange = e => {
   }
 }
 </script>
-
-<style module>
-.wrapper {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-}
-
-.wrapper :global(div[class*='language-']) {
-  flex: 1;
-}
-</style>

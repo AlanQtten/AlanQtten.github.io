@@ -1,16 +1,15 @@
 <template>
-<div class="wrapper">
+<div class="pt-8">
   <input 
-    class="input"
+    class="w-full text-3xl"
     placeholder="输入算式"
     v-model="input"
   />
 
   <hr />
 
-  <h6>结果:</h6>
-  <span class="result">{{ result }}</span>
-</div>
+  <span>结果: {{ result }}</span>
+</div> 
 </template>
 
 <script setup lang="ts">
@@ -54,20 +53,3 @@ watch(input, () => {
 
 
 </script>
-
-<style scoped>
-  .wrapper {
-    padding: 16px 0;
-  }
-
-  .input {
-    width: 100%;
-    font-size: 32px;
-  }
-
-  .result {
-    height: 24px;
-    display: flex;
-    align-items: center;
-  }
-</style>

@@ -1,3 +1,4 @@
 :root {
+  --aq: var(--vp-c-text-1);
   --aq-error: #ff5151;
 }

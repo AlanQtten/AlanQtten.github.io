@@ -1,7 +1,7 @@
 <template>
-  <div :class="$style.paragraph">
+  <div class="my-4">
     这段程序：
-    <label :class="$style.option">
+    <label class="p-2 border-aq border border-solid rounded">
       <input
         type="radio"
         :name="`radio-${uniqueId}`"
@@ -16,7 +16,7 @@
     
     或
 
-    <label :class="$style.option">
+    <label class="p-2 border-aq border border-solid rounded">
       <input
         type="radio"
         :name="`radio-${uniqueId}`"
@@ -36,7 +36,7 @@
     @input="handleInputChange"
     :disabled="disabled"
     placeholder="请输入编译结果"
-    style="display: block;"
+    class="block"
     v-if="value?.compiled"
   />
 </template>
@@ -69,15 +69,3 @@ const handleInputChange = (e) => {
   props.onChange({ compiled: props.value?.compiled, compiledResult: e.target.value })
 }
 </script>
-
-<style module>
-.paragraph {
-  margin: 16px 0;
-}
-
-.option {
-  padding: 8px;
-  border: 1px solid var(--vp-c-text-1);
-  border-radius: 4px;
-}
-</style>
