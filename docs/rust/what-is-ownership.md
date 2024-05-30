@@ -25,14 +25,14 @@ import CheckboxHolder from '../components/quiz/CheckboxHolder.vue'
 
 ```rust
 fn read(y: bool) {
-  if y {
-    println!("y is true!");
-  }
+    if y {
+        println!("y is true!");
+    }
 }
 
 fn main() {
-  let x = true;
-  read(x);
+    let x = true;
+    read(x);
 }
 ```
 
@@ -40,14 +40,14 @@ fn main() {
 
 ```rust
 fn read(y: bool) {
-  if y {
-    println!("y is true!");
-  }
+    if y {
+        println!("y is true!");
+    }
 }
 
 fn main() {
-  read(x); // 哦不，x没有定义！
-  let x = true;
+    read(x); // 哦不，x没有定义！
+    let x = true;
 }
 ```
 
@@ -131,13 +131,13 @@ Rust提供了一个特别的方式来思考内存。所有权就是这种思考�
 
 ```rust
 fn main() {
-  let n = 5; /*[!flag L1]*/
-  let y = plus_one(n); /*[!flag L3]*/
-  println!("The value of y is {y}");
+    let n = 5; /*[!flag L1]*/
+    let y = plus_one(n); /*[!flag L3]*/
+    println!("The value of y is {y}");
 }
 
 fn plus_one(x: i32) -> i32 {
-  /*[!flag L2]*/x + 1
+    /*[!flag L2]*/x + 1
 }
 ```
 
@@ -474,12 +474,12 @@ Rust不允许程序内手动释放内存。这种策略避免了类似上面的�
 
 ```rust
 fn main() {
-  let a_num = 4; /*[!flag L1]*/
-  make_and_drop(); /*[!flag L3]*/
+    let a_num = 4; /*[!flag L1]*/
+    make_and_drop(); /*[!flag L3]*/
 }
 
 fn make_and_drop() {
-  let a_box = Box::new(5); /*[!flag L2]*/
+    let a_box = Box::new(5); /*[!flag L2]*/
 }
 ```
 
@@ -541,14 +541,14 @@ let b = a;
 
 ```rust
 fn main() {
-  let first = String::from("Ferris"); /*[!flag L1]*/
-  let full = add_suffix(first); /*[!flag L4]*/
-  println!("{full}");
+    let first = String::from("Ferris"); /*[!flag L1]*/
+    let full = add_suffix(first); /*[!flag L4]*/
+    println!("{full}");
 }
 
 fn add_suffix(mut name: String) -> String {
-  /*[!flag L2]*/name.push_str(" Jr.");/*[!flag L3]*/
-  name
+    /*[!flag L2]*/name.push_str(" Jr.");/*[!flag L3]*/
+    name
 }
 ```
 
@@ -623,14 +623,14 @@ fn add_suffix(mut name: String) -> String {
 
 ```rust
 fn main() {
-  let first = String::from("Ferris");
-  let full = add_suffix(first);
-  println!("{full}, originally {first}"); /*[!flag_error L1]*/ // first 在这里被使用了
+    let first = String::from("Ferris");
+    let full = add_suffix(first);
+    println!("{full}, originally {first}"); /*[!flag_error L1]*/ // first 在这里被使用了
 }
 
 fn add_suffix(mut name: String) -> String {
-  name.push_str(" Jr.");
-  name
+    name.push_str(" Jr.");
+    name
 }
 ```
 
@@ -686,15 +686,15 @@ error[E0382]: borrow of moved value: `first`
 
 ```rust
 fn main() {
-  let first = String::from("Ferris");
-  let first_clone = first.clone(); /*[!flag L1]*/
-  let full = add_suffix(first_clone); /*[!flag L2]*/
-  println!("{full}, originally {first}");
+    let first = String::from("Ferris");
+    let first_clone = first.clone(); /*[!flag L1]*/
+    let full = add_suffix(first_clone); /*[!flag L2]*/
+    println!("{full}, originally {first}");
 }
 
 fn add_suffix(mut name: String) -> String {
-  name.push_str(" Jr.");
-  name
+    name.push_str(" Jr.");
+    name
 }
 ```
 
@@ -769,14 +769,14 @@ fn add_suffix(mut name: String) -> String {
 
 ```rust
 fn add_suffix(mut s: String) -> String {
-  s.push_str(" world");
-  s
+    s.push_str(" world");
+    s
 }
 
 fn main() {
-  let s = String::from("hello");
-  let s2 = add_suffix(s);
-  println!("{}", s2);
+    let s = String::from("hello");
+    let s2 = add_suffix(s);
+    println!("{}", s2);
 }
 ```
 
@@ -803,13 +803,13 @@ fn main() {
 
 ```rust
 fn main() {
-  let s = String::from("hello");
-  let s2;
-  let b = false;
-  if b {
-    s2 = s;
-  }
-  println!("{}", s)
+    let s = String::from("hello");
+    let s2;
+    let b = false;
+    if b {
+        s2 = s;
+    }
+    println!("{}", s)
 }
 ```
 
@@ -845,7 +845,7 @@ fn main() {
 
 ```rust
 fn move_a_box(b: Box<i32>) {
-  // 什么都没有
+    // 什么都没有
 }
 ```
 
