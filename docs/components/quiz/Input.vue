@@ -1,22 +1,22 @@
-<template>
-  <input 
-    type="text" 
-    :value="value" 
-    @input="handleChange"
-    :disabled="disabled"
-    placeholder="请输入答案"
-    class="block"
-  />
-</template>
-
 <script setup lang="ts">
 const props = defineProps<{
-  value: any,
-  onChange: (value: string) => void,
+  value: any
+  onChange: (value: string) => void
   disabled: boolean
 }>()
 
-const handleChange = e => {
+function handleChange(e) {
   props.onChange(e.target.value)
 }
 </script>
+
+<template>
+  <input
+    type="text"
+    :value="value"
+    :disabled="disabled"
+    placeholder="请输入答案"
+    class="block"
+    @input="handleChange"
+  >
+</template>

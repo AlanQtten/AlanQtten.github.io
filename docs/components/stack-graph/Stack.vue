@@ -1,101 +1,18 @@
-<template>
-<section>
-  <div class="flex gap-2 mb-2">
-    <span 
-      class="border border-aq border-solid px-2 rounded inline-block"
-      :class="titleError && 'bg-aq.error-800'"
-    >
-      {{ title }}
-    </span>
-
-    <span class="text-aq.error-800" v-if="titleError">{{ titleError }}</span>
-  </div>
-
-  <div class="flex items-start gap-16 relative" ref="wrapper">
-    <div class="p-2 border border-aq border-solid ml-2">
-      <h6>Stack</h6>
-
-      <div v-for="scope in memory" :key="scope.scopeName">
-        <span>{{ scope.scopeName }}</span>
-
-        <table :class="$style.table">
-          <tbody>
-            <tr v-for="(stack, frameIndex) in scope.stack" :key="stack.key" :class="stack.moved && $style.moved">
-              <td>{{ stack.key }}</td>
-              <td v-if="stack.pointTo && stack.pointTo.startsWith('null')">
-                <div :class="[$style.pointToNullValue, stack.pointTo === 'null_error' && $style.pointToNullValueError]">
-                  <div></div>
-                </div>
-              </td>
-              <td 
-                v-else-if="stack.pointTo" 
-                :class="$style.pointer"
-                :ref="el => joinPointer(el, scope, frameIndex)"
-              ></td>
-              <td v-else-if="Array.isArray(stack.value)" :class="$style.arrayValue">
-                <span v-for="(value, index) in stack.value" :key="index">{{ value }}</span>
-              </td>
-              <td v-else>{{ stack.value }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-
-    <div class="p-2 border border-aq border-solid ml-2" v-if="heap?.length">
-      <h6>Heap</h6>
-
-      <table :class="$style.table">
-        <tbody>
-          <tr v-for="(heap, index) in heap" :key="index">
-            <td v-if="Array.isArray(heap.value)" :class="$style.arrayValue" ref="heapBlock">
-              <span v-for="(value, index) in heap.value" :key="index">{{ value }}</span>
-            </td>
-            <td v-else ref="heapBlock">{{ heap.value }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div v-for="(linker, index) in linkers" :key="index" :style="linker.style">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        :width="linker.svg.style.width"
-        :height="linker.svg.style.height"
-      >
-        <path
-          :d="linker.svg.path.d"
-          stroke="var(--aq)"
-          stroke-width="1"
-          fill="none"
-        />
-
-        <polygon
-          points="-8,-5 8,0 -8,5 -5,0" 
-          fill="var(--aq)"
-          :transform="linker.svg.polygon.transform"
-        />
-      </svg>
-    </div>
-  </div>
-</section>
-</template>
-
 <script setup lang="ts">
-import { ref, watchEffect, CSSProperties } from 'vue'
+import type { CSSProperties } from 'vue'
+import { ref, watchEffect } from 'vue'
 
 const $props = defineProps<{
   title: string
   titleError: string
-  memory: { 
-    scopeName: string, 
-    stack: { 
-      key: string, 
-      value: string | string[],
-      pointTo: string,
+  memory: {
+    scopeName: string
+    stack: {
+      key: string
+      value: string | string[]
+      pointTo: string
       moved: boolean
-    }[] 
+    }[]
   }[]
   heap: { id: '0', value: string[] | string }[]
 }>()
@@ -108,25 +25,25 @@ const wrapper = ref()
 const pointer = ref({})
 const heapBlock = ref()
 
-const joinPointer = (el, scope, frameIndex) => {
-  if(!pointer.value[scope.scopeName]) {
+function joinPointer(el, scope, frameIndex) {
+  if (!pointer.value[scope.scopeName]) {
     pointer.value[scope.scopeName] = []
   }
   pointer.value[scope.scopeName][frameIndex] = el
 }
 
-const PX = (str) => `${str}px`
-const validPointTo = (pt) => pt && pt !== 'null' && pt !== 'null_error'
+const PX = str => `${str}px`
+const validPointTo = pt => pt && pt !== 'null' && pt !== 'null_error'
 
 const linkers = ref([])
 watchEffect(() => {
-  if(Object.keys(pointer.value).length && heapBlock.value?.length && wrapper.value) {
-    let _linkers = []
+  if (Object.keys(pointer.value).length && heapBlock.value?.length && wrapper.value) {
+    const _linkers = []
 
     // let frameIndex = 0
-    memory.forEach(_mm => {
+    memory.forEach((_mm) => {
       _mm.stack.forEach((frame, frameIndex) => {
-        if(validPointTo(frame.pointTo)) {
+        if (validPointTo(frame.pointTo)) {
           const start = pointer.value[_mm.scopeName][frameIndex]
           const end = heapBlock.value[frame.pointTo] // TODO: search by id
           const memoryWrapper = wrapper.value
@@ -137,7 +54,7 @@ watchEffect(() => {
 
           const style: CSSProperties = {}
 
-          style.position = 'absolute'; 
+          style.position = 'absolute'
 
           const _width = endRect.left - startRect.left
           const _height = startRect.top - endRect.top + startRect.height
@@ -156,25 +73,112 @@ watchEffect(() => {
             `,
           }
           const svgPolygon = {
-            transform: `translate(${_width - 8} ${endRect.height / 2})`
+            transform: `translate(${_width - 8} ${endRect.height / 2})`,
           }
-          
-          _linkers.push({ 
-            style, 
+
+          _linkers.push({
+            style,
             svg: {
               style: svgStyle,
               path: svgPath,
-              polygon: svgPolygon
-            }
+              polygon: svgPolygon,
+            },
           })
         }
       })
     })
-    
+
     linkers.value = _linkers
   }
 })
 </script>
+
+<template>
+  <section>
+    <div class="flex gap-2 mb-2">
+      <span
+        class="border border-aq border-solid px-2 rounded inline-block"
+        :class="titleError && 'bg-aq.error-800'"
+      >
+        {{ title }}
+      </span>
+
+      <span v-if="titleError" class="text-aq.error-800">{{ titleError }}</span>
+    </div>
+
+    <div ref="wrapper" class="flex items-start gap-16 relative">
+      <div class="p-2 border border-aq border-solid ml-2">
+        <h6>Stack</h6>
+
+        <div v-for="scope in memory" :key="scope.scopeName">
+          <span>{{ scope.scopeName }}</span>
+
+          <table :class="$style.table">
+            <tbody>
+              <tr v-for="(stack, frameIndex) in scope.stack" :key="stack.key" :class="stack.moved && $style.moved">
+                <td>{{ stack.key }}</td>
+                <td v-if="stack.pointTo && stack.pointTo.startsWith('null')">
+                  <div :class="[$style.pointToNullValue, stack.pointTo === 'null_error' && $style.pointToNullValueError]">
+                    <div />
+                  </div>
+                </td>
+                <td
+                  v-else-if="stack.pointTo"
+                  :ref="el => joinPointer(el, scope, frameIndex)"
+                  :class="$style.pointer"
+                />
+                <td v-else-if="Array.isArray(stack.value)" :class="$style.arrayValue">
+                  <span v-for="(value, index) in stack.value" :key="index">{{ value }}</span>
+                </td>
+                <td v-else>
+                  {{ stack.value }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div v-if="heap?.length" class="p-2 border border-aq border-solid ml-2">
+        <h6>Heap</h6>
+
+        <table :class="$style.table">
+          <tbody>
+            <tr v-for="(heap, index) in heap" :key="index">
+              <td v-if="Array.isArray(heap.value)" ref="heapBlock" :class="$style.arrayValue">
+                <span v-for="(value, index) in heap.value" :key="index">{{ value }}</span>
+              </td>
+              <td v-else ref="heapBlock">
+                {{ heap.value }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div v-for="(linker, index) in linkers" :key="index" :style="linker.style">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          :width="linker.svg.style.width"
+          :height="linker.svg.style.height"
+        >
+          <path
+            :d="linker.svg.path.d"
+            stroke="var(--aq)"
+            stroke-width="1"
+            fill="none"
+          />
+
+          <polygon
+            points="-8,-5 8,0 -8,5 -5,0"
+            fill="var(--aq)"
+            :transform="linker.svg.polygon.transform"
+          />
+        </svg>
+      </div>
+    </div>
+  </section>
+</template>
 
 <style module>
 .pointer {
@@ -185,9 +189,9 @@ watchEffect(() => {
 .moved {
   opacity: 0.3;
   background: repeating-linear-gradient(
-    45deg, 
-    var(--aq), 
-    var(--aq) 1px, 
+    45deg,
+    var(--aq),
+    var(--aq) 1px,
     transparent 1px,
     transparent 10px
   );

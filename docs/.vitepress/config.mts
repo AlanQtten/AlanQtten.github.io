@@ -1,19 +1,20 @@
+import process from 'node:process'
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import markDownItTaskLists from 'markdown-it-task-lists'
-import transformerFlag from './transformers/transformerFlag'
 import UnoCss from 'unocss/vite'
+import transformerFlag from './transformers/transformerFlag'
 
 const blogList = [
   { text: '关于x-mixed-replace', link: 'x-mixed-replace' },
   { text: '--ff和--no-ff', link: 'ff-and-no-ff' },
   { text: '一个计算器', link: 'a-calculator' },
   { text: 'import和require', link: 'import-and-require' },
-  { text: '岛', link: 'island' }
+  { text: '岛', link: 'island' },
 ]
 
 const projects = [
-  { text: "list", link: 'list' }
+  { text: 'list', link: 'list' },
 ]
 
 const rustList = [
@@ -24,49 +25,49 @@ type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['theme
 
 // https://vitepress.dev/reference/site-config
 export default withMermaid(defineConfig({
-  title: "blog",
-  description: "blog",
+  title: 'blog',
+  description: 'blog',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'blog', link: `/blog/${blogList[0].link}`, activeMatch: '/blog/' },
-      { text: "project", link: `/project/${projects[0].link}`, activeMatch: '/project/' },
-      { text: "rust", link: `/rust/${rustList[0].link}`, activeMatch: '/rust/' },
-      process.env.NODE_ENV === 'development' && { text: 'playground', link: '/playground' }
+      { text: 'project', link: `/project/${projects[0].link}`, activeMatch: '/project/' },
+      { text: 'rust', link: `/rust/${rustList[0].link}`, activeMatch: '/rust/' },
+      process.env.NODE_ENV === 'development' && { text: 'playground', link: '/playground' },
     ].filter(Boolean) as NavItem[],
 
     sidebar: {
-      '/blog/': { 
-        base: '/blog/', 
+      '/blog/': {
+        base: '/blog/',
         items: [
-          { 
-            text: "2024",
-            items: blogList
-          }
-        ] 
+          {
+            text: '2024',
+            items: blogList,
+          },
+        ],
       },
 
       '/rust': {
         base: '/rust/',
-        items: rustList
-      }
+        items: rustList,
+      },
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/AlanQtten' }
-    ]
+      { icon: 'github', link: 'https://github.com/AlanQtten' },
+    ],
   },
   markdown: {
     config(md) {
       md.use(markDownItTaskLists)
     },
     codeTransformers: [
-      transformerFlag
-    ]
+      transformerFlag,
+    ],
   },
   vite: {
     plugins: [
-      UnoCss()
-    ]
-  }
+      UnoCss(),
+    ],
+  },
 }))

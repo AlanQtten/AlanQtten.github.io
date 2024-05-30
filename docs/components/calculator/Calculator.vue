@@ -1,19 +1,5 @@
-<template>
-<div class="pt-8">
-  <input 
-    class="w-full text-3xl"
-    placeholder="输入算式"
-    v-model="input"
-  />
-
-  <hr />
-
-  <span>结果: {{ result }}</span>
-</div> 
-</template>
-
 <script setup lang="ts">
-import { defineModel, watch, ref } from 'vue'
+import { defineModel, ref, watch } from 'vue'
 import { calculate, preCheck } from 'simple-calculate'
 
 const input = defineModel<string>()
@@ -30,26 +16,39 @@ watch(input, () => {
   // 替换特殊字符
   let _inputValue = input.value
 
-  if(!_inputValue) {
+  if (!_inputValue) {
     result.value = ''
     return
   }
-  
+
   _inputValue = replaceTextList.reduce<string>((_str, [searchValue, replaceValue]) => {
     return _str.replaceAll(searchValue, replaceValue)
   }, _inputValue)
 
-  if(!preCheck(_inputValue)) {
+  if (!preCheck(_inputValue)) {
     result.value = '请勿输入特殊字符'
     return
   }
 
   try {
     result.value = calculate(_inputValue)
-  }catch(error) {
+  }
+  catch (error) {
     result.value = ''
   }
 })
-
-
 </script>
+
+<template>
+  <div class="pt-8">
+    <input
+      v-model="input"
+      class="w-full text-3xl"
+      placeholder="输入算式"
+    >
+
+    <hr>
+
+    <span>结果: {{ result }}</span>
+  </div>
+</template>

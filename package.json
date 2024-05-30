@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@antfu/eslint-config": "^2.19.1",
     "@types/node": "^20.12.12",
+    "eslint": "^9.3.0",
     "mermaid": "^10.9.1",
     "unocss": "^0.60.3",
     "vitepress": "1.1.4",

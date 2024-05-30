@@ -1,19 +1,15 @@
-export const countOfIsland = (
-  map: number[],
-  x: number,
-  y: number
-) => {
+export function countOfIsland(map: number[], x: number, y: number) {
   const grid = Array(y).fill(0).map((zero, index) => {
     return map.slice(index * x, index * x + x)
   })
-  
+
   const spread = (_x: number, _y: number) => {
-    if(
-      _x < 0 ||
-      _y < 0 ||
-      _x > x - 1 || 
-      _y > y - 1 ||
-      grid[_y][_x] === 0
+    if (
+      _x < 0
+      || _y < 0
+      || _x > x - 1
+      || _y > y - 1
+      || grid[_y][_x] === 0
     ) {
       return
     }
@@ -26,10 +22,10 @@ export const countOfIsland = (
   }
 
   let count = 0
-  for(let i = 0; i < y; i ++) {
-    for(let j = 0; j < x; j ++) {
-      if(grid[i][j] === 1) {
-        count ++
+  for (let i = 0; i < y; i++) {
+    for (let j = 0; j < x; j++) {
+      if (grid[i][j] === 1) {
+        count++
         spread(j, i)
       }
     }

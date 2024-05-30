@@ -1,3 +1,1 @@
 - [ ] never stop learning rust...
-- [ ] eslint & prettier
-- [ ] tw or unocss
