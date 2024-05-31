@@ -1,6 +1,6 @@
 <script setup>
-import Stack from '../components/stack-graph/Stack.vue'
-import Wrapper from '../components/stack-graph/Wrapper.vue'
+import MemoryGraph from '../components/memory-graph/MemoryGraph.vue'
+import Wrapper from '../components/memory-graph/Wrapper.vue'
 import Quiz from '../components/quiz/QuizHolder.vue'
 import Radio from '../components/quiz/Radio.vue'
 import Input from '../components/quiz/Input.vue'
@@ -145,22 +145,26 @@ fn plus_one(x: i32) -> i32 {
 
 <template #graph>
 <div class="flex gap-8">
-  <Stack 
+  <MemoryGraph 
     title="L1"
-    :memory="[{ scopeName: 'main', stack: [{ key: 'n', value: 5 }] }]"
+    :memory="{ stack: [{ name: 'main', body: [{ key: 'n', value: 5 }] }]}"
   />
 
-  <Stack 
+  <MemoryGraph 
     title="L2"
-    :memory="[
-      { scopeName: 'main', stack: [{ key: 'n', value: 5 }] },
-      { scopeName: 'plus_one', stack: [{ key: 'x', value: 5 }] },
-    ]"
+    :memory="{
+      stack: [
+        { name: 'main', body: [{ key: 'n', value: 5 }] },
+        { name: 'plus_one', body: [{ key: 'x', value: 5 }] },
+      ]
+    }"
   />
 
-  <Stack 
+  <MemoryGraph 
     title="L1"
-    :memory="[{ scopeName: 'main', stack: [{ key: 'n', value: 5 }, { key: 'y', value: 6 }] }]"
+    :memory="{
+      stack: [{ name: 'main', body: [{ key: 'n', value: 5 }, { key: 'y', value: 6 }] }]
+    }"
   />
 </div>
 </template>
@@ -193,19 +197,32 @@ b += 1; /*[!flag L3]*/
 
 <template #graph>
 <div class="flex gap-8">
-  <Stack 
+  <MemoryGraph 
     title="L1"
-    :memory="[{ scopeName: 'main', stack: [{ key: 'a', value: 5 }] }]"
+    :memory="{
+      stack: [{ name: 'main', body: [{ key: 'a', value: 5 }] }]
+    }"
   />
 
-  <Stack 
+  <MemoryGraph 
     title="L2"
-    :memory="[{ scopeName: 'main', stack: [{ key: 'a', value: 5 }, { key: 'b', value: 5 }] }]"
+    :memory="{
+      stack: [
+        { 
+          name: 'main', 
+          body: [{ key: 'a', value: 5 }, { key: 'b', value: 5 }] 
+        }
+      ]
+    }"
   />
 
-  <Stack 
+  <MemoryGraph 
     title="L3"
-    :memory="[{ scopeName: 'main', stack: [{ key: 'a', value: 5 }, { key: 'b', value: 6 }] }]"
+    :memory="{
+      stack: [
+        { name: 'main', body: [{ key: 'a', value: 5 }, { key: 'b', value: 6 }] }
+      ]
+    }"
   />
 </div>
 </template>
@@ -231,21 +248,21 @@ let b = a; /*[!flag L2]*/
 
 <template #graph>
 <div class="flex flex-col gap-8">
-  <Stack 
+  <MemoryGraph 
     title="L1"
-    :memory="[{ scopeName: 'main', stack: [
+    :memory="{ stack: [{ name: 'main', body: [
       { 
         key: 'a', 
         value: [
           0,0,0,0,0,0,0,0,0,0,0,'...',0
         ] 
       }
-    ] }]"
+    ] }]}"
   />
 
-  <Stack 
+  <MemoryGraph 
     title="L2"
-    :memory="[{ scopeName: 'main', stack: [
+    :memory="{ stack: [{ name: 'main', body: [
       { 
         key: 'a', 
         value: [
@@ -258,7 +275,7 @@ let b = a; /*[!flag L2]*/
           0,0,0,0,0,0,0,0,0,0,0,'...',0
         ] 
       }
-    ] }]"
+    ] }]}"
   />
 </div>
 </template>
@@ -269,7 +286,6 @@ let b = a; /*[!flag L2]*/
 为了在不复制数据的情况下转移其访问权，Rust使用了指针。一个指针就是一个描述内存位置的值。被指针指向的值成为被指值。一个常见的创建指针的方式就是在堆中分配内存。堆是内存中一片分隔开的区域，其中的数据可以无限期地存储。堆数据并不会和某一个栈帧绑定死。Rust提供了一个内置构造函数**Box**来便捷地把数据放入堆。比如，我们可以使用`Box::new`来封装一百万个元素的数据：
 
 <Wrapper>
-
 <template #code>
 
 ```rust
@@ -281,40 +297,44 @@ let b = a; /*[!flag L2]*/
 
 <template #graph>
 <div class="flex flex-col gap-8">
-  <Stack
+  <MemoryGraph
     title="L1"
-    :memory="[
-      { scopeName: 'main', stack: [{ key: 'a', pointTo: '0' }] }
-    ]"
-    :heap="[
-      { 
-        id: '0',
-        value: [
-          0,0,0,0,0,0,0,0,0,0,0,'...',0
-        ]
-      }
-    ]"
+    :memory="{
+      stack: [
+        { name: 'main', body: [{ key: 'a', point2: 0 }] }
+      ],
+      heap: [
+        { 
+          id: 0,
+          value: [
+            0,0,0,0,0,0,0,0,0,0,0,'...',0
+          ]
+        }
+      ]
+    }"
   />
 
-  <Stack
+  <MemoryGraph
     title="L2"
-    :memory="[
-      { 
-        scopeName: 'main', 
-        stack: [
-          { key: 'a', pointTo: '0', moved: true }, 
-          { key: 'b', pointTo: '0' }
-        ] 
-      }
-    ]"
-    :heap="[
-      { 
-        id: '0',
-        value: [
-          0,0,0,0,0,0,0,0,0,0,0,'...',0
-        ]
-      }
-    ]"
+    :memory="{
+      stack: [
+        { 
+          name: 'main', 
+          body: [
+            { key: 'a', point2: 0, moved: true }, 
+            { key: 'b', point2: 0 }
+          ] 
+        }
+      ],
+      heap: [
+        { 
+          id: 0,
+          value: [
+            0,0,0,0,0,0,0,0,0,0,0,'...',0
+          ]
+        }
+      ]
+    }"
   />
 </div>
 </template>
@@ -323,7 +343,7 @@ let b = a; /*[!flag L2]*/
 
 可以观察到，在同一时间，只有一个数组存在。在L1，`a`的值是一个指向堆内数组数据的指针（用点和带箭头的线表示）。`let b = a`这个声明将a的指针复制给了b，但指针指向的数据并没有复制。请注意`a`的样式变淡了因为它被**移动了**，后面我们会讨论这是什么含义。
 
-::: details 小测(2)
+::: details 小测（2）
 
 <Quiz
   question="下述哪种说法最准确的描述了栈和堆的不同？"
@@ -372,22 +392,24 @@ let c = Box::new(15); /*[!flag L1]*/
 </template>
 
 <template #graph>
-<Stack
+<MemoryGraph
   title="L1"
-  :memory="[
-    { 
-      scopeName: 'main', 
-      stack: [
-        { key: 'a', pointTo: '0', moved: true },
-        { key: 'b', pointTo: '0' },
-        { key: 'c', pointTo: '1' },
-      ] 
-    }
-  ]"
-  :heap="[
-    { id: '0', value: 15 },
-    { id: '1', value: 15 },
-  ]"
+  :memory="{
+    stack: [
+      { 
+        name: 'main', 
+        body: [
+          { key: 'a', point2: 0, moved: true },
+          { key: 'b', point2: 0 },
+          { key: 'c', point2: 1 },
+        ] 
+      }
+    ],
+    heap: [
+      { id: 0, value: 15 },
+      { id: 1, value: 15 },
+    ]
+  }"
 />
 </template>
 </Wrapper>
@@ -422,34 +444,36 @@ assert!(b[0] == 0); /*[!flag_error L3]*/
 
 <template #graph>
 <div class="flex flex-col gap-8">
-<Stack
+<MemoryGraph
   title="L1"
-  :memory="[
-    { scopeName: 'main', stack: [{ key: 'b', pointTo: '0' }] }
-  ]"
-  :heap="[
-    { 
-      id: '0',
-      value: [
-        0,0,0,0,0,0,0,0,0,0,0,'...',0
-      ]
-    }
-  ]"
+  :memory="{
+    stack: [
+      { name: 'main', body: [{ key: 'b', point2: 0 }] }
+    ],
+    heap: [
+      { 
+        id: 0,
+        value: [
+          0,0,0,0,0,0,0,0,0,0,0,'...',0
+        ]
+      }
+    ]
+  }"
 />
 
-<Stack
+<MemoryGraph
   title="L2"
-  :memory='[
-    { scopeName: "main", stack: [{ key: "b", pointTo: "null", moved: true }] }
-  ]'
+  :memory='{ stack: [
+    { name: "main", body: [{ key: "b", point2: "null", moved: true }] }
+  ]}'
 />
 
-<Stack
+<MemoryGraph
   title="L3"
-  titleError="未定义行为：指针在其指向的对象被释放后被使用"
-  :memory='[
-    { scopeName: "main", stack: [{ key: "b", pointTo: "null_error", moved: true }] }
-  ]'
+  errorMessage="未定义行为：指针在其指向的对象被释放后被使用"
+  :memory='{ stack: [
+    { name: "main", body: [{ key: "b", point2: "null_error", moved: true }] }
+  ]}'
 />
 </div>
 </template>
@@ -487,29 +511,31 @@ fn make_and_drop() {
 
 <template #graph>
 <div class="flex flex-col gap-8">
-<Stack
+<MemoryGraph
   title="L3"
-  :memory="[
-    { scopeName: 'main', stack: [{ key: 'a_num', value: 4 }] }
-  ]"
+  :memory="{ stack: [
+    { name: 'main', body: [{ key: 'a_num', value: 4 }] }
+  ]}"
 />
 
-<Stack
+<MemoryGraph
   title="L2"
-  :memory="[
-    { scopeName: 'main', stack: [{ key: 'a_num', value: 4}] },
-    { scopeName: 'make_and_drop', stack: [{ key: 'a_box', pointTo: '0' }] }
-  ]"
-  :heap="[
-    { id: '0', value: '5' }
-  ]"
+  :memory="{
+    stack: [
+      { name: 'main', body: [{ key: 'a_num', value: 4 }] },
+      { name: 'make_and_drop', body: [{ key: 'a_box', point2: 0 }] }
+    ],
+    heap: [
+      { id: 0, value: '5' }
+    ]
+  }"
 />
 
-<Stack
+<MemoryGraph
   title="L3"
-  :memory="[
-    { scopeName: 'main', stack: [{ key: 'a_num', value: 4 }] }
-  ]"
+  :memory="{ stack: [
+    { name: 'main', body: [{ key: 'a_num', value: 4 }] }
+  ]}"
 />
 </div>
 </template>
@@ -556,49 +582,57 @@ fn add_suffix(mut name: String) -> String {
 
 <template #graph>
 <div class="flex flex-col gap-8">
-<Stack
+<MemoryGraph
   title="L1"
-  :memory="[
-    { scopeName: 'main', stack: [{ key: 'first', pointTo: '0' }] }
-  ]"
-  :heap="[
-    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] }
-  ]"
+  :memory="{
+    stack: [
+      { name: 'main', stack: [{ key: 'first', point2: 0 }] }
+    ],
+    heap: [
+      { id: 0, value: ['F', 'e', 'r', 'r', 'i', 's'] }
+    ]
+  }"
 />
 
-<Stack
+<MemoryGraph
   title="L2"
-  :memory="[
-    { scopeName: 'main', stack: [{ key: 'first', pointTo: '0', moved: true }] },
-    { scopeName: 'add_suffix', stack: [{ key: 'name', pointTo: '0' }] },
-  ]"
-  :heap="[
-    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] }
-  ]"
+  :memory="{
+    stack: [
+      { name: 'main', body: [{ key: 'first', point2: 0, moved: true }] },
+      { name: 'add_suffix', body: [{ key: 'name', point2: 0 }] },
+    ],
+    heap: [
+      { id: 0, value: ['F', 'e', 'r', 'r', 'i', 's'] }
+    ]
+  }"
 />
 
-<Stack
+<MemoryGraph
   title="L3"
-  :memory="[
-    { scopeName: 'main', stack: [{ key: 'first', pointTo: 'null', moved: true }] },
-    { scopeName: 'add_suffix', stack: [{ key: 'name', pointTo: '0' }] }
-  ]"
-  :heap="[
-    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
-  ]"
+  :memory="{
+    stack: [
+      { name: 'main', body: [{ key: 'first', point2: 'null', moved: true }] },
+      { name: 'add_suffix', body: [{ key: 'name', point2: 0 }] }
+    ],
+    heap: [
+      { id: 0, value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
+    ]
+  }"
 />
 
-<Stack
+<MemoryGraph
   title="L4"
-  :memory="[
-    { scopeName: 'main', stack: [
-      { key: 'first', pointTo: 'null', moved: true },
-      { key: 'full', pointTo: '0' },
-    ] },
-  ]"
-  :heap="[
-    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
-  ]"
+  :memory="{
+    stack: [
+      { name: 'main', body: [
+        { key: 'first', point2: 'null', moved: true },
+        { key: 'full', point2: 0 },
+      ] },
+    ],
+    heap: [
+      { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
+    ]
+  }"
 />
 </div>
 </template>
@@ -637,18 +671,20 @@ fn add_suffix(mut name: String) -> String {
 </template>
 
 <template #graph>
-<Stack
+<MemoryGraph
   title="L1"
-  titleError="未定义行为：指针在其指向的对象被释放后被使用"
-  :memory="[
-    { scopeName: 'main', stack: [
-      { key: 'first', pointTo: 'null_error', moved: true },
-      { key: 'full', pointTo: '0' }
-    ] }
-  ]"
-  :heap="[
-    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
-  ]"
+  errorMessage="未定义行为：指针在其指向的对象被释放后被使用"
+  :memory="{
+    stack: [
+      { name: 'main', body: [
+        { key: 'first', point2: 'null_error', moved: true },
+        { key: 'full', point2: 0 }
+      ] }
+    ],
+    heap: [
+      { id: 0, value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
+    ]
+  }"
 />
 </template>
 </Wrapper>
@@ -702,33 +738,37 @@ fn add_suffix(mut name: String) -> String {
 
 <template #graph>
 <div class="flex flex-col gap-8">
-<Stack
+<MemoryGraph
   title="L1"
-  :memory="[
-    { scopeName: 'main', stack: [
-      { key: 'first', pointTo: '0' },
-      { key: 'first_clone', pointTo: '1' }
-    ] }
-  ]"
-  :heap="[
-    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] },
-    { id: '1', value: ['F', 'e', 'r', 'r', 'i', 's'] },
-  ]"
+  :memory="{
+    stack: [
+      { name: 'main', body: [
+        { key: 'first', point2: 0 },
+        { key: 'first_clone', point2: 1 }
+      ] }
+    ],
+    heap: [
+      { id: 0, value: ['F', 'e', 'r', 'r', 'i', 's'] },
+      { id: 1, value: ['F', 'e', 'r', 'r', 'i', 's'] },
+    ]
+  }"
 />
 
-<Stack
+<MemoryGraph
   title="L2"
-  :memory="[
-    { scopeName: 'main', stack: [
-      { key: 'first', pointTo: '0' },
-      { key: 'first_clone', pointTo: 'null', moved: true },
-      { key: 'full', pointTo: '1' }
-    ] }
-  ]"
-  :heap="[
-    { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] },
-    { id: '1', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] },
-  ]"
+  :memory="{
+    stack: [
+      { name: 'main', body: [
+        { key: 'first', point2: 0 },
+        { key: 'first_clone', point2: 'null', moved: true },
+        { key: 'full', point2: 1 }
+      ] }
+    ],
+    heap: [
+      { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] },
+      { id: '1', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] },
+    ]
+  }"
 />
 </div>
 </template>
@@ -736,7 +776,7 @@ fn add_suffix(mut name: String) -> String {
 
 可以观察到在L1，`first_clone`并不是”浅“复制了`first`的指针，而是”深“复制了堆内存中的数据。因此在L2，当`first_clone`被移动且被`add_suffix`无效化后，原始的`first`变量并没有被改变。继续使用`first`是安全的。
 
-::: details 小测(4)
+::: details 小测（4）
 <Quiz
   question="下面哪一个选项【不是】未定义行为？"
   answer="A"

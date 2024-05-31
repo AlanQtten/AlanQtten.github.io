@@ -5,8 +5,8 @@ const props = defineProps<{
   disabled: boolean
 }>()
 
-function handleChange(e) {
-  props.onChange(e.target.value)
+function handleChange(e: Event) {
+  props.onChange((e.target as HTMLInputElement).value)
 }
 </script>
 

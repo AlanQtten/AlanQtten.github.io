@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import { inject } from 'vue'
+import { inject, ref } from 'vue'
 
 defineProps<{
   label: string
@@ -8,18 +8,26 @@ defineProps<{
 }>()
 
 const name = inject<string>('name')
-const groupValue = inject<Ref<string[]>>('value')
-const onChange = inject<Ref<(v: string[]) => void>>('onChange')
+
+type GroupValue = string[]
+type OnChange = (v: GroupValue) => void
+
+const defaultGroupValue = ref<GroupValue>([])
+const groupValue = inject<Ref<GroupValue>>('value', defaultGroupValue)
+const defaultOnChange = ref<OnChange>(() => {})
+const onChange = inject<Ref<OnChange>>('onChange', defaultOnChange)
 const disabled = inject<boolean>('disabled')
 
-function handleCheckboxChange(e) {
+function handleCheckboxChange(e: Event) {
   const _groupValue = groupValue.value ?? []
 
-  if (_groupValue.includes(e.target.value)) {
-    onChange.value(_groupValue.filter(v => v !== e.target.value))
+  const updateValue = (e.target as HTMLInputElement).value
+
+  if (_groupValue.includes(updateValue)) {
+    onChange.value(_groupValue.filter(v => v !== updateValue))
   }
   else {
-    onChange.value([..._groupValue, e.target.value])
+    onChange.value([..._groupValue, updateValue])
   }
 }
 </script>

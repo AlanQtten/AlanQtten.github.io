@@ -3,10 +3,12 @@ import { computed, ref } from 'vue'
 import objectEqual from '../../utils/object-equal'
 import arrayEqual from '../../utils/array-equal'
 
+type Answer = string | number | object
+
 const { answer } = withDefaults(defineProps<{
   questionMark: number
   question: string
-  answer: string | number | object
+  answer: Answer
   showingAnswer?: string
   description: string
 }>(), {
@@ -22,7 +24,7 @@ function handleAnswer() {
   freezeAnswer.value = true
 }
 
-function onChange(v) {
+function onChange(v: Answer) {
   inputAnswer.value = v
 }
 

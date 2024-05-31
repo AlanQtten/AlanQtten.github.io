@@ -4,7 +4,7 @@ import { onMounted, ref } from 'vue'
 const props = defineProps<{
   options: { key: string | number, message: string }[]
   value: string | number
-  onChange: (e: Event) => void
+  onChange: (v: string) => void
   disabled: boolean
 }>()
 
@@ -14,8 +14,8 @@ onMounted(() => {
   uniqueId.value = new Date().getTime()
 })
 
-function handleChange(e) {
-  props.onChange(e.target.value)
+function handleChange(e: Event) {
+  props.onChange((e.target as HTMLInputElement).value)
 }
 </script>
 

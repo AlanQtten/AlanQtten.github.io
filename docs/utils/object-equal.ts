@@ -1,4 +1,4 @@
-const sorter = (a, b) => a - b
+const sorter = (a: any, b: any) => a - b
 
 function objectEqual(a: any, b: any): boolean {
   if (a === b)

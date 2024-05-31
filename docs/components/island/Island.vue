@@ -7,7 +7,7 @@ import { countOfIsland } from './utils'
 const el = ref(null)
 const x = ref(0)
 const y = ref(0)
-const map = ref([])
+const map = ref<number[]>([])
 
 function reload() {
   map.value = Array(x.value * y.value)

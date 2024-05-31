@@ -17,8 +17,11 @@ const projects = [
   { text: 'list', link: 'list' },
 ]
 
+// 🚧
+
 const rustList = [
   { text: '什么是所有权？', link: 'what-is-ownership' },
+  { text: '引用和借用🚧', link: 'references-and-borrowing' },
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]

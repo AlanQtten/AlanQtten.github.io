@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
-    "lib": ["ESNext"]
+    "lib": ["ESNext", "DOM"],
+    "strict": true
   },
   "include": ["docs"]
 }

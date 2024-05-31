@@ -15,15 +15,15 @@ onMounted(() => {
   uniqueId.value = new Date().getTime()
 })
 
-function handleRadioChange(e) {
-  props.onChange(e.target.value === 'true'
+function handleRadioChange(e: Event) {
+  props.onChange((e.target as HTMLInputElement).value === 'true'
     ? { compiled: true, compiledResult: props.value?.compiledResult }
     : { compiled: false },
   )
 }
 
-function handleInputChange(e) {
-  props.onChange({ compiled: props.value?.compiled, compiledResult: e.target.value })
+function handleInputChange(e: Event) {
+  props.onChange({ compiled: props.value?.compiled, compiledResult: (e.target as HTMLInputElement).value })
 }
 </script>
 
