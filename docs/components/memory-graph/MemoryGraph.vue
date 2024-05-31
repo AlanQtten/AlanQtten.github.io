@@ -84,7 +84,7 @@ watchEffect(() => {
             position: 'absolute',
           }
 
-          if (typeof ele.point2 === 'number' || /^\d+\./.test(ele.point2)) {
+          if (typeof ele.point2 === 'number') {
             const end = heapBlock.value[ele.point2] // TODO: search by id
             const {
               height: eh,
@@ -119,6 +119,52 @@ watchEffect(() => {
             }
             const svgPolygon = {
               transform: `translate(${_width - 8} ${eh / 2})`,
+              style: commonStyle,
+            }
+
+            _linkers.push({
+              style,
+              svg: {
+                style: svgStyle,
+                path: svgPath,
+                polygon: svgPolygon,
+              },
+            })
+          }
+          else if (/^\d+\./.test(ele.point2)) {
+            const [targetHeap, targetHeapIndex] = ele.point2.split('.').map(Number)
+
+            const end = heapBlock.value[targetHeap].children[targetHeapIndex - 1] // TODO: search by id
+            const {
+              width: ew,
+              height: eh,
+              left: el,
+              top: et,
+            } = end.getBoundingClientRect()
+
+            const _width = el - sl + ew
+            const _height = st - et + sh
+
+            style.width = PX(_width)
+            style.height = PX(_height)
+            style.left = PX(sl - wl)
+            style.top = PX(et - wt)
+
+            const svgStyle = { width: _width, height: _height }
+            const gapX = el - sl - sw
+
+            const commonStyle = ele.moved ? { opacity: 0.3 } : {}
+
+            const svgPath = {
+              d: `
+                M ${sw / 2} ${_height - sh / 2}  
+                Q ${sw + gapX * 0.25} ${_height} ${sw + gapX * 0.65} ${_height * 0.8}
+                T ${_width - ew / 2} ${eh} 
+              `,
+              style: commonStyle,
+            }
+            const svgPolygon = {
+              transform: `translate(${_width - ew / 2} ${eh + 4}) rotate(-90)`,
               style: commonStyle,
             }
 

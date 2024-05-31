@@ -511,7 +511,7 @@ println!("Third element is {}", *num); /*[!flag_error L3]*/
     stack: [
       { name: 'main', body: [
         { key: 'v', point2: 0 },
-        { key: 'num', point2: 0 },
+        { key: 'num', point2: '0.3' },
       ] }
     ],
     heap: [
