@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 
-interface Value { compiled: boolean, compiledResult?: string }
+interface Value { compiled?: boolean, compiledResult?: string }
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   value: Value
   onChange: (v: Value) => void
-  disabled: boolean
-}>()
+  disabled?: boolean
+}>(), {
+  value: () => ({ compiled: undefined, compiledResult: undefined }),
+})
 
 const uniqueId = ref()
 

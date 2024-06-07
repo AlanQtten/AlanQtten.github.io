@@ -1,9 +1,9 @@
 :root {
-  --aq-op-0: var(--vp-c-text-1);
+  --aq-fill: var(--vp-c-text-1);
   --aq: var(--vp-c-text-1);
   --aq-error: #ff5151;
 }
 
 .dark {
-  --aq-op-0: rgb(255, 255, 245);
+  --aq-fill: rgb(255, 255, 245);
 }

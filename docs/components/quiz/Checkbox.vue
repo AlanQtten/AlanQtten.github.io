@@ -3,7 +3,7 @@ import type { Ref } from 'vue'
 import { inject, ref } from 'vue'
 
 defineProps<{
-  label: string
+  label?: string
   value: string
 }>()
 

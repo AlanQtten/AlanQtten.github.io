@@ -2,7 +2,7 @@
 const props = defineProps<{
   value: any
   onChange: (value: string) => void
-  disabled: boolean
+  disabled?: boolean
 }>()
 
 function handleChange(e: Event) {

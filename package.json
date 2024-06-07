@@ -6,19 +6,22 @@
   "packageManager": "pnpm@8.15.4",
   "scripts": {
     "dev": "vitepress dev docs",
-    "build": "vitepress build docs"
+    "build": "vitepress build docs",
+    "test": "vitest"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@antfu/eslint-config": "^2.19.1",
+    "@iconify-json/material-symbols": "^1.1.81",
     "@types/node": "^20.12.12",
     "eslint": "^9.3.0",
     "mermaid": "^10.9.1",
     "unocss": "^0.60.3",
     "vitepress": "1.1.4",
-    "vitepress-plugin-mermaid": "^2.0.16"
+    "vitepress-plugin-mermaid": "^2.0.16",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "@vueuse/core": "^10.9.0",

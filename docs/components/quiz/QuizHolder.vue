@@ -6,11 +6,11 @@ import arrayEqual from '../../utils/array-equal'
 type Answer = string | number | object
 
 const { answer } = withDefaults(defineProps<{
-  questionMark: number
+  questionMark?: number | string
   question: string
   answer: Answer
   showingAnswer?: string
-  description: string
+  description?: string
 }>(), {
   questionMark: 1,
 })
@@ -66,7 +66,7 @@ const isCorrect = computed(() => {
     提交
   </button>
 
-  <fragment v-if="freezeAnswer === true">
+  <template v-if="freezeAnswer === true">
     <div v-if="isCorrect">
       <span>回答正确</span>
     </div>
@@ -82,5 +82,5 @@ const isCorrect = computed(() => {
     <p v-else>
       {{ description }}
     </p>
-  </fragment>
+  </template>
 </template>

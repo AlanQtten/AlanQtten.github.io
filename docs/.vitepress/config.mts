@@ -21,7 +21,7 @@ const projects = [
 
 const rustList = [
   { text: '什么是所有权？', link: 'what-is-ownership' },
-  { text: '引用和借用🚧', link: 'references-and-borrowing' },
+  { text: '引用和借用', link: 'references-and-borrowing' },
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
@@ -36,7 +36,7 @@ export default withMermaid(defineConfig({
       { text: 'blog', link: `/blog/${blogList[0].link}`, activeMatch: '/blog/' },
       { text: 'project', link: `/project/${projects[0].link}`, activeMatch: '/project/' },
       { text: 'rust', link: `/rust/${rustList[0].link}`, activeMatch: '/rust/' },
-      process.env.NODE_ENV === 'development' && { text: 'playground', link: '/playground' },
+      process.env.NODE_ENV !== 'production' && { text: 'playground', link: '/playground/playground' },
     ].filter(Boolean) as NavItem[],
 
     sidebar: {

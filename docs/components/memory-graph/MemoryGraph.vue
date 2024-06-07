@@ -55,8 +55,9 @@ const {
 const wrapper = ref()
 const pointer = ref<Record<string, HTMLElement[]>>({})
 const heapBlock = ref()
-const detailMode = inject<Ref<boolean>>('detailMode')
 const linkers = ref<Linker[]>([])
+
+const detailMode = inject<Ref<boolean>>('detailMode', ref(false))
 
 function joinPointer(el: HTMLElement, frameName: string, frameIndex: number) {
   if (!pointer.value[frameName]) {
@@ -398,14 +399,14 @@ watchEffect(() => {
           <path
             :d="linker.svg.path.d"
             :style="linker.svg.path.style"
-            class="stroke-aq.op0"
+            class="stroke-aq.fill"
             stroke-width="1"
             fill="none"
           />
 
           <polygon
             points="-8,-5 8,0 -8,5 -5,0"
-            class="fill-aq.op0"
+            class="fill-aq.fill"
             :transform="linker.svg.polygon.transform"
             :style="linker.svg.polygon.style"
           />

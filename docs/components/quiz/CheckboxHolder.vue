@@ -2,9 +2,9 @@
 import { provide, toRefs } from 'vue'
 
 const props = defineProps<{
-  value: string[]
+  value?: string[]
   onChange: (v: string[]) => void
-  disabled: boolean
+  disabled?: boolean
   name: string
 }>()
 

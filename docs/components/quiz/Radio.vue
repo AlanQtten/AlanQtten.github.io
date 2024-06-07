@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import type { Ref } from 'vue'
+import { onMounted, ref, toRefs } from 'vue'
 
 const props = defineProps<{
   options: { key: string | number, message: string }[]
-  value: string | number
+  value: Ref<string | number>
   onChange: (v: string) => void
-  disabled: boolean
+  disabled?: boolean
 }>()
+
+const { value } = toRefs(props)
 
 const uniqueId = ref()
 
