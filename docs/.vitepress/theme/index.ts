@@ -6,6 +6,7 @@ import Thinking from '../../components/thinking/Thinking.vue'
 import iconSetup from './icon'
 
 import './global-var.css'
+import './global-style.css'
 import 'virtual:uno.css'
 
 /** @type {import('vitepress').Theme} */

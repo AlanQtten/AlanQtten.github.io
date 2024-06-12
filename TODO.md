@@ -3,7 +3,5 @@
 
 ---
 quiz related refactor
-- [ ] remove `questionMark` prop and replace with <QuizProvider /> or <QuizArea />
-- [ ] refactor <Radio /> with <RadioGroup /> and <Radio />
-- [ ] support auto generate <StrongHr /> between quiz
+- [ ] remove `question` prop, move all body into #quiz
 - [ ] auto generate more `showing answer`

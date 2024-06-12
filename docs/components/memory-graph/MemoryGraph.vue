@@ -4,22 +4,19 @@ import { inject, ref, watchEffect } from 'vue'
 import findElementAndIndex from '../../utils/findElementAndIndex'
 import type { Detail } from './UnwrapPointer.vue'
 import UnwrapPointer from './UnwrapPointer.vue'
+import { LineType, line } from './line'
 
-export type Point2 = 'null' | 'null_error' | number | string
+export type Point2 = 'null' | 'null_error' | number | string | number[]
 interface Linker {
   style: CSSProperties
-  svg: {
-    style: CSSProperties
-    path: {
-      d: string
-      style?: CSSProperties
-    }
-    polygon: {
-      transform: string
-      style?: CSSProperties
-    }
+  path: {
+    d: string
+    style?: CSSProperties
   }
-
+  polygon: {
+    transform: string
+    style?: CSSProperties
+  }
 }
 interface Frame {
   name: string
@@ -66,115 +63,55 @@ function joinPointer(el: HTMLElement, frameName: string, frameIndex: number) {
   pointer.value[frameName][frameIndex] = el
 }
 
-const PX = (num: number) => `${num}px`
 const validPointTo = (pt: Point2) => pt !== undefined && pt !== null && pt !== 'null' && pt !== 'null_error'
 
 watchEffect(() => {
   if (Object.keys(pointer.value).length && heapBlock.value?.length && wrapper.value) {
     const _linkers: Linker[] = []
-    const { left: wl, top: wt } = wrapper.value.getBoundingClientRect()
 
     memory.stack.forEach((frame) => {
       frame.body.forEach((ele, frameIndex) => {
         if (validPointTo(ele.point2)) {
           const start = pointer.value[frame.name][frameIndex]
 
-          const { width: sw, height: sh, left: sl, top: st } = start.getBoundingClientRect()
-
-          const style: CSSProperties = {
-            position: 'absolute',
+          if (Array.isArray(ele.point2)) {
+            // temporarily do nothing
           }
-
-          if (typeof ele.point2 === 'number') {
-            const end = heapBlock.value[ele.point2] // TODO: search by id
-            const {
-              height: eh,
-              left: el,
-              top: et,
-            } = end.getBoundingClientRect()
-
-            const _width = el - sl
-            const _height = st - et + sh
-
-            style.width = PX(_width)
-            style.height = PX(_height)
-            style.left = PX(sl - wl)
-            style.top = PX(et - wt)
-
-            const svgStyle = { width: _width, height: _height }
-
-            const x1 = ele.svgCurve?.x1 ?? 0.5
-            const y1 = ele.svgCurve?.y1 ?? 0.75
-            const x2 = ele.svgCurve?.x2 ?? 0.5
-            const y2 = ele.svgCurve?.y2 ?? 0.5
-
-            const commonStyle = ele.moved ? { opacity: 0.3 } : {}
-
-            const svgPath = {
-              d: `
-                M ${sw / 2} ${_height - sh / 2}  
-                Q ${Math.floor(_width * x1)} ${Math.floor(_height * y1)} ${_width * x2} ${_height * y2}
-                T ${_width} ${eh / 2} 
-              `,
-              style: commonStyle,
-            }
-            const svgPolygon = {
-              transform: `translate(${_width - 8} ${eh / 2})`,
-              style: commonStyle,
-            }
+          else if (typeof ele.point2 === 'number') {
+            const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === ele.point2)]
+            const [svg] = line(start, end, LineType.right2left, { wrapper: wrapper.value, pointTo: 'edge' })
+            const commonStyle: CSSProperties = ele.moved ? { opacity: 0.3 } : {}
 
             _linkers.push({
-              style,
-              svg: {
-                style: svgStyle,
-                path: svgPath,
-                polygon: svgPolygon,
+              style: svg.style,
+              path: {
+                d: svg.path.d,
+                style: commonStyle,
+              },
+              polygon: {
+                transform: svg.polygon.transform,
+                style: commonStyle,
               },
             })
           }
           else if (/^\d+\./.test(ele.point2)) {
-            const [targetHeap, targetHeapIndex] = ele.point2.split('.').map(Number)
+            let [targetHeap, targetHeapIndex] = ele.point2.split('.').map(Number)
+            targetHeap = +targetHeap
 
-            const end = heapBlock.value[targetHeap].children[targetHeapIndex - 1] // TODO: search by id
-            const {
-              width: ew,
-              height: eh,
-              left: el,
-              top: et,
-            } = end.getBoundingClientRect()
-
-            const _width = el - sl + ew
-            const _height = st - et + sh
-
-            style.width = PX(_width)
-            style.height = PX(_height)
-            style.left = PX(sl - wl)
-            style.top = PX(et - wt)
-
-            const svgStyle = { width: _width, height: _height }
-            const gapX = el - sl - sw
+            const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === targetHeap)].children[targetHeapIndex - 1] // TODO: search by id
+            const [svg] = line(start, end, LineType.right2bottom, { wrapper: wrapper.value, pointTo: 'edge' })
 
             const commonStyle = ele.moved ? { opacity: 0.3 } : {}
 
-            const svgPath = {
-              d: `
-                M ${sw / 2} ${_height - sh / 2}  
-                Q ${sw + gapX * 0.25} ${_height} ${sw + gapX * 0.65} ${_height * 0.8}
-                T ${_width - ew / 2} ${eh} 
-              `,
-              style: commonStyle,
-            }
-            const svgPolygon = {
-              transform: `translate(${_width - ew / 2} ${eh + 4}) rotate(-90)`,
-              style: commonStyle,
-            }
-
             _linkers.push({
-              style,
-              svg: {
-                style: svgStyle,
-                path: svgPath,
-                polygon: svgPolygon,
+              style: svg.style,
+              path: {
+                d: svg.path.d,
+                style: commonStyle,
+              },
+              polygon: {
+                transform: svg.polygon.transform,
+                style: commonStyle,
               },
             })
           }
@@ -185,41 +122,26 @@ watchEffect(() => {
             const [targetFrame, targetFrameIndex] = findElementAndIndex(memory.stack[targetScopeIndex].body, variable => variable.key === targetFrameKey)!
 
             const end = pointer.value[targetScopeName][targetFrameIndex]
-            const endRect = end.getBoundingClientRect()
-
-            const _width = Math.max(sw, endRect.width) + 64 + 8 // TODO: 4rem + 0.5rem
-            const _height = st - endRect.top + sh
-
-            style.width = PX(_width)
-            style.height = PX(_height)
-            style.left = PX(Math.min(sl, endRect.left) - wl)
-            style.top = PX(endRect.top - wt)
-
-            const svgStyle = { width: _width, height: _height }
-
-            const gapY = _height - sh - endRect.height
-
-            const fixL = Math.max(endRect.left - sl, 0)
-            const fixYPercent = validPointTo(targetFrame.point2) ? 0.75 : 0.5
-
-            const svgPath = {
-              d: `
-                M ${sw / 2} ${_height - sh / 2}  
-                C ${_width * 0.75} ${gapY + endRect.height}, 
-                  ${_width * 1.5} ${gapY * -0.2 + endRect.height}, 
-                  ${endRect.width + fixL} ${endRect.height * fixYPercent} 
-              `,
-            }
-            const svgPolygon = {
-              transform: `translate(${endRect.width + 8 + fixL}, ${endRect.height * fixYPercent}) rotate(180)`,
-            }
+            const [svg] = line(start, end, LineType.right2right, {
+              wrapper: wrapper.value,
+              pointTo: 'edge',
+              modifier: {
+                pointStart(p, pkg) {
+                  if (validPointTo(targetFrame.point2)) {
+                    return [p[0], p[1] + pkg.endHeight * 0.25]
+                  }
+                  return p
+                },
+              },
+            })
 
             _linkers.push({
-              style,
-              svg: {
-                style: svgStyle,
-                path: svgPath,
-                polygon: svgPolygon,
+              style: svg.style,
+              path: {
+                d: svg.path.d,
+              },
+              polygon: {
+                transform: svg.polygon.transform,
               },
             })
           }
@@ -236,55 +158,91 @@ watchEffect(() => {
 
         const start = pointer.value[targetScopeName][targetFrameIndex]
         const end = heapBlock.value[_hpIndex]
-        const { width: sw, height: sh, top: st, left: sl } = start.getBoundingClientRect()
-        const { width: ew, height: eh, top: et, left: el } = end.getBoundingClientRect()
 
-        const gapX = el - sl - sw
-        const gapY = Math.abs(et - st)
+        const isTargetFrameValidPointer = validPointTo(targetFrame.point2)
+        const isCurrentHeapBeingPointAt = memory.stack.some(frame => frame.body.some(variable => variable.point2 === hp.id))
 
-        const w = Math.abs(sl - el) + ew
-        const h = gapY + (st > et ? sh : eh) + 64
-
-        const style: CSSProperties = {
-          position: 'absolute',
-        }
-
-        style.width = PX(w)
-        style.height = PX(h)
-        style.left = PX(sl - wl)
-        style.top = PX(Math.min(st, et) - wt)
-
-        const svgStyle = { width: w, height: h }
-
-        const fixRT = et > st ? gapY : 0
-        const fixLT = et > st ? 0 : gapY
-        const fixStartPercent = memory.stack.some(frame => frame.body.some(variable => variable.point2 === hp.id))
-          ? 0.75
-          : 0.5
-        const fixEndPercent = validPointTo(targetFrame.point2) ? 0.75 : 0.5
-
-        const svgPath = {
-          d: `
-            M ${w - eh} ${eh * fixStartPercent + fixRT}  
-            C ${sw + gapX * 0.5} ${eh * fixStartPercent + fixRT}, 
-              ${sw + gapX * 0.9} ${h}, 
-              ${sw + gapX / 2} ${h - 1}
-            C ${sw + gapX * 0.1} ${h - 1},
-              ${sw + gapX * 0.75} ${sh * fixEndPercent + fixLT},
-              ${sw} ${sh * fixEndPercent + fixLT}
-          `,
-        }
-        const svgPolygon = {
-          transform: `translate(${sw + 8}, ${sh * fixEndPercent + fixLT}) rotate(180)`,
-        }
+        const [svg] = line(start, end, LineType.right2bottom2left, {
+          wrapper: wrapper.value,
+          reverse: true,
+          pointTo: 'edge',
+          startFrom: 'edge',
+          modifier: {
+            pointStart(p, pkg) {
+              if (isTargetFrameValidPointer) {
+                return [p[0], p[1] + pkg.startHeight * 0.25]
+              }
+              return p
+            },
+            pointEnd(p, pkg) {
+              if (isCurrentHeapBeingPointAt) {
+                return [p[0], p[1] + pkg.endHeight * 0.25]
+              }
+              return p
+            },
+          },
+        })
 
         _linkers.push({
-          style,
-          svg: {
-            style: svgStyle,
-            path: svgPath,
-            polygon: svgPolygon,
+          style: svg.style,
+          path: {
+            d: svg.path.d,
           },
+          polygon: {
+            transform: svg.polygon.transform,
+          },
+        })
+      }
+      else if (typeof hp.point2 === 'number') {
+        const start = heapBlock.value[_hpIndex]
+        const end = heapBlock.value[memory.heap.findIndex(_hp => _hp.id === hp.point2)]
+
+        const [svg] = line(start, end, LineType.right2right, {
+          wrapper: wrapper.value,
+          pointTo: 'edge',
+        })
+
+        _linkers.push({
+          style: svg.style,
+          path: {
+            d: svg.path.d,
+          },
+          polygon: {
+            transform: svg.polygon.transform,
+          },
+        })
+      }
+      else if (Array.isArray(hp.point2)) {
+        const start = heapBlock.value[_hpIndex]
+
+        let offsetX = 60
+        let offsetY = 60
+        hp.point2.forEach((targetHeapId, i) => {
+          const end = heapBlock.value[memory.heap.findIndex(_hp => _hp.id === targetHeapId)]
+
+          const [svg] = line(start.children[i], end, {
+            lineType: LineType.bottom2right,
+            options: {
+              offsetX,
+              offsetY,
+            },
+          }, {
+            wrapper: wrapper.value,
+            pointTo: 'edge',
+          })
+
+          offsetX += 30
+          offsetY += 30
+
+          _linkers.push({
+            style: svg.style,
+            path: {
+              d: svg.path.d,
+            },
+            polygon: {
+              transform: svg.polygon.transform,
+            },
+          })
         })
       }
     })
@@ -308,7 +266,7 @@ watchEffect(() => {
     </div>
 
     <div ref="wrapper" class="flex items-start gap-16 relative">
-      <div class="p-2 border border-aq border-solid ml-2">
+      <div class="p-2 border border-aq border-dashed ml-2">
         <h6>Stack</h6>
 
         <div v-for="frame in memory.stack" :key="frame.name">
@@ -363,15 +321,24 @@ watchEffect(() => {
         </div>
       </div>
 
-      <div v-if="memory.heap?.length" class="p-2 border border-aq border-solid">
+      <div v-if="memory.heap?.length" class="p-2 border border-aq border-dashed">
         <h6>Heap</h6>
 
         <table :class="$style.table">
           <tbody>
             <tr v-for="(hp, index) in memory.heap" :key="index">
+              <!-- multi pointer in one block -->
+              <td
+                v-if="Array.isArray(hp.point2)"
+                ref="heapBlock"
+                :class="$style.arrayValue"
+              >
+                <span v-for="p in hp.point2" :key="p" :class="$style.pointer" class="!px-2" />
+              </td>
+
               <!-- pointer to stack -->
               <td
-                v-if="hp.point2"
+                v-else-if="hp.point2 || hp.point2 === 0"
                 ref="heapBlock"
                 :class="$style.pointer"
               />
@@ -390,28 +357,25 @@ watchEffect(() => {
         </table>
       </div>
 
-      <div v-for="(linker, index) in linkers" :key="index" :style="linker.style">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          :width="linker.svg.style.width"
-          :height="linker.svg.style.height"
-        >
-          <path
-            :d="linker.svg.path.d"
-            :style="linker.svg.path.style"
-            class="stroke-aq.fill"
-            stroke-width="1"
-            fill="none"
-          />
+      <svg
+        v-for="(linker, index) in linkers"
+        :key="index" xmlns="http://www.w3.org/2000/svg" :style="linker.style"
+      >
+        <path
+          :d="linker.path.d"
+          :style="linker.path.style"
+          class="stroke-aq.fill"
+          stroke-width="1"
+          fill="none"
+        />
 
-          <polygon
-            points="-8,-5 8,0 -8,5 -5,0"
-            class="fill-aq.fill"
-            :transform="linker.svg.polygon.transform"
-            :style="linker.svg.polygon.style"
-          />
-        </svg>
-      </div>
+        <polygon
+          points="-8,-5 8,0 -8,5 -5,0"
+          class="fill-aq.fill"
+          :transform="linker.polygon.transform"
+          :style="linker.polygon.style"
+        />
+      </svg>
     </div>
   </section>
 </template>
@@ -469,9 +433,9 @@ watchEffect(() => {
   }
 }
 
-.pointer {
+td.pointer.pointer {
   position: relative;
-  padding: 16px!important;
+  padding: 16px;
 }
 
 .pointer::before {
@@ -490,9 +454,21 @@ watchEffect(() => {
   text-align: left!important;
 }
 
+.arrayValue span {
+  position: relative;
+  margin-right: 9px;
+}
+
 .arrayValue span:not(:last-child)::after {
-  content: '|';
-  display: inline-block;
+  content: "";
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 1px;
+  background-color: var(--aq);
+  right: -5px;
+  /* content: '|';
+  display: inline-block; */
 }
 
 .table {

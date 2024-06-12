@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { inject, ref } from 'vue'
+import { disabledSymbol, onChangeSymbol, valueSymbol } from './quiz'
 
 defineProps<{
   label?: string
@@ -13,10 +14,9 @@ type GroupValue = string[]
 type OnChange = (v: GroupValue) => void
 
 const defaultGroupValue = ref<GroupValue>([])
-const groupValue = inject<Ref<GroupValue>>('value', defaultGroupValue)
-const defaultOnChange = ref<OnChange>(() => {})
-const onChange = inject<Ref<OnChange>>('onChange', defaultOnChange)
-const disabled = inject<boolean>('disabled')
+const groupValue = inject<Ref<GroupValue>>(valueSymbol, defaultGroupValue)
+const onChange = inject<OnChange>(onChangeSymbol, () => {})
+const disabled = inject<boolean>(disabledSymbol)
 
 function handleCheckboxChange(e: Event) {
   const _groupValue = groupValue.value ?? []
@@ -24,10 +24,10 @@ function handleCheckboxChange(e: Event) {
   const updateValue = (e.target as HTMLInputElement).value
 
   if (_groupValue.includes(updateValue)) {
-    onChange.value(_groupValue.filter(v => v !== updateValue))
+    onChange(_groupValue.filter(v => v !== updateValue))
   }
   else {
-    onChange.value([..._groupValue, updateValue])
+    onChange([..._groupValue, updateValue])
   }
 }
 </script>

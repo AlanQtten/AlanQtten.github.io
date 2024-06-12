@@ -1,12 +1,17 @@
 <script setup lang="ts">
-const props = defineProps<{
-  value: any
-  onChange: (value: string) => void
-  disabled?: boolean
-}>()
+import type { Ref } from 'vue'
+import { inject, ref } from 'vue'
+import { disabledSymbol, onChangeSymbol, valueSymbol } from './quiz'
+
+type OnChange = (v: string) => void
+
+const defaultValue = ref<string>('')
+const value = inject<Ref<string>>(valueSymbol, defaultValue)
+const onChange = inject<OnChange>(onChangeSymbol, () => {})
+const disabled = inject<boolean>(disabledSymbol)
 
 function handleChange(e: Event) {
-  props.onChange((e.target as HTMLInputElement).value)
+  onChange((e.target as HTMLInputElement).value)
 }
 </script>
 

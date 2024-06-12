@@ -2,6 +2,8 @@
 import MemoryGraph from '../components/memory-graph/MemoryGraph.vue'
 import Wrapper from '../components/memory-graph/Wrapper.vue'
 import Quiz from '../components/quiz/QuizHolder.vue'
+import QuizProvider from '../components/quiz/QuizProvider'
+import RadioHolder from '../components/quiz/RadioHolder.vue'
 import Radio from '../components/quiz/Radio.vue'
 import Input from '../components/quiz/Input.vue'
 import IsCompile from '../components/quiz/IsCompile.vue'
@@ -344,41 +346,35 @@ let b = a; /*[!flag L2]*/
 可以观察到，在同一时间，只有一个数组存在。在L1，`a`的值是一个指向堆内数组数据的指针（用点和带箭头的线表示）。`let b = a`这个声明将a的指针复制给了b，但指针指向的数据并没有复制。请注意`a`的样式变淡了因为它被**移动了**，后面我们会讨论这是什么含义。
 
 ::: details 小测（2）
-
+<QuizProvider>
 <Quiz
-  question="下述哪种说法最准确的描述了栈和堆的不同？"
   answer="C"
   description="解析：栈帧是与特定的函数相关联的，当函数结束时会被释放。而堆中的数据可以无限期地存活。注意堆栈中的数据都是可变、可被复制的。堆中也能存储指针（甚至有指向栈的指针，后面我们会看到）。"
 >
-  <template #quiz="{ onChange, value, disabled }">
-    <Radio
-      :value={value}
-      :options="[
-        { key: 'A', message: '栈存储着可复制的数据，堆存储着不可复制的数据', },
-        { key: 'B', message: '栈存储着不可变的数据，堆存储着可变数据', },
-        { key: 'C', message: '栈存储着和某个特定函数关联的数据，堆存储着与函数生命周期无关的数据', },
-        { key: 'D', message: '栈可以存储指向堆的指针，而堆只能存储非指针数据', },
-      ]"
-      :onChange="onChange"
-      :disabled="disabled"
-    />
-  </template>
+<template #quiz>
+
+下述哪种说法最准确的描述了栈和堆的不同？
+
+<RadioHolder name="401-1-1">
+  <Radio value="A" label="栈存储着可复制的数据，堆存储着不可复制的数据"/>
+  <Radio value="B" label="栈存储着不可变的数据，堆存储着可变数据"/>
+  <Radio value="C" label="栈存储着和某个特定函数关联的数据，堆存储着与函数生命周期无关的数据"/>
+  <Radio value="D" label="栈可以存储指向堆的指针，而堆只能存储非指针数据"/>
+</RadioHolder>
+
+</template>
 </Quiz>
 
-<StrongHr />
-
-<Quiz
-  question="请查看如下代码"
-  answer="2"
-  questionMark="2"
->
+<Quiz answer="2">
 <template #description>
 
 两个`盒子`存储了两份15，而`let b = a`只复制了堆指针，并没有复制堆中的值。
 
 </template>
 
-<template #quiz="{ onChange, value, disabled }">
+<template #quiz>
+请查看如下代码
+
 <Wrapper>
 
 <template #code>
@@ -415,13 +411,10 @@ let c = Box::new(15); /*[!flag L1]*/
 </Wrapper>
 
 <span>最终，内存中有多少份数字15的复制体？用数字表示你的答案，比如0或1</span>
-<Input
-  :value="value"
-  :onChange="onChange"
-  :disabled="disabled"
-/>
+<Input />
 </template>
 </Quiz>
+</QuizProvider>
 
 :::
 
@@ -630,7 +623,7 @@ fn add_suffix(mut name: String) -> String {
       ] },
     ],
     heap: [
-      { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
+      { id: 0, value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] }
     ]
   }"
 />
@@ -765,8 +758,8 @@ fn add_suffix(mut name: String) -> String {
       ] }
     ],
     heap: [
-      { id: '0', value: ['F', 'e', 'r', 'r', 'i', 's'] },
-      { id: '1', value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] },
+      { id: 0, value: ['F', 'e', 'r', 'r', 'i', 's'] },
+      { id: 1, value: ['F', 'e', 'r', 'r', 'i', 's', ' ', 'J', 'r', '.'] },
     ]
   }"
 />
@@ -777,35 +770,29 @@ fn add_suffix(mut name: String) -> String {
 可以观察到在L1，`first_clone`并不是”浅“复制了`first`的指针，而是”深“复制了堆内存中的数据。因此在L2，当`first_clone`被移动且被`add_suffix`无效化后，原始的`first`变量并没有被改变。继续使用`first`是安全的。
 
 ::: details 小测（4）
+<QuizProvider>
 <Quiz
-  question="下面哪一个选项【不是】未定义行为？"
   answer="A"
   description="解析：在栈帧中存放一个空指针是完全安全的，重点在于不要使用空指针。（不管是读取还是释放）"
 >
-  <template #quiz="{ onChange, value, disabled }">
-    <Radio
-      :value={value}
-      :options="[
-        { key: 'A', message: '栈帧中存储着一个空指针', },
-        { key: 'B', message: '释放同一片内存两次', },
-        { key: 'C', message: '在if()中使用非bool类型的值', },
-        { key: 'D', message: '使用一个空指针', },
-      ]"
-      :onChange="onChange"
-      :disabled="disabled"
-    />
-  </template>
+<template #quiz>
+下面哪一个选项【不是】未定义行为？
+
+<RadioHolder name="401-2-1">
+  <Radio value="A" label="栈帧中存储着一个空指针" />
+  <Radio value="B" label="释放同一片内存两次" />
+  <Radio value="C" label="在if()中使用非bool类型的值" />
+  <Radio value="D" label="使用一个空指针" />
+</RadioHolder>
+</template>
 </Quiz>
 
-<StrongHr />
-
 <Quiz
-  question="判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。"
-  questionMark="2"
   :answer="{ compiled: true, compiledResult: 'hello world' }"
   showingAnswer="编译成功，输出：hello world"
 >
-<template #quiz="{ onChange, value, disabled }">
+<template #quiz>
+判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
 
 ```rust
 fn add_suffix(mut s: String) -> String {
@@ -820,26 +807,19 @@ fn main() {
 }
 ```
 
-<IsCompile 
-  :value="value"
-  :onChange="onChange"
-  :disabled="disabled"
-/>
+<IsCompile name="401-2-2" />
 
 </template>
 </Quiz>
 
-<StrongHr />
-
 <Quiz
-  question="判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。"
-  questionMark="3"
   :answer="{ compiled: false }"
   showingAnswer="编译失败"
   description="解析：变量s在if体里被移动了，所以在第8行使用它是不合法的。尽管在这个程序中，b永远是false，所以if永远不会被执行，但Rust通常不会尝试解析if是否会被执行，只会认为它“可能”会被执行，所以“可能”存在移动。"
 >
 
-<template #quiz="{ onChange, value, disabled }">
+<template #quiz>
+判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
 
 ```rust
 fn main() {
@@ -853,20 +833,12 @@ fn main() {
 }
 ```
 
-<IsCompile 
-  :value="value"
-  :onChange="onChange"
-  :disabled="disabled"
-/>
+<IsCompile name="401-2-3" />
 
 </template>
 </Quiz>
 
-<StrongHr />
-
 <Quiz
-  question="现有如下函数，移动了堆数据"
-  questionMark="4"
   :answer="['C', 'D', 'E']"
   showingAnswer="C,D,E"
 >
@@ -881,7 +853,8 @@ fn main() {
 
 </template>
 
-<template #quiz="{ value, onChange, disabled }">
+<template #quiz>
+现有如下函数，移动了堆数据
 
 ```rust
 fn move_a_box(b: Box<i32>) {
@@ -892,12 +865,7 @@ fn move_a_box(b: Box<i32>) {
 下面有四个被Rust编译器拒绝的程序，想象一下如果Rust允许这些代码编译通过。请选择哪些代码会导致未定义行为，或选择“都不会”
 
 <div class="flex flex-col">
-<CheckboxHolder
-  :value="value"
-  :onChange="onChange"
-  :disabled="disabled"
-  name="quiz-411-2-4"
->
+<CheckboxHolder name="401-2-4">
 <Checkbox label="都不会" value="A"/>
 
 <Checkbox value="B">
@@ -946,6 +914,7 @@ println!("{}", b)
 
 </template>
 </Quiz>
+</QuizProvider>
 :::
 
 ## 总结

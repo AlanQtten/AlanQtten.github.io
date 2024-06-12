@@ -1,31 +1,30 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import type { Ref } from 'vue'
+import { inject, onMounted, ref } from 'vue'
+import { disabledSymbol, onChangeSymbol, valueSymbol } from './quiz'
 
 interface Value { compiled?: boolean, compiledResult?: string }
 
-const props = withDefaults(defineProps<{
-  value: Value
-  onChange: (v: Value) => void
-  disabled?: boolean
-}>(), {
-  value: () => ({ compiled: undefined, compiledResult: undefined }),
-})
+defineProps<{
+  name: string
+}>()
 
-const uniqueId = ref()
+type OnChange = (v: Value) => void
 
-onMounted(() => {
-  uniqueId.value = new Date().getTime()
-})
+const defaultValue = ref<Value>(({ compiled: undefined, compiledResult: undefined }))
+const injectValue = inject<Ref<Value>>(valueSymbol, defaultValue)
+const onChange = inject<OnChange>(onChangeSymbol, () => {})
+const disabled = inject<boolean>(disabledSymbol)
 
 function handleRadioChange(e: Event) {
-  props.onChange((e.target as HTMLInputElement).value === 'true'
-    ? { compiled: true, compiledResult: props.value?.compiledResult }
+  onChange((e.target as HTMLInputElement).value === 'true'
+    ? { compiled: true, compiledResult: injectValue.value?.compiledResult }
     : { compiled: false },
   )
 }
 
 function handleInputChange(e: Event) {
-  props.onChange({ compiled: props.value?.compiled, compiledResult: (e.target as HTMLInputElement).value })
+  onChange({ compiled: injectValue.value?.compiled, compiledResult: (e.target as HTMLInputElement).value })
 }
 </script>
 
@@ -35,10 +34,10 @@ function handleInputChange(e: Event) {
     <label class="p-2 border-aq border border-solid rounded">
       <input
         type="radio"
-        :name="`radio-${uniqueId}`"
+        :name="name"
         :value="true"
         :onChange="handleRadioChange"
-        :checked="value?.compiled === true"
+        :checked="injectValue?.compiled === true"
         :disabled="disabled"
       >
 
@@ -50,10 +49,10 @@ function handleInputChange(e: Event) {
     <label class="p-2 border-aq border border-solid rounded">
       <input
         type="radio"
-        :name="`radio-${uniqueId}`"
+        :name="name"
         :value="false"
         :onChange="handleRadioChange"
-        :checked="value?.compiled === false"
+        :checked="injectValue?.compiled === false"
         :disabled="disabled"
       >
 
@@ -62,9 +61,9 @@ function handleInputChange(e: Event) {
   </div>
 
   <input
-    v-if="value?.compiled"
+    v-if="injectValue?.compiled"
     type="text"
-    :value="value?.compiledResult"
+    :value="injectValue?.compiledResult"
     :disabled="disabled"
     placeholder="请输入编译结果"
     class="block"

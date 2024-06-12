@@ -1,41 +1,43 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import { onMounted, ref, toRefs } from 'vue'
+import { inject, ref } from 'vue'
+import { disabledSymbol, onChangeSymbol, valueSymbol } from './quiz'
 
-const props = defineProps<{
-  options: { key: string | number, message: string }[]
-  value: Ref<string | number>
-  onChange: (v: string) => void
-  disabled?: boolean
+defineProps<{
+  label?: string
+  value: string
 }>()
 
-const { value } = toRefs(props)
+const name = inject<string>('name')
 
-const uniqueId = ref()
+type OnChange = (v: string) => void
 
-onMounted(() => {
-  uniqueId.value = new Date().getTime()
-})
+const defaultValue = ref<string>('')
+const injectValue = inject<Ref<string>>(valueSymbol, defaultValue)
+const onChange = inject<OnChange>(onChangeSymbol, () => {})
+const disabled = inject<boolean>(disabledSymbol)
 
 function handleChange(e: Event) {
-  props.onChange((e.target as HTMLInputElement).value)
+  onChange((e.target as HTMLInputElement).value)
 }
 </script>
 
 <template>
-  <div class="flex flex-col">
-    <label v-for="option in options" :key="option.key" class="flex items-center">
-      <input
-        type="radio"
-        :value="option.key"
-        :disabled="disabled"
-        :checked="value === option.key"
-        :name="`radio-${uniqueId}`"
-        class="m-0 mr-2"
-        @change="handleChange"
-      >
+  <label class="flex items-center gap-4">
+    <input
+      type="radio"
+      :value="value"
+      :disabled="disabled"
+      :checked="value === injectValue"
+      :name="name"
+      @change="handleChange"
+    >
 
-      <span>{{ option.key }}. {{ option.message }}</span>
-    </label>
-  </div>
+    <span v-if="label">{{ label }}</span>
+
+    <div class="flex-1">
+      <slot />
+    </div>
+
+  </label>
 </template>

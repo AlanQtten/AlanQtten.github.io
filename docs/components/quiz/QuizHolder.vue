@@ -1,21 +1,22 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, provide, ref } from 'vue'
 import objectEqual from '../../utils/object-equal'
 import arrayEqual from '../../utils/array-equal'
+import { disabledSymbol, onChangeSymbol, valueSymbol } from './quiz'
 
 type Answer = string | number | object
 
-const { answer } = withDefaults(defineProps<{
+const { answer, defaultValue = '' } = withDefaults(defineProps<{
   questionMark?: number | string
-  question: string
   answer: Answer
   showingAnswer?: string
   description?: string
+  defaultValue?: any
 }>(), {
   questionMark: 1,
 })
 
-const inputAnswer = ref()
+const inputAnswer = ref(defaultValue)
 const freezeAnswer = ref()
 function handleAnswer() {
   if (!inputAnswer.value)
@@ -48,19 +49,16 @@ const isCorrect = computed(() => {
       return false
   }
 })
+
+provide(valueSymbol, inputAnswer)
+provide(onChangeSymbol, onChange)
+provide(disabledSymbol, freezeAnswer)
 </script>
 
 <template>
   <h6>问题{{ questionMark }}</h6>
 
-  <p>{{ question }}</p>
-
-  <slot
-    name="quiz"
-    :value="inputAnswer"
-    :on-change="onChange"
-    :disabled="freezeAnswer"
-  />
+  <slot name="quiz" />
 
   <button class="mt-2" @click="handleAnswer">
     提交

@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import markDownItTaskLists from 'markdown-it-task-lists'
 import UnoCss from 'unocss/vite'
+import { transformerMetaWordHighlight } from '@shikijs/transformers'
 import transformerFlag from './transformers/transformerFlag'
 
 const blogList = [
@@ -22,6 +23,7 @@ const projects = [
 const rustList = [
   { text: '什么是所有权？', link: 'what-is-ownership' },
   { text: '引用和借用', link: 'references-and-borrowing' },
+  { text: '修复错误的所有权🚧', link: 'fixing-ownership-errors' },
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
@@ -65,6 +67,7 @@ export default withMermaid(defineConfig({
       md.use(markDownItTaskLists)
     },
     codeTransformers: [
+      transformerMetaWordHighlight(),
       transformerFlag,
     ],
   },

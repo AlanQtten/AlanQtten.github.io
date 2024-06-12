@@ -13,6 +13,7 @@ type Operation =
   | 'l' // loose
   | 'b' // borrow
   | 'r' // regain
+  | 'c' // recycle
 
 const props = defineProps<{
   defaultGraphCollapse?: boolean
@@ -110,6 +111,9 @@ watch([collapsing, tableCollapse], () => {
           </td>
           <td v-else-if="letter.operation === 'r'">
             <div class="i-material-symbols:refresh" />
+          </td>
+          <td v-else-if="letter.operation === 'c'">
+            <div class="i-material-symbols:recycling" />
           </td>
 
           <td>
