@@ -3,5 +3,4 @@
 
 ---
 quiz related refactor
-- [ ] remove `question` prop, move all body into #quiz
 - [ ] auto generate more `showing answer`

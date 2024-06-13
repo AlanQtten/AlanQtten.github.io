@@ -16,7 +16,7 @@ type Operation =
   | 'c' // recycle
 
 const props = defineProps<{
-  defaultGraphCollapse?: boolean
+  defaultCollapse?: boolean
   perms: Array<
     {
       var: string
@@ -76,7 +76,7 @@ const showCollapseIndex = computed(() => {
 })
 
 const collapsing = ref(true)
-const tableCollapse = ref(props.defaultGraphCollapse)
+const tableCollapse = ref(props.defaultCollapse)
 
 function toggleCollapsing() {
   collapsing.value = !collapsing.value

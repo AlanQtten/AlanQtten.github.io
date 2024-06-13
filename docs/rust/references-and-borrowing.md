@@ -10,13 +10,13 @@ import QuizProvider from '../components/quiz/QuizProvider'
 import Input from '../components/quiz/Input.vue'
 import RadioHolder from '../components/quiz/RadioHolder.vue'
 import Radio from '../components/quiz/Radio.vue'
-import LetterTable from '../components/letter/LetterTable.vue'
 import ShikiCode from '../components/code/ShikiCode.vue'
 import DoubleLetter from '../components/letter/DoubleLetter.vue'
 import { R, W, O, F } from '../components/letter'
 import CheckboxHolder from "../components/quiz/CheckboxHolder.vue"
 import Checkbox from "../components/quiz/Checkbox.vue"
 import IsCompile from "../components/quiz/IsCompile.vue"
+import { lr } from "../utils/renderer"
 
 const vec3_0 = ref(Vec({ cap: 3, point2: '0' }))
 </script>
@@ -582,9 +582,8 @@ println!("Third element is {}", *num); /*[!flag_error L3]*/
   :inserter="({ line, before, after }) => {
     if (!after) {
       switch (line) {
-      case 0: return h(LetterTable, { perms: [{ var: 'v', operation: 'g', P: 'p' }] });
-      case 1: return h(
-        LetterTable,
+      case 0: return lr({ perms: [{ var: 'v', operation: 'g', P: 'p' }] });
+      case 1: return lr(
         {
           perms: [
             { var: 'v', operation: 'b', P: [null, 's', 's'] },
@@ -593,8 +592,7 @@ println!("Third element is {}", *num); /*[!flag_error L3]*/
           ],
         },
       );
-      case 2: return h(
-        LetterTable,
+      case 2: return lr(
         {
           perms: [
             { var: 'v', operation: 'r', P: [null, 'p', 'p'] },
@@ -604,7 +602,7 @@ println!("Third element is {}", *num); /*[!flag_error L3]*/
         },
       );
       case 3:
-        return h(LetterTable, { perms: [{ var: 'v', operation: 'l', P: 's' }] });
+        return lr({ perms: [{ var: 'v', operation: 'l', P: 's' }] });
       }
     }
   }"
@@ -632,8 +630,8 @@ v.push(4);` })"
   :inserter="({ after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { perms: [{ var: 'x', operation: 'g', P: ['p', 'e', 'p'] }] });
-        case 1: return h(LetterTable, 
+        case 0: return lr({ perms: [{ var: 'x', operation: 'g', P: ['p', 'e', 'p'] }] });
+        case 1: return lr(
           { perms: 
             [
               { var: 'x', operation: 'b', P: [null, 'e', 's'] },
@@ -663,10 +661,9 @@ let mut x_ref = &x;` })"
   :inserter="({ line, before, after }) => { 
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { perms: [{ var: 'v', operation: 'g', P: 'p' }]}
+        case 0: return lr({ perms: [{ var: 'v', operation: 'g', P: 'p' }]}
         );
-        case 1: return h(
-          LetterTable, 
+        case 1: return lr(
           { 
             perms: [
               { var: 'v', operation: 'b', P: [null, 's', 's'] },
@@ -675,8 +672,7 @@ let mut x_ref = &x;` })"
             ] 
           }
         );
-        case 3: return h(
-          LetterTable, 
+        case 3: return lr(
           { 
             perms: [
               { var: 'v', operation: 'r', P: [null, 'p', 'p'] },
@@ -685,7 +681,7 @@ let mut x_ref = &x;` })"
             ] 
           }
         );
-        case 4: return h(LetterTable, { perms: [{ var: 'v', operation: 'g', P: 's' }]})
+        case 4: return lr({ perms: [{ var: 'v', operation: 'g', P: 's' }]})
       }
     }
  }"
@@ -706,8 +702,8 @@ Rust在内置的**借用检查器**里使用了这些权限。借用检查器会
   :inserter="({ before, after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { perms: [{ var: 'v', operation: 'g', P: 'p' }] });
-        case 1: return h(LetterTable, { perms: [
+        case 0: return lr({ perms: [{ var: 'v', operation: 'g', P: 'p' }] });
+        case 1: return lr({ perms: [
           { var: 'v', operation: 'b', P: [null, 's', 's'] },
           { var: 'num', operation: 'g', P: ['p', 'e', 'p'] },
           { var: '*num', operation: 'g', P: ['p', 'e', 'e'] },
@@ -751,22 +747,22 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
   :inserter="({ before, after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { perms: [{ var: 'v', operation: 'g', P: 'p' }] })
-        case 1: return h(LetterTable, {
+        case 0: return lr({ perms: [{ var: 'v', operation: 'g', P: 'p' }] })
+        case 1: return lr({
           perms: [
             { var: 'v', operation: 'b', P: 's' },
             { var: 'num', operation: 'g', P: ['p', 'e', 'p'] },
             { var: '*num*', operation: 'g', P: ['p', 'p', 'e'] },
           ]
         })
-        case 3: return h(LetterTable, {
+        case 3: return lr({
           perms: [
             { var: 'v', operation: 'r', P: 'p' },
             { var: 'num', operation: 'l', P: ['s', 'e', 's'] },
             { var: '*num*', operation: 'l', P: ['s', 's', 'e'] },
           ]
         })
-        case 4: return h(LetterTable, { perms: [{ var: 'v', operation: 'l', P: 's' }] })
+        case 4: return lr({ perms: [{ var: 'v', operation: 'l', P: 's' }] })
       }
     }
   }"
@@ -795,21 +791,21 @@ println!("Vector is now {:?}", /*[!perm R.{"collapse":true}]*/v);` })'
   :inserter="({ before, after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { defaultGraphCollapse: true, perms: [
+        case 0: return lr({ defaultCollapse: true, perms: [
           { var: 'v', operation: 'g', P: 'p' },
         ] })
-        case 1: return h(LetterTable, { perms: [
+        case 1: return lr({ perms: [
           { var: '*num', operation: 'g', P: ['p', 'p', 'e'], collapse: true },
           { var: 'v', operation: 'b', P: 's' },
           { var: 'num', operation: 'g', P: ['p', 'e', 'p'] },
         ] })
-        case 2: return h(LetterTable, { perms: [
+        case 2: return lr({ perms: [
           { var: '*num', operation: 'b', P: [null, 's', 'e'] },
           { var: '*num2', operation: 'g', P: ['p', 'e', 'e'], collapse: true },
           { var: 'num', operation: 'b', P: [null, 'e', 's'] },
           { var: 'num2', operation: 'g', P: ['p', 'e', 'p'] },
         ] })
-        case 3: return h(LetterTable, { defaultGraphCollapse: true, perms: [
+        case 3: return lr({ defaultCollapse: true, perms: [
           { var: '*num', operation: 'r', P: ['s', 'e', 'e'] },
           { var: '*num', operation: 'r', P: ['s', 'e', 'e'] },
           { var: 'num2', operation: 'l', P: ['s', 'e', 's'] },
@@ -840,19 +836,19 @@ println!("{} {}", /*[!perm R.{"collapse":true}]*/*num, /*[!perm R.{"collapse":tr
   :inserter="({ before, after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { defaultGraphCollapse: true, perms: [{ var: 'x', operation: 'g', P: 'p' }] })
-        case 1: return h(LetterTable, { perms: [
+        case 0: return lr({ defaultCollapse: true, perms: [{ var: 'x', operation: 'g', P: 'p' }] })
+        case 1: return lr({ perms: [
           { var: 'x', operation: 'b', P: [null, 's', 's'], collapse: true },
           { var: 'y', operation: 'g', P: ['p', 'e', 'p'] },
           { var: '*y', operation: 'g', P: ['p', 'e', 'e'] },
         ] })
-        case 2: return h(LetterTable, { perms: [
+        case 2: return lr({ perms: [
           { var: 'x', operation: 'r', P: [null, 'p', 'p'], collapse: true },
           { var: 'y', operation: 'l', P: ['s', 'e', 's'] },
           { var: '*y*', operation: 'l', P: ['s', 'e', 'e'] },
           { var: 'z', operation: 'g', P: ['p', 'e', 'p'] },
         ] })
-        case 3: return h(LetterTable, { defaultGraphCollapse: true, perms: [
+        case 3: return lr({ defaultCollapse: true, perms: [
           { var: 'x', operation: 'l', P: 's' },
           { var: 'z', operation: 'l', P: ['s', 'e', 's'] },
         ] }) 
@@ -873,35 +869,35 @@ let z = /*[!perm R.{"collapse":true}]*/*y;
   :inserter="({ before, after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { defaultGraphCollapse: true, perms: [
+        case 0: return lr({ defaultCollapse: true, perms: [
           { var: 'v', operation: 'g', P: ['p', 'e', 'p'] },
           { var: '*v', operation: 'g', P: ['p', 'p', 'e'] },
         ] })
-        case 1: return h(LetterTable, { perms: [
+        case 1: return lr({ perms: [
           { var: '*v', operation: 'b', P: [null, 's', 'e'], collapse: true },
           { var: 'v', operation: 'b', P: [null, 'e', 's'] },
           { var: 'c', operation: 'g', P: ['p', 'e', 'p'] },
           { var: '*c', operation: 'g', P: ['p', 'e', 'e'] },
         ] })
-        case 3: return h(LetterTable, { perms: [
+        case 3: return lr({ perms: [
           { var: '*v', operation: 'r', P: [null, 'p', 'e'], collapse: true },
           { var: 'v', operation: 'r', P: [null, 'e', 'p'] },
           { var: 'c', operation: 'l', P: ['s', 'e', 's'] },
           { var: '*c', operation: 'l', P: ['s', 'e', 'e'] },
           { var: 'up', operation: 'g', P: ['p', 'e', 'p'] },
         ] })
-        case 4: return h(LetterTable, { defaultGraphCollapse: true, perms: [
+        case 4: return lr({ defaultCollapse: true, perms: [
           { var: 'v', operation: 'l', P: ['s', 'e', 's'] },
           { var: '*v', operation: 'l', P: ['s', 's', 'e'] },
           { var: 'up', operation: 'l', P: ['s', 'e', 's'] },
         ] })
-        case 5: return h(LetterTable, { perms: [
+        case 5: return lr({ perms: [
           { var: '*v', operation: 'r', P: [null, 'p', 'e'], collapse: true },
           { var: 'v', operation: 'r', P: [null, 'e', 'p'] },
           { var: 'c', operation: 'l', P: ['s', 'e', 's'] },
           { var: '*c', operation: 'l', P: ['s', 'e', 'e'] },
         ] })
-        case 6: return h(LetterTable, { defaultGraphCollapse: true, perms: [
+        case 6: return lr({ defaultCollapse: true, perms: [
           { var: 'v', operation: 'l', P: ['s', 'e', 's'] },
           { var: '*v', operation: 'l', P: ['s', 's', 'e'] },
         ] })
@@ -941,18 +937,18 @@ let z = /*[!perm R.{"collapse":true}]*/*y;
   :inserter="({ before, after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { perms: [{ var: 's', operation: 'g', P: 'p' }] })
-        case 1: return h(LetterTable, { perms: [
+        case 0: return lr({ perms: [{ var: 's', operation: 'g', P: 'p' }] })
+        case 1: return lr({ perms: [
           { var: 's', operation: 'b', P: 's' },
           { var: 't', operation: 'g', P: ['p', 'e', 'p'] },
           { var: '*t', operation: 'g', P: ['p', 'p', 'e'] }
         ] })
-        case 3: return h(LetterTable, { perms: [
+        case 3: return lr({ perms: [
           { var: 's', operation: 'r', P: 'p' },
           { var: 't', operation: 'l', P: ['s', 'e', 's'] },
           { var: '*t', operation: 'l', P: ['s', 's', 'e'] }
         ] })
-        case 4: return h(LetterTable, { perms: [{ var: 's', operation: 'l', P: 's' }] })
+        case 4: return lr({ perms: [{ var: 's', operation: 'l', P: 's' }] })
       }
     }
   }"
@@ -989,31 +985,31 @@ println!("{}", s);` })'
   :inserter="({ before, after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { perms: [
+        case 0: return lr({ perms: [
           { var: 'v', operation: 'g', P: ['p', 'e', 'p'] },
           { var: '*v', operation: 'g', P: ['p', 'e', 'e'] },
         ] })
-        case 1: return h(LetterTable, { perms: [
+        case 1: return lr({ perms: [
           { var: 'v', operation: 'l', P: ['s', 'e', 's'] },
           { var: '*v', operation: 'l', P: ['s', 'e', 'e'] },
         ] })
-        case 6: return h(LetterTable, { perms: [
+        case 6: return lr({ perms: [
           { var: 'strs', operation: 'g', P: 'p' },
         ] })
-        case 7: return h(LetterTable, { perms: [
+        case 7: return lr({ perms: [
           { var: 'strs', operation: 'b', P: [null, 's', 's'] },
           { var: 'first', operation: 'g', P: ['p', 'e', 'p'] },
           { var: '*first', operation: 'g', P: ['p', 'e', 'e'] },
         ] })
-        case 8: return h(LetterTable, { perms: [
+        case 8: return lr({ perms: [
           { var: 'strs', operation: 'r', P: [null, 'p', 'p'] },
           { var: 'first', operation: 'l', P: ['s', 'e', 's'] },
           { var: '*first', operation: 'l', P: ['s', 'e', 'e'] },
         ] })
-        case 9: return h(LetterTable, { perms: [
+        case 9: return lr({ perms: [
           { var: 'strs', operation: 'l', P: 's' },
         ] })
-        case 10: return h(LetterTable, { perms: [
+        case 10: return lr({ perms: [
           { var: 'strs', operation: 'l', P: 's' },
         ] })
       }
@@ -1105,7 +1101,7 @@ println!("{}", v1[0]); /*[!flag_error L1]*/
 <ShikiCode
   :inserter="({ after, line }) => {
     if(!after && line === 1) {
-      return h(LetterTable, {
+      return lr({
         perms: [
           { var: 's', operation: 'b', P: [null, 'e', 's'], collapse: true },
           { var: 's_ref', operation: 'g', P: ['p', 'e', 'p'] },

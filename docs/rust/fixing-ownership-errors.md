@@ -1,7 +1,6 @@
 <script setup>
 import ShikiCode from "../components/code/ShikiCode.vue"
-import LetterTable from "../components/letter/LetterTable.vue"
-import { W } from "../components/letter"
+import { W, R, O } from "../components/letter"
 import { h } from "vue"
 import Wrapper from "../components/memory-graph/Wrapper.vue"
 import MemoryGraph from "../components/memory-graph/MemoryGraph.vue"
@@ -9,7 +8,10 @@ import Quiz from "../components/quiz/QuizHolder.vue"
 import QuizProvider from "../components/quiz/QuizProvider"
 import Radio from "../components/quiz/Radio.vue"
 import RadioHolder from "../components/quiz/RadioHolder.vue"
-
+import Checkbox from "../components/quiz/Checkbox.vue"
+import IsCompile from "../components/quiz/IsCompile.vue"
+import CheckboxHolder from "../components/quiz/CheckboxHolder.vue"
+import { lr } from "../utils/renderer"
 </script>
 
 # 修复错误的所有权
@@ -80,7 +82,7 @@ fn return_a_string(output: &mut String) {
   :inserter="({ after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, { perms: [
+        case 0: return lr({ perms: [
           { var: 'name', operation: 'g', P: ['p', 'e', 'p'] },
           { var: '*name', operation: 'g', P: ['p', 'e', 'e'] },
         ] })
@@ -412,7 +414,7 @@ fn round_in_place(mut v: Vec<f32>) {
   :inserter="({ after, line }) => {
     if(!after) {
       switch(line) {
-        case 0: return h(LetterTable, {
+        case 0: return lr({
           perms: [
             { var: '*dst', operation: 'g', P: ['p', 'p', 'e'], collapse: true },
             { var: 'dst', operation: 'g', P: ['p', 'e', 'p'] },
@@ -421,7 +423,7 @@ fn round_in_place(mut v: Vec<f32>) {
             { var: '(*src)[_]', operation: 'g', P: ['p', 'e', 'e'] },
           ]
         })
-        case 1: return h(LetterTable, {
+        case 1: return lr({
           perms: [
             { var: '*dst', operation: 'b', P: [null, 's', 'e'], collapse: true },
             { var: 'dst', operation: 'b', P: [null, 'e', 's'] },
@@ -429,8 +431,8 @@ fn round_in_place(mut v: Vec<f32>) {
             { var: '*largest', operation: 'g', P: ['p', 'e', 'e'] },
           ]
         }) 
-        case 2: return h(LetterTable, {
-          defaultGraphCollapse: true,
+        case 2: return lr({
+          defaultCollapse: true,
           perms: [
             { var: 'src', operation: 'l', P: ['s', 'e', 's'] },
             { var: '*src', operation: 'l', P: ['s', 'e', 'e'] },
@@ -497,3 +499,582 @@ fn add_big_strings(dst: &mut Vec<String>, src: &[String]) {
 ```
 
 这些办法的思路类似：缩短`dst`借出的周期，不和它的修改重合。
+
+## 修复不安全程序：集合元素的移出与复制
+
+对Rust的学习者来说，从集合中复制数据常常令人十分困惑。比如，下面是一个安全地从集合中复制数字的程序：
+
+<ShikiCode
+  :inserter="({ after, line }) => {
+    if(!after) {
+      switch(line) {
+        case 0: return lr({ defaultCollapse: true, perms: [{ var: 'v', operation: 'g', P: ['p', 'e', 'p'] }] })
+        case 1: return lr({ perms: [
+          { var: '*n_ref', operation: 'g', P: ['p', 'e', 'e'], collapse: true },
+          { var: 'v', operation: 'b', P: ['s', 'e', 's'] },
+          { var: 'n_ref', operation: 'g', P: ['p', 'e', 'p'] },
+        ] })
+        case 2: return lr({ defaultCollapse: true, perms: [
+          { var: 'n_ref', operation: 'l', P: ['s', 'e', 's'] },
+          { var: '*n_ref', operation: 'l', P: ['s', 'e', 'e'] },
+        ] })
+      }
+    }
+  }"
+  :init-code='() => ({ lang: "rust", code: `let v: Vec<i32> = vec![0, 1, 2];
+let n_ref: &i32 = &/*[!perm R.{"collapse":true}]*/v[0];
+let n: i32 = /*[!perm R]*/*n_ref;` })'
+/>
+
+解引用操作`*n_ref`需要<R />权限，而路径`*n_ref`正好拥有这个权限。但如果我们把集合元素的类型从`i32`改为`String`呢？结果是所需要的权限不足了：
+
+<ShikiCode
+  :inserter="({ after, line }) => {
+    if(!after) {
+      switch(line) {
+        case 0: return lr({ defaultCollapse: true, perms: [
+          { var: 'v', operation: 'g', P: ['p', 'e', 'p'] }
+        ] })
+        case 1: return lr({ perms: [
+          { var: '*s_ref', operation: 'g', P: ['g', 'e', 'e'], collapse: true },
+          { var: 'v', operation: 'b', P: ['s', 'e', 's'] },
+          { var: 's_ref', operation: 'g', P: ['g', 'e', 'p'] },
+        ] })
+      }
+    }
+  }"
+  :init-code='() => ({ lang: "rust", code: `let v: Vec<String> = vec![String::from("Hello world")];
+let s_ref: &String = &/*[!perm R.{"collapse":true}]*/v[0];
+let s: String = /*[!perm_double R.O.{"letterBProps":{"missing":true}}]*/*s_ref;` })'
+/>
+
+第一个程序可以编译通过，而第二个程序编译不通过。Rust抛出了如下错误：
+
+```
+error[E0507]: cannot move out of `*s_ref` which is behind a shared reference
+--> test.rs:4:9
+ |
+4|  let s = *s_ref;
+ |          ^^^^^^
+ |          |
+ |          move occurs because `*s_ref` has type `String`, which does not implement the `Copy` trait
+```
+
+问题在于集合`v`拥有字符串`Hello world`。当我们对`s_ref`进行解引用，会导致字符串的所有权从集合被剥离。但引用是不拥有的指针————我们无法通过引用来获取所有权。因此Rust解释为“cannot move out of [...] a shared reference”（无法从共享引用...中移动）。
+
+但为什么这种情况是不安全的呢？我们可以通过图示模拟被拒绝的程序：
+
+<Wrapper>
+<template #code>
+
+```rust
+let v: Vec<String> = vec![String::from("Hello world")];
+let s_ref: &String = &v[0];
+let s: String = *s_ref; /*[!flag L1]*/
+
+// 这些销毁操作通常是隐式的，此处为了说明暴露出来
+drop(s); /*[!flag L2]*/
+drop(v); /*[!flag_error L3]*/
+```
+
+</template>
+
+<template #graph>
+<div class="flex flex-col gap-16">
+<MemoryGraph
+  title="L1"
+  :memory="{
+    stack: [{ name: 'main', body: [
+      { key: 'v', point2: 1 },
+      { key: 's_ref', point2: 1 },
+      { key: 's', point2: 0 },
+    ] }],
+    heap: [
+      { id: 0, value: ['H', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'] },
+      { id: 1, point2: 0 }
+    ]
+  }"
+/>
+
+<MemoryGraph
+  title="L2"
+  :memory="{
+    stack: [{ name: 'main', body: [
+      { key: 'v', point2: 0 },
+      { key: 's_ref', point2: 0 },
+      { key: 's', point2: 'null', moved: true },
+    ] }],
+    heap: [{ id: 0, point2: 'null' }]
+  }"
+/>
+
+<MemoryGraph
+  title="L3"
+  error-message="未定义行为：指针在其指向的对象被释放后被使用"
+  :memory="{
+    stack: [{ name: 'main', body: [
+      { key: 'v', point2: 0, moved: true },
+      { key: 's_ref', point2: 0 },
+      { key: 's', point2: 'null_error', moved: true },
+    ] }],
+    heap: [{ id: 0, point2: 'null_error' }]
+  }"
+/>
+</div>
+</template>
+</Wrapper>
+
+这里发生了**重复销毁**的问题。在`let s = *s_ref`执行后，`v`和`s`都认为它们拥有了“Hello world”。在`s`被销毁后，“Hello world”被释放了。然后`v`被销毁，未定义行为就发生了。
+
+> [!NOTE]
+> 在执行`s = *s_ref`后，由于发生了**重复销毁**的问题，我们甚至不必使用`v`或`s`就会引发未定义行为。只要我们将字符串移出`s_ref`，未定义行为就会在元素销毁时发生。
+
+然而，这种未定义行为在集合元素的类型为`i32`时并不会发生。不同点在于，复制`String`复制了一个指向堆数据的指针。而复制`i32`并没有。用技术的语言来说，Rust认为`i32`实现了`Copy`这个特性，而`String`并没有实现（后续章节会深入讨论特性）。
+
+总的来说，**如果一个值没有拥有堆数据，那么它无需移动即可复制。**比如：
+- 一个`i32`没有拥有堆数据，所以它无需移动即可复制。
+- 一个`String`拥有了堆数据，所以它不能在不移动的情况下被复制。
+- 一个`&String`没有拥有堆数据，所以它无需移动即可复制。
+
+> [!NOTE]
+> 可变引用是一个例外。比如，`&mut i32`不是一个可以复制的类型。所以你可以
+> ```rust
+> let mut n = 0;
+> let a = &mut n;
+> let b = a;
+> ```
+> 在赋值给`b`后，`a`就不能继续使用了。避免了两个指向同一份数据的可变引用同时被使用。
+
+所以如果我们拥有一个`不可复制`的类型，比如`String`，那么我们如何安全地访问其中的元素呢？下面是一些安全的做法。首先，可以使用不可变引用来避免所有权的移动：
+
+```rust
+let v: Vec<String> = vec![String::from("Hello world")];
+let s_ref: &String = &v[0];
+println!("{s_ref}!");
+```
+
+其次，如果你想在不影响集合的情况下获取字符串的所有权，可以使用克隆：
+
+```rust
+let v: Vec<String> = vec![String::from("Hello world")];
+let mut s: String = v[0].clone();
+s.push('!');
+println!("{s}");
+```
+
+最后，你也可以使用诸如`Vec::remove`类似的方法来把元素移出集合：
+
+```rust
+let mut v: Vec<String> = vec![String::from("Hello world")];
+let mut s: String = v.remove(0);
+s.push('!');
+println!("{s}");
+assert!(v.len() == 0);
+```
+
+## 修复不安全程序：修改不同的元祖成员
+
+之前的例子都是一些不安全的程序。Rust也可能会拒绝一些安全的程序。一个常见的问题就是：Rust会尝试在最细粒度追踪所有权。然而，有些不同的路径可能会被Rust合并。
+
+下面的例子就是一个通过借用检查器进行的最细层级所有权追踪。这个程序展示了借用元组的一个成员，然后修改了另一个成员：
+
+<ShikiCode
+  :inserter="({ after, line }) => {
+    if(!after) {
+      switch(line) {
+        case 3: return lr({ perms: [
+          { var: 'name', operation: 'g', P: 'p' },
+          { var: 'name.0', operation: 'g', P: 'p' },
+          { var: 'name.1', operation: 'g', P: 'p' },
+        ] })
+        case 4: return lr({ perms: [
+          { var: 'name', operation: 'b', P: [null, 's', 's'] },
+          { var: 'name.0', operation: 'b', P: [null, 's', 's'], collapse: true },
+          { var: 'first', operation: 'g', P: ['p', 'e', 'p'] },
+          { var: '*first', operation: 'g', P: ['p', 'e', 'e'] },
+        ] }) 
+        case 6: return lr({ defaultCollapse: true, perms: [
+          { var: 'name', operation: 'l', P: ['s', 'e', 'e'] },
+          { var: 'name.0', operation: 'l', P: ['s', 'e', 'e'], },
+          { var: 'name.1', operation: 'b', P: 's', },
+          { var: 'first', operation: 'b', P: ['s', 'e', 's'] },
+          { var: '*first', operation: 'b', P: ['s', 'e', 'e'] },
+        ] }) 
+      }
+    }
+  }"
+  :init-code='() => ({ lang: "rust", code: `let mut name = (
+    String::from("Ferris"), 
+    String::from("Rustacean")
+);
+let first = &/*[!perm R.{"collapse":true}]*/name.0;
+name.1/*[!perm_double R.W]*/.push_str(", Esq.");
+println!("{} {}", /*[!perm R.{"collapse":true}]*/first, /*[!perm R.{"collapse":true}]*/name.1);` })'
+/>
+
+声明`let first = &name.0`借用了`name.0`。这个借用移除了`name.0`的<W /><O />权限。也会移除`name`的<W /><O />的权限（比如，此时`name`不能作为函数的入参）。但`name.1`仍然保留了<W />权限，所以`name.1.push_str(...)`是合法的操作。
+
+然而，Rust可能会找不到具体是哪一个路径被借用了。比如，如果我们把`&name.0`重构为函数`get_first`。注意在调用`get_first(&name)`后，Rust会移除name.1的<W />权限：
+
+<ShikiCode
+  :inserter="({ after, line }) => {
+    if(!after) {
+      switch(line) {
+        case 0: return lr({ defaultCollapse: true, perms: [
+          { var: 'name', operation: 'g', P: ['p', 'e', 'p']},
+          { var: '*name', operation: 'g', P: ['p', 'e', 'e']},
+          { var: '(*name).0', operation: 'g', P: ['p', 'e', 'e']},
+          { var: '(*name).1', operation: 'g', P: ['p', 'e', 'e']},
+        ] })
+        case 1: return lr({ defaultCollapse: true, perms: [
+          { var: 'name', operation: 'l', P: ['s', 'e', 's']},
+          { var: '*name', operation: 'l', P: ['s', 'e', 'e']},
+          { var: '(*name).0', operation: 'l', P: ['s', 'e', 'e']},
+          { var: '(*name).1', operation: 'l', P: ['s', 'e', 'e']},
+        ] })
+        case 7: return lr({ defaultCollapse: true, perms: [
+          { var: 'name', operation: 'g', P: 'p'},
+          { var: 'name.0', operation: 'g', P: 'p'},
+          { var: 'name.1', operation: 'g', P: 'p'},
+        ] })
+        case 8: return lr({ perms: [
+          { var: 'name', operation: 'b', P: [null, 's', 's']},
+          { var: 'name.0', operation: 'b', P: [null, 's', 's']},
+          { var: 'name.1', operation: 'b', P: [null, 's', 's'], collapse: true},
+          { var: 'first', operation: 'g', P: ['p', 'e', 'p']},
+          { var: '*first', operation: 'g', P: ['p', 'e', 'e']},
+        ] })
+      }
+    }
+  }"
+  :init-code='() => ({ lang: "rust", code: `fn get_first(name: &(String, String)) -> &String {
+    &/*[!perm R.{"collapse":true}]*/name.0
+}
+fn main() {
+    let mut name = (
+        String::from("Ferris"),
+        String::from("Rustacean")
+    );
+    let first = get_first(&/*[!perm R.{"collapse":true}]*/name);
+    name.1/*[!perm_double R.W.{"letterBProps":{"missing":true}}]*/.push_str(", Esq.");
+    println!("{} {}", first, name.1);
+}` })'
+/>
+
+现在我们不能进行`name.1.push_str(..)`了！Rust会抛出如下错误：
+
+```
+error[E0502]: cannot borrow `name.1` as mutable because it is also borrowed as immutable
+--> test.rs:11:5
+  |
+10|    let first = get_first(&name);
+  |                          ----- immutable borrow occurs here
+11|    name.1.push_str(", Esq.");
+  |    ^^^^^^^^^^^^^^^^^^^^^^^^^ mutable borrow occurs here
+12|    println!("{} {}", first, name.1);
+  |                      ----- immutable borrow later used here
+```
+这看起来很奇怪，既然我们修改前的程序是安全的。我们进行的修改也没修改程序的运行时行为。为什么将`&name.0`放入函数很关键呢？
+
+问题在于，Rust并不关心`get_first`的具体实现，它只通过它的签名来判断它的借用行为，而它的签名表示“入参中的一些`String`被借用了”。Rust会趋于保守地认为`name.0`和`name.1`都被借用了，将它们的<W />和<O />权限都移除。
+
+请记住，**上面的程序是安全的**。它并没有未定义行为！未来某个版本的Rust可能会更聪明，让它通过编译，但现在，它会被拒绝。所以如何应对当下的借用检查器呢？一个可行的办法是将`&name.0`在调用在行内进行，比如最开始的程序。另一个办法是通过`cells`将借用检查器推迟到运行时，后续章节我们会展开讨论。
+
+## 修复不安全程序：修改数组的不同元素
+
+跟上一个问题类似的问题是借用数组的元素。比如，观察下面的程序就能看到，哪些路径在创建数组元素的可变引用时被借用了：
+
+<ShikiCode 
+  :inserter="({ after, line }) => {
+    if(!after) {
+      switch(line) {
+        case 0: return lr({ defaultCollapse: true, perms: [
+          { var: 'a', operation: 'g', P: 'p' },
+          { var: 'a[_]', operation: 'g', P: ['p', 'p', 'e'] },
+        ] })
+        case 1: return lr({ perms: [
+          { var: 'a[_]', operation: 'b', P: ['s', 's', 'e'], collapse: true },
+          { var: 'a', operation: 'b', P: 's' },
+          { var: 'x', operation: 'g', P: ['p', 'e', 'p'] },
+          { var: '*x', operation: 'g', P: ['p', 'p', 'e'] },
+        ] })
+        case 2: return lr({ perms: [
+          { var: 'a[_]', operation: 'r', P: ['p', 'p', 'e'], collapse: true },
+          { var: 'a', operation: 'r', P: 'p' },
+          { var: 'x', operation: 'l', P: ['s', 'e', 's'] },
+          { var: '*x', operation: 'l', P: ['s', 's', 'e'] },
+        ] })
+        case 3: return lr({ defaultCollapse: true, perms: [
+          { var: 'a', operation: 'l', P: 's' },
+          { var: 'a[_]', operation: 'l', P: ['s', 's', 'e'] },
+        ] })
+      }
+    }
+  }"
+  :init-code='() => ({ lang: "rust", code: `let mut a = [0, 1, 2, 3];
+let x = &mut /*[!perm_double R.W.{"collapse":true}]*/a[1];
+/*[!perm_double R.W.{"collapse":true}]*/*x += 1;
+println!(/*[!perm R.{"collapse":true}]*/"{a:?}")` })'
+/>
+
+Rust的借用检查器不会区分路径`a[0]`和`a[1]`等等。它会使用`a[_]`来表示`a`中所有的下标。这么做是因为Rust有些情况下元素下标是不可判断的。比如，如果有一些更复杂的场景：
+
+```rust
+let idx = a_complex_function();
+let x = &mut a[idx];
+```
+
+`idx`的值是什么呢？Rust不可能胡乱猜测，所以只能推断`idx`可以是任意数。比如，如果我们从一个下标读数的同时向另一个下标写入：
+
+<ShikiCode
+  :inserter="({ after, line }) => {
+    if(!after) {
+      switch(line) {
+        case 0: return lr({
+          defaultCollapse: true,
+          perms: [
+            { var: 'a', operation: 'g', P: 'p' },
+            { var: 'a[_]', operation: 'g', P: ['p', 'p', 'e'] },
+          ]
+        })
+        case 1: return lr({
+          perms: [
+            { var: 'a[_]', operation: 'b', P: ['s', 's', 'e'], collapse: true },
+            { var: 'a', operation: 'b', P: 's' },
+            { var: 'x', operation: 'g', P: ['p', 'e', 'p'] },
+            { var: '*x', operation: 'g', P: ['p', 'p', 'e'] },
+          ]
+        })
+      }
+    }
+  }"
+  :init-code='() => ({ lang: "rust", code: `let mut a = [1, 2, 3, 4];
+let x = &mut /*[!perm_double R.W.{"collapse":true}]*/a[1];
+let y = &/*[!perm R.{"missing":true}]*/a[2];
+*x += *y;` })'
+/>
+
+然而，Rust会拒绝这个程序，因为`a`将其读权限赋予了`x`。编译器会抛出如下错误：
+
+```
+error[0502]: cannot borrow `a[_]` as immutable because it is also borrowed as mutable
+--> test.rs:4:9
+ |
+3|  let x = &mut a[1];
+ |          --------- mutable borrow occurs here
+4|  let y = &a[2];
+ |          ^^^^^ immutable borrow occurs here
+5|  *x += *y;
+ |  -------- mutable borrow later used here
+```
+
+再一次的，**这个程序是不安全的**。对于这样的情况，Rust的标准库会提供了函数来配合借用检查器。比如我们可以使用`slice::split_at_mut`：
+
+```rust
+let mut a = [0, 1, 2, 3];
+let (a_l, a_r) = a.split_at_mut(2);
+let x = &mut a_l[1];
+let y = &a_r[0];
+*x += *y;
+```
+
+你可能好奇，`split_at_mut`是怎么实现的呢？其实在一些Rust库中，尤其类似`Vec`或者`slice`这种核心库，你会经常看到`unsafe`的代码块。`unsafe`代码块允许使用“裸”指针，它们不会被借用检查器检查到。比如，我们可以使用一个不安全的块来完成我们的任务：
+
+```rust
+let mut a = [0, 1, 2, 3];
+let x = &mut a[1] as *mut i32;
+let y = &a[2] as *const i32;
+unsafe { *x += *y ; } // 除非你非常清楚自己在做什么，否则别这么干！
+```
+
+不安全的代码对于一些期望突破借用检查器的限制十分有效。通常来说，借用检查器会拒绝那些你以为安全的代码。然后你应该去标准库里找到包含`unsafe`代码块的函数（比如`split_at_mut`）来解决你的问题。我们在后面会讨论不安全代码。现在，只要明白不安全代码就是Rust对某些其他情况下不可能实现的取巧实现。
+
+::: details 小测（5）
+<QuizProvider>
+<Quiz answer="B">
+<template #description>
+
+解析：如果一个`String`在不移动的情况下被复制了，那么两个变量可能会拥有同一个字符串，最终导致内存的重复释放。
+
+</template>
+<template #quiz>
+
+下面哪一个描述最正确地解释了为什么`i32`可以在不移动的情况下复制，而`String`不行？
+
+<RadioHolder name="403-2-1">
+<Radio value="A" label="i32是Rust中的一种原始类型，而String不是" />
+<Radio value="B" label="String拥有了堆中的数据，而i32没有" />
+<Radio value="C" label="String可以被存放在堆中，而i32只能被存放在栈中" />
+<Radio value="D" label="i32占有的内存比String小" />
+</RadioHolder>
+</template>
+</Quiz>
+
+<Quiz answer="B">
+<template #description>
+
+解析：`println`技术上来说是安全的，因为字符串在当前的块结束时才会被释放。但在程序结束时未定义行为出现了，字符串会由于`s`和`s2`的缘故被释放两次。
+
+</template>
+<template #quiz>
+
+下面的代码无法通过编译
+
+```rust
+let s = String::from("Hello world");
+let s_ref = &s;
+let s2 = *s_ref;
+println!("{s2}");
+```
+
+下面哪一个描述最正确地描述了如果允许这个程序编译，可能出现的未定义行为？
+
+<RadioHolder name="403-2-2">
+<Radio value="A" label="这个程序不存在未定义行为" />
+<Radio value="B" label="字符串在程序结束时会被释放两次" />
+<Radio value="C" label="println中读取s2的行为使用了被释放的内存" />
+<Radio value="D" label="解引用*s_ref使用了被释放的内存" />
+</RadioHolder>
+
+</template>
+</Quiz>
+
+<Quiz answer="C">
+<template #description>
+
+解析：这段代码是安全的。执行的话也不存在未定义行为。（如果`i`越界了，那么Rust会在运行时崩溃，而不是导致未定义行为）
+
+这段代码无法编译的原因在于Rust无法确定`v[i]`和`v[i - 1]`指向的是不同的元素。
+
+</template>
+<template #quiz>
+
+下面的代码无法通过编译
+
+```rust
+fn copy_to_prev(v: &mut Vec<i32>, i: usize) {
+    let n = &mut v[i];
+    *n = v[i - 1];
+}
+fn main() {
+    let mut v = vec![1, 2, 3];
+    copy_to_prev(&mut v, 1);
+}
+```
+
+下面哪一个描述最正确地描述了如果允许这个程序编译，可能出现的未定义行为？
+
+<RadioHolder name="403-2-3">
+<Radio value="A" label="v[i - 1]读取了被释放的内存" />
+<Radio value="B" label="&mut v[i]创建了指向释放内存的指针" />
+<Radio value="C" label="这个程序不存在未定义行为" />
+<Radio value="D" label="赋值*n使用了被释放的内存" />
+</RadioHolder>
+
+</template>
+</Quiz>
+
+<Quiz :answer="['A', 'B', 'C']">
+<template #description>
+
+解析：`let mut name = *name`使得入参`name`的所有权被移除了。然而，调用者仍然保留了原始字符串的所有权。因此在`award_phd`完成调用后，字符串被销毁了。上面的每一个程序都存在未定义行为，因为`name`最终会被销毁两次。不管`name`或其引用有没有在调用`award_phd`后被读取。
+
+</template>
+<template #quiz>
+
+下面是一个和之前测试中类似的程序：
+
+```rust
+/// 返回"Ph.D." + 输入名称
+fn award_phd(name: &String) {
+    let mut name = *name;
+    name.push_str(", Ph.D.");
+}
+```
+
+Rust编译器会拒绝编译并抛出错误：
+
+```
+error[E0507]: cannot move out of `*name` which is behind a shared reference
+--> test.rs:3:20
+ |
+3|    let mut name = *name;
+ |                   ^^^^^
+ |                   |
+ |                   move occurs because `*name` has type `String`, which does not implement the `Copy` trait
+ |                   help: consider borrowing here: `&*name`
+```
+
+假设编译器**没有编译失败**。选择以下可能导致未定义行为的程序，或选择“都不会”
+
+<CheckboxHolder name="403-2-4">
+<Checkbox value="A">
+
+```rust
+let name = String::from("Ferris");
+award_phd(&name);
+println!("{}", name);
+```
+
+</Checkbox>
+
+<Checkbox value="B">
+
+```rust
+let name = String::from("Ferris");
+let name_ref = &name;
+award_phd(&name);
+println!("{}", name_ref);
+```
+
+</Checkbox>
+
+<Checkbox value="C">
+
+```rust
+let name = String::from("Ferris");
+award_phd(&name);
+```
+
+</Checkbox>
+
+<Checkbox value="null" label="都不会" />
+</CheckboxHolder>
+
+</template>
+</Quiz>
+
+<Quiz 
+  :answer="{ compiled: true, compiledResult: '0 2' }"
+  showingAnswer="编译成功，输出：0 2"
+>
+<template #description>
+
+解析：这段程序可以正常编译，`x`复制了`point[0]`，因而允许`y`创建了对`point[1]`的可变借用。`x += 1`没有影响到`point`，而`*y += 1`影响了，因此结果是`0 2`。
+
+</template>
+<template #quiz>
+
+判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
+
+```rust
+fn main() {
+    let mut point = [0, 1];
+    let mut x = point[0];
+    let y = &mut point[1];
+    x += 1；
+    *y += 1;
+    println!("{} {}", point[0], point[1]);
+}
+```
+
+<IsCompile name="403-2-5" />
+
+</template>
+</Quiz>
+</QuizProvider>
+:::
+
+## 总结
+
+当面对一个所有权问题时，应该先问问自己：我的程序真的不安全吗？如果是，那么因为需要理解不安全的根源。如果不是，那么应该明白借用检查器的限制，并了解如何绕开它们。

@@ -63,7 +63,7 @@ function joinPointer(el: HTMLElement, frameName: string, frameIndex: number) {
   pointer.value[frameName][frameIndex] = el
 }
 
-const validPointTo = (pt: Point2) => pt !== undefined && pt !== null && pt !== 'null' && pt !== 'null_error'
+const validPointTo = (pt?: Point2) => pt !== undefined && pt !== null && pt !== 'null' && pt !== 'null_error'
 
 watchEffect(() => {
   if (Object.keys(pointer.value).length && heapBlock.value?.length && wrapper.value) {
@@ -150,6 +150,9 @@ watchEffect(() => {
     });
 
     (memory.heap ?? []).forEach((hp, _hpIndex) => {
+      if (!validPointTo(hp.point2)) {
+        return
+      }
       if (typeof hp.point2 === 'string') {
         const [targetScopeName, targetFrameKey] = hp.point2.split('.')
 
@@ -327,9 +330,23 @@ watchEffect(() => {
         <table :class="$style.table">
           <tbody>
             <tr v-for="(hp, index) in memory.heap" :key="index">
+              <!-- null -->
+              <td v-if="hp.point2 === 'null'" ref="heapBlock">
+                <div :class="$style.pointToNullValue">
+                  <div />
+                </div>
+              </td>
+
+              <!-- null_error -->
+              <td v-else-if="hp.point2 === 'null_error'" ref="heapBlock">
+                <div :class="[$style.pointToNullValue, $style.pointToNullValueError]">
+                  <div />
+                </div>
+              </td>
+
               <!-- multi pointer in one block -->
               <td
-                v-if="Array.isArray(hp.point2)"
+                v-else-if="Array.isArray(hp.point2)"
                 ref="heapBlock"
                 :class="$style.arrayValue"
               >
