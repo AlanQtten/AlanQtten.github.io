@@ -121,11 +121,16 @@ function handleMouseLeave() {
   height: 8px;
   border-radius: 50%;
   background-color: var(--letter-theme);
+  border: 1px solid var(--letter-theme);
   transition: transform .3s;
 }
 
 .hover::after {
   transform: translate(-50%, -50%) scale(0.01);
+}
+
+.missing::after {
+  background-color: transparent;
 }
 
 .missing span{

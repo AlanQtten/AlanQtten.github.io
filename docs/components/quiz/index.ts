@@ -1,0 +1,8 @@
+export { default as Checkbox } from './Checkbox.vue'
+export { default as CheckboxHolder } from './CheckboxHolder.vue'
+export { default as Radio } from './Radio.vue'
+export { default as RadioHolder } from './RadioHolder.vue'
+export { default as Input } from './Input.vue'
+export { default as IsCompile } from './IsCompile.vue'
+export { default as QuizProvider } from './QuizProvider'
+export { default as Quiz } from './QuizHolder.vue'

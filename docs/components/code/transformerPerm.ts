@@ -3,7 +3,7 @@ import { propsMergeSymbol } from './constant'
 
 const regexResolverList = [
   {
-    regex: /\/\*\[!perm ([a-zA-Z0-9.{}: "]+)\]\*\/$/,
+    regex: /\/\*\[!perm ([a-zA-Z0-9.,{}: "]+)\]\*\/$/,
     resolver(value: string) {
       const [letter, restProps] = value.split('.')
 
@@ -21,7 +21,7 @@ const regexResolverList = [
     },
   },
   {
-    regex: /\/\*\[!perm_double ([a-zA-Z0-9.{}: "]+)\]\*\/$/,
+    regex: /\/\*\[!perm_double ([a-zA-Z0-9.,{}: "]+)\]\*\/$/,
     resolver(value: string) {
       const [letterA, letterB, restProps] = value.split('.')
 

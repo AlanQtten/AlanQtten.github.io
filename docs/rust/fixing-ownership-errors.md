@@ -2,15 +2,16 @@
 import ShikiCode from "../components/code/ShikiCode.vue"
 import { W, R, O } from "../components/letter"
 import { h } from "vue"
-import Wrapper from "../components/memory-graph/Wrapper.vue"
-import MemoryGraph from "../components/memory-graph/MemoryGraph.vue"
-import Quiz from "../components/quiz/QuizHolder.vue"
-import QuizProvider from "../components/quiz/QuizProvider"
-import Radio from "../components/quiz/Radio.vue"
-import RadioHolder from "../components/quiz/RadioHolder.vue"
-import Checkbox from "../components/quiz/Checkbox.vue"
-import IsCompile from "../components/quiz/IsCompile.vue"
-import CheckboxHolder from "../components/quiz/CheckboxHolder.vue"
+import { Wrapper, MemoryGraph } from "../components/memory-graph"
+import { 
+  Quiz,  
+  QuizProvider,
+  Radio,
+  RadioHolder,
+  Checkbox,
+  CheckboxHolder,
+  IsCompile
+} from "../components/quiz"
 import { lr } from "../utils/renderer"
 </script>
 

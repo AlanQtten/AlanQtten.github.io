@@ -1,7 +1,7 @@
 <script lang="ts">
 import { provide, ref } from 'vue'
 import type { LetterProps } from './Letter.vue'
-import { F, O, R, W } from './index'
+import { F, O, R, W } from './defineLetter'
 
 export default {
   components: {

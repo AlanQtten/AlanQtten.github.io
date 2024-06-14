@@ -2,20 +2,19 @@
 import { ref, h } from "vue"
 import { Vec } from "../utils/generateStructure"
 
-import Wrapper from '../components/memory-graph/Wrapper.vue'
-import DetailMode from '../components/memory-graph/DetailMode.vue'
-import MemoryGraph from '../components/memory-graph/MemoryGraph.vue'
-import Quiz from '../components/quiz/QuizHolder.vue'
-import QuizProvider from '../components/quiz/QuizProvider'
-import Input from '../components/quiz/Input.vue'
-import RadioHolder from '../components/quiz/RadioHolder.vue'
-import Radio from '../components/quiz/Radio.vue'
+import { Wrapper, DetailMode, MemoryGraph } from '../components/memory-graph'
+import {
+  Quiz,
+  QuizProvider,
+  Input,
+  RadioHolder,
+  Radio,
+  CheckboxHolder,
+  Checkbox,
+  IsCompile
+} from '../components/quiz'
 import ShikiCode from '../components/code/ShikiCode.vue'
-import DoubleLetter from '../components/letter/DoubleLetter.vue'
-import { R, W, O, F } from '../components/letter'
-import CheckboxHolder from "../components/quiz/CheckboxHolder.vue"
-import Checkbox from "../components/quiz/Checkbox.vue"
-import IsCompile from "../components/quiz/IsCompile.vue"
+import { R, W, O, F, DoubleLetter } from '../components/letter'
 import { lr } from "../utils/renderer"
 
 const vec3_0 = ref(Vec({ cap: 3, point2: 0 }))

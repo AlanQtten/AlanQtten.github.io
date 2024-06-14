@@ -14,6 +14,7 @@ type Operation =
   | 'b' // borrow
   | 'r' // regain
   | 'c' // recycle
+  | 'e' // exit
 
 const props = defineProps<{
   defaultCollapse?: boolean
@@ -114,6 +115,9 @@ watch([collapsing, tableCollapse], () => {
           </td>
           <td v-else-if="letter.operation === 'c'">
             <div class="i-material-symbols:recycling" />
+          </td>
+          <td v-else-if="letter.operation === 'e'">
+            <div class="i-material-symbols:exit-to-app" />
           </td>
 
           <td>

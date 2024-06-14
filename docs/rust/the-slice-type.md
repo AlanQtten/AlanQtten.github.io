@@ -1,14 +1,14 @@
 <script setup>
   import { ref } from "vue"
-  import Wrapper from "../components/memory-graph/Wrapper.vue";
-  import MemoryGraph from "../components/memory-graph/MemoryGraph.vue";
-  import DetailMode from "../components/memory-graph/DetailMode.vue";
+  import { Wrapper, MemoryGraph, DetailMode } from "../components/memory-graph";
   import ShikiCode from "../components/code/ShikiCode.vue";
-  import QuizProvider from "../components/quiz/QuizProvider";
-  import Quiz from "../components/quiz/QuizHolder.vue"
-  import RadioHolder from "../components/quiz/RadioHolder.vue"
-  import IsCompile from "../components/quiz/IsCompile.vue"
-  import Radio from "../components/quiz/Radio.vue"
+  import { 
+    Quiz,
+    QuizProvider,
+    Radio,
+    RadioHolder,
+    IsCompile,
+  } from "../components/quiz";
   import { lr } from "../utils/renderer"
   import { Vec } from "../utils/generateStructure"
 

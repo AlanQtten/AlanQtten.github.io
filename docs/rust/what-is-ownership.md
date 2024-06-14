@@ -1,14 +1,15 @@
 <script setup>
-import MemoryGraph from '../components/memory-graph/MemoryGraph.vue'
-import Wrapper from '../components/memory-graph/Wrapper.vue'
-import Quiz from '../components/quiz/QuizHolder.vue'
-import QuizProvider from '../components/quiz/QuizProvider'
-import RadioHolder from '../components/quiz/RadioHolder.vue'
-import Radio from '../components/quiz/Radio.vue'
-import Input from '../components/quiz/Input.vue'
-import IsCompile from '../components/quiz/IsCompile.vue'
-import Checkbox from '../components/quiz/Checkbox.vue'
-import CheckboxHolder from '../components/quiz/CheckboxHolder.vue'
+import { MemoryGraph, Wrapper } from '../components/memory-graph'
+import { 
+  Quiz,
+  QuizProvider,
+  RadioHolder,
+  Radio,
+  Input,
+  IsCompile,
+  CheckboxHolder,
+  Checkbox
+} from '../components/quiz'
 </script>
 
 >（译）

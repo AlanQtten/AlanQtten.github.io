@@ -21,10 +21,16 @@ const projects = [
 // 🚧
 
 const rustList = [
-  { text: '什么是所有权？', link: 'what-is-ownership' },
-  { text: '引用和借用', link: 'references-and-borrowing' },
-  { text: '修复错误的所有权', link: 'fixing-ownership-errors' },
-  { text: '切片类型', link: 'the-slice-type' },
+  {
+    text: '4. 理解所有权',
+    items: [
+      { text: '4.1 什么是所有权？', link: 'what-is-ownership' },
+      { text: '4.2 引用和借用', link: 'references-and-borrowing' },
+      { text: '4.3 修复错误的所有权', link: 'fixing-ownership-errors' },
+      { text: '4.4 切片类型', link: 'the-slice-type' },
+      { text: '4.5 所有权回顾', link: 'ownership-recap' },
+    ],
+  },
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
@@ -38,7 +44,7 @@ export default withMermaid(defineConfig({
     nav: [
       { text: 'blog', link: `/blog/${blogList[0].link}`, activeMatch: '/blog/' },
       { text: 'project', link: `/project/${projects[0].link}`, activeMatch: '/project/' },
-      { text: 'rust', link: `/rust/${rustList[0].link}`, activeMatch: '/rust/' },
+      { text: 'rust', link: `/rust/${rustList[0].items[0].link}`, activeMatch: '/rust/' },
       process.env.NODE_ENV !== 'production' && { text: 'playground', link: '/playground/playground' },
     ].filter(Boolean) as NavItem[],
 
