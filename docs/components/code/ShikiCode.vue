@@ -5,6 +5,7 @@ import { codeToHast } from 'shiki'
 import cx from 'classnames'
 import { O, R, W } from '../letter'
 import DoubleLetter from '../letter/DoubleLetter.vue'
+import transformerFlag from '../../transformers/transformerFlag'
 import transformerPerm from './transformerPerm'
 import { lineIndexSymbol, propsMergeSymbol } from './constant'
 
@@ -173,6 +174,7 @@ export default defineComponent({
             },
           },
           transformerPerm,
+          transformerFlag,
         ],
       }).then((result) => {
         resultTree.value = {

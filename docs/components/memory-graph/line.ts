@@ -1,4 +1,3 @@
-/* eslint-disable no-case-declarations */
 import type { CSSProperties } from 'vue'
 
 export enum LineType {
@@ -18,7 +17,7 @@ export enum LineType {
 }
 
 interface LineTypeWithOption {
-  lineType: LineType.bottom2right
+  lineType: LineType
   options: {
     offsetX?: number
     offsetY?: number
@@ -51,6 +50,17 @@ interface Polygon {
   transform: string
 }
 
+interface DataPackage {
+  startWidth: number
+  startHeight: number
+  endWidth: number
+  endHeight: number
+  pointerStartLeft: number
+  pointerStartTop: number
+  pointerEndLeft: number
+  pointerEndTop: number
+}
+
 interface Svg {
   key: number | string
   style: CSSProperties
@@ -58,19 +68,19 @@ interface Svg {
   polygon: Polygon
 }
 
-type PointerModifier = (p: [number, number], pkg: { startWidth: number, startHeight: number, endWidth: number, endHeight: number }) => [number, number]
+type PointerModifier = (p: [number, number], pkg: DataPackage) => [number, number]
 
 const defaultPointerModifier: PointerModifier = p => p
 
-interface Options {
+export interface Options {
   wrapper?: HTMLElement
   reverse?: boolean
   modifier?: {
-    D?: (d: D) => D
-    M?: (p: Rest<M>) => Rest<M>
-    Q?: (p: Rest<Q>) => Rest<Q>
-    T?: (p: Rest<T>) => Rest<T>
-    C?: (p: Rest<C>) => Rest<C>
+    D?: (d: D, pkg: DataPackage) => D
+    M?: (p: Rest<M>, pkg: DataPackage) => Rest<M>
+    Q?: (p: Rest<Q>, pkg: DataPackage) => Rest<Q>
+    T?: (p: Rest<T>, pkg: DataPackage) => Rest<T>
+    C?: (p: Rest<C>, pkg: DataPackage) => Rest<C>
     pointStart?: PointerModifier
     pointEnd?: PointerModifier
   }
@@ -90,20 +100,20 @@ function d2Str(d: D) {
   }).join(' ')
 }
 
-function pipeModifier(d: D, modifier: Options['modifier']): D {
+function pipeModifier(d: D, modifier: Options['modifier'], pkg: DataPackage): D {
   if (!modifier)
     return d
 
   if (modifier.D) {
-    return modifier.D(d)
+    return modifier.D(d, pkg)
   }
 
   return d.map((_d) => {
     switch (_d[0]) {
-      case PathType.M: return modifier.M ? [PathType.M, ...modifier.M(_d.slice(1) as Rest<M>)] : _d
-      case PathType.Q: return modifier.Q ? [PathType.Q, ...modifier.Q(_d.slice(1) as Rest<Q>)] : _d
-      case PathType.T: return modifier.T ? [PathType.T, ...modifier.T(_d.slice(1) as Rest<T>)] : _d
-      case PathType.C: return modifier.C ? [PathType.C, ...modifier.C(_d.slice(1) as Rest<C>)] : _d
+      case PathType.M: return modifier.M ? [PathType.M, ...modifier.M(_d.slice(1) as Rest<M>, pkg)] : _d
+      case PathType.Q: return modifier.Q ? [PathType.Q, ...modifier.Q(_d.slice(1) as Rest<Q>, pkg)] : _d
+      case PathType.T: return modifier.T ? [PathType.T, ...modifier.T(_d.slice(1) as Rest<T>, pkg)] : _d
+      case PathType.C: return modifier.C ? [PathType.C, ...modifier.C(_d.slice(1) as Rest<C>, pkg)] : _d
     }
 
     return _d
@@ -115,6 +125,9 @@ export function line(start: HTMLElement, end: HTMLElement, _lineType: LineType |
 
   const lineType = typeof _lineType === 'string' ? _lineType : _lineType.lineType
   const lineTypeOptions = typeof _lineType === 'object' ? _lineType.options : {}
+
+  let offsetX = lineTypeOptions.offsetX
+  let offsetY = lineTypeOptions.offsetY
 
   const {
     // width: pw, height: ph,
@@ -159,7 +172,16 @@ export function line(start: HTMLElement, end: HTMLElement, _lineType: LineType |
   let pel = el2p - l + ew / 2 // pointer end left
   let pet = et2p - t + eh / 2 // pointer end top
 
-  const pkg = { startWidth: sw, startHeight: sh, endWidth: ew, endHeight: eh }
+  const pkg: DataPackage = {
+    startWidth: sw,
+    startHeight: sh,
+    endWidth: ew,
+    endHeight: eh,
+    pointerStartLeft: psl,
+    pointerStartTop: pst,
+    pointerEndLeft: pel,
+    pointerEndTop: pet,
+  }
 
   switch (lineType) {
     case LineType.right2right:
@@ -245,12 +267,18 @@ export function line(start: HTMLElement, end: HTMLElement, _lineType: LineType |
       if (pointTo === 'edge') {
         pet += eh / 2
       }
+      [psl, pst] = psMd([psl, pst], pkg);
+      [pel, pet] = peMd([pel, pet], pkg)
+
+      offsetX = lineTypeOptions.offsetX ?? 0
+      w += offsetX
+
       d.push(
         [PathType.M, psl, pst],
         [PathType.Q, sw + gapX * 0.4, h * 0.9, sw + gapX * 0.75, h * 0.8],
         [PathType.T, pel, pet],
       )
-      transform = `translate(${w - ew / 2} ${pet + 5}) rotate(-90)`
+      transform = `translate(${pel} ${pet + 5}) rotate(-90)`
       break
 
     case LineType.bottom2right:
@@ -261,8 +289,8 @@ export function line(start: HTMLElement, end: HTMLElement, _lineType: LineType |
         pel += ew / 2
       }
 
-      const offsetX = lineTypeOptions.offsetX ?? 120
-      const offsetY = lineTypeOptions?.offsetY ?? 120
+      offsetX = lineTypeOptions.offsetX ?? 120
+      offsetY = lineTypeOptions.offsetY ?? 120
       h += offsetY
       w += offsetX
 
@@ -277,6 +305,11 @@ export function line(start: HTMLElement, end: HTMLElement, _lineType: LineType |
       break
   }
 
+  pkg.pointerStartLeft = psl
+  pkg.pointerStartTop = pst
+  pkg.pointerEndLeft = pel
+  pkg.pointerEndTop = pet
+
   return [{
     key: 0,
     style: {
@@ -287,7 +320,7 @@ export function line(start: HTMLElement, end: HTMLElement, _lineType: LineType |
       left: _px(l),
       top: _px(t),
     },
-    path: { d: d2Str(pipeModifier(d, customModifier)) },
+    path: { d: d2Str(pipeModifier(d, customModifier, pkg)) },
     polygon: {
       transform,
     },

@@ -18,7 +18,7 @@ import Checkbox from "../components/quiz/Checkbox.vue"
 import IsCompile from "../components/quiz/IsCompile.vue"
 import { lr } from "../utils/renderer"
 
-const vec3_0 = ref(Vec({ cap: 3, point2: '0' }))
+const vec3_0 = ref(Vec({ cap: 3, point2: 0 }))
 </script>
 
 # 引用和借用

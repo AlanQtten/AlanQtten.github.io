@@ -1,4 +1,6 @@
-export function Vec(param: { cap: number, point2: string }) {
+import type { Point2 } from '../components/memory-graph/MemoryGraph.vue'
+
+export function Vec(param: { cap: number, point2: Point2 }) {
   const { cap, point2 } = param
 
   return {

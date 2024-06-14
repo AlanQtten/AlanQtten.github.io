@@ -44,7 +44,7 @@ const transformer: ShikiTransformer = {
 
       allEle.push({
         ...ele,
-        children: ele.children.reduce<any>((subChildren, subEle) => {
+        children: ele.children?.reduce<any>((subChildren, subEle) => {
           const { match, value, replaceValue, className } = matchPipe((subEle as any).value)
 
           if (match) {
@@ -75,7 +75,7 @@ const transformer: ShikiTransformer = {
           type: 'element',
           tagName: 'span',
           properties: {
-            className: pushInfo.className,
+            class: pushInfo.className,
           },
           children: [{ type: 'text', value: pushInfo.value }],
         })

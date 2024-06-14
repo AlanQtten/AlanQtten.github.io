@@ -4,6 +4,7 @@ import { inject, ref, watchEffect } from 'vue'
 import findElementAndIndex from '../../utils/findElementAndIndex'
 import type { Detail } from './UnwrapPointer.vue'
 import UnwrapPointer from './UnwrapPointer.vue'
+import type { Options } from './line'
 import { LineType, line } from './line'
 
 export type Point2 = 'null' | 'null_error' | number | string | number[]
@@ -17,6 +18,11 @@ interface Linker {
     transform: string
     style?: CSSProperties
   }
+  extraPolygon?: {
+    points: string
+    transform?: string
+    style?: CSSProperties
+  }
 }
 interface Frame {
   name: string
@@ -24,12 +30,7 @@ interface Frame {
     key: string
     value: string | string[]
     point2: Point2
-    svgCurve?: {
-      x1?: number
-      y1?: number
-      x2?: number
-      y2?: number
-    }
+    modifier?: Options['modifier']
     moved: boolean
     detail: Detail
   }>
@@ -78,6 +79,7 @@ watchEffect(() => {
             // temporarily do nothing
           }
           else if (typeof ele.point2 === 'number') {
+            // stack ---> heap by id
             const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === ele.point2)]
             const [svg] = line(start, end, LineType.right2left, { wrapper: wrapper.value, pointTo: 'edge' })
             const commonStyle: CSSProperties = ele.moved ? { opacity: 0.3 } : {}
@@ -95,27 +97,97 @@ watchEffect(() => {
             })
           }
           else if (/^\d+\./.test(ele.point2)) {
-            let [targetHeap, targetHeapIndex] = ele.point2.split('.').map(Number)
-            targetHeap = +targetHeap
+            const [targetHeapId, targetHeapIndexOrRange] = ele.point2.split('.')
 
-            const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === targetHeap)].children[targetHeapIndex - 1] // TODO: search by id
-            const [svg] = line(start, end, LineType.right2bottom, { wrapper: wrapper.value, pointTo: 'edge' })
+            if (targetHeapIndexOrRange.includes('-')) {
+              // stack ---> heap by collection slice
+              const _targetHeapId = +targetHeapId
+              const [targetHeapIndexStart, targetHeapIndexEnd] = targetHeapIndexOrRange.split('-').map(Number)
 
-            const commonStyle = ele.moved ? { opacity: 0.3 } : {}
+              const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === _targetHeapId)]
+              const endList = end.children as HTMLElement[]
+              const recGroup = Array.from(endList).map((node: HTMLElement) => {
+                const styleBlock = getComputedStyle(node)
+                const rect = node.getBoundingClientRect()
 
-            _linkers.push({
-              style: svg.style,
-              path: {
-                d: svg.path.d,
-                style: commonStyle,
-              },
-              polygon: {
-                transform: svg.polygon.transform,
-                style: commonStyle,
-              },
-            })
+                return {
+                  width: rect.width,
+                  height: rect.height,
+                  marginRight: Number.parseInt(styleBlock.marginRight),
+                }
+              })
+
+              const extraPolygonWidth = recGroup
+                .slice(targetHeapIndexStart, targetHeapIndexEnd)
+                .reduce((acc, cur) => acc + cur.width + cur.marginRight, 0)
+              const offsetX = recGroup
+                .slice(0, targetHeapIndexStart)
+                .reduce((acc, cur) => acc + cur.width + cur.marginRight, 0)
+
+              const [svg] = line(start, endList[0], {
+                lineType: LineType.right2bottom,
+                options: {
+                  offsetX: offsetX + extraPolygonWidth,
+                },
+              }, {
+                wrapper: wrapper.value,
+                pointTo: 'edge',
+                modifier: {
+                  pointEnd(p) {
+                    return [
+                      p[0]
+                      - recGroup[0].width / 2
+                      + offsetX + extraPolygonWidth / 2,
+                      p[1] + 3,
+                    ]
+                  },
+                  ...ele.modifier,
+                },
+              })
+
+              const commonStyle = ele.moved ? { opacity: 0.3 } : {}
+
+              _linkers.push({
+                style: svg.style,
+                path: {
+                  d: svg.path.d,
+                  style: commonStyle,
+                },
+                polygon: {
+                  transform: svg.polygon.transform,
+                  style: commonStyle,
+                },
+                extraPolygon: {
+                  points: `0,0 ${extraPolygonWidth},0 ${extraPolygonWidth},3 0,3`,
+                  transform: `translate(${Number.parseInt(svg.style.width as string) - extraPolygonWidth - 9}, ${recGroup[0].height})`,
+                },
+              })
+            }
+            else {
+              // stack ---> heap by collection
+              const _targetHeapId = +targetHeapId
+              const targetHeapIndex = +targetHeapIndexOrRange
+
+              const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === _targetHeapId)].children[targetHeapIndex - 1]
+              const [svg] = line(start, end, LineType.right2bottom, { wrapper: wrapper.value, pointTo: 'edge' })
+
+              const commonStyle = ele.moved ? { opacity: 0.3 } : {}
+
+              _linkers.push({
+                style: svg.style,
+                path: {
+                  d: svg.path.d,
+                  style: commonStyle,
+                },
+                polygon: {
+                  transform: svg.polygon.transform,
+                  style: commonStyle,
+                },
+              })
+            }
           }
           else if (ele.point2.includes('.')) {
+            // stack ---> stack by scope.key
             const [targetScopeName, targetFrameKey] = ele.point2.split('.')
 
             const targetScopeIndex = memory.stack.findIndex(frame => frame.name === targetScopeName)
@@ -154,6 +226,7 @@ watchEffect(() => {
         return
       }
       if (typeof hp.point2 === 'string') {
+        // heap ---> stack by scope.key
         const [targetScopeName, targetFrameKey] = hp.point2.split('.')
 
         const targetScopeIndex = memory.stack.findIndex(frame => frame.name === targetScopeName)
@@ -197,6 +270,7 @@ watchEffect(() => {
         })
       }
       else if (typeof hp.point2 === 'number') {
+        // heap ---> heap by id
         const start = heapBlock.value[_hpIndex]
         const end = heapBlock.value[memory.heap.findIndex(_hp => _hp.id === hp.point2)]
 
@@ -216,6 +290,7 @@ watchEffect(() => {
         })
       }
       else if (Array.isArray(hp.point2)) {
+        // heap ---> multi heap by id
         const start = heapBlock.value[_hpIndex]
 
         let offsetX = 60
@@ -268,7 +343,7 @@ watchEffect(() => {
       <span v-if="errorMessage" class="text-aq.error-800">{{ errorMessage }}</span>
     </div>
 
-    <div ref="wrapper" class="flex items-start gap-16 relative">
+    <div ref="wrapper" class="flex items-start = relative" :class="!detailMode && 'gap-16'">
       <div class="p-2 border border-aq border-dashed ml-2">
         <h6>Stack</h6>
 
@@ -376,7 +451,10 @@ watchEffect(() => {
 
       <svg
         v-for="(linker, index) in linkers"
-        :key="index" xmlns="http://www.w3.org/2000/svg" :style="linker.style"
+        :key="index"
+        class="pointer-events-none"
+        xmlns="http://www.w3.org/2000/svg"
+        :style="linker.style"
       >
         <path
           :d="linker.path.d"
@@ -391,6 +469,14 @@ watchEffect(() => {
           class="fill-aq.fill"
           :transform="linker.polygon.transform"
           :style="linker.polygon.style"
+        />
+
+        <polygon
+          v-if="linker.extraPolygon"
+          class="fill-aq.fill"
+          :points="linker.extraPolygon.points"
+          :transform="linker.extraPolygon.transform"
+          :style="linker.extraPolygon.style"
         />
       </svg>
     </div>
@@ -469,6 +555,7 @@ td.pointer.pointer {
 
 .arrayValue {
   text-align: left!important;
+  white-space: nowrap;
 }
 
 .arrayValue span {

@@ -31,7 +31,7 @@ function wrapResolveRef(_ref: HTMLElement) {
       <table class="!m-0">
         <tr v-for="item in detail.body" :key="item.name">
           <td>{{ item.name }}</td>
-          <td v-if="item.point2" :ref="el => resolveRef(el)" :class="$style.pointer" />
+          <td v-if="item.point2 || item.point2 === 0" :ref="el => resolveRef(el)" :class="$style.pointer" />
           <td v-else>
             <UnwrapPointer v-if="typeof item.value === 'object'" :resolve-ref="wrapResolveRef" :detail="item.value" />
             <template v-else>

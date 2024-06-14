@@ -4,7 +4,7 @@ import { withMermaid } from 'vitepress-plugin-mermaid'
 import markDownItTaskLists from 'markdown-it-task-lists'
 import UnoCss from 'unocss/vite'
 import { transformerMetaWordHighlight } from '@shikijs/transformers'
-import transformerFlag from './transformers/transformerFlag'
+import transformerFlag from '../transformers/transformerFlag'
 
 const blogList = [
   { text: '关于x-mixed-replace', link: 'x-mixed-replace' },
@@ -24,6 +24,7 @@ const rustList = [
   { text: '什么是所有权？', link: 'what-is-ownership' },
   { text: '引用和借用', link: 'references-and-borrowing' },
   { text: '修复错误的所有权', link: 'fixing-ownership-errors' },
+  { text: '切片类型', link: 'the-slice-type' },
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
