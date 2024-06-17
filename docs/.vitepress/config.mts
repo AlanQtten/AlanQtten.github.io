@@ -23,6 +23,7 @@ const projects = [
 const rustList = [
   {
     text: '4. 理解所有权',
+    link: 'understanding-ownership',
     items: [
       { text: '4.1 什么是所有权？', link: 'what-is-ownership' },
       { text: '4.2 引用和借用', link: 'references-and-borrowing' },
