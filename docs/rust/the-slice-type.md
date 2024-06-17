@@ -480,7 +480,7 @@ assert_eq!(slice, &[2, 3]);
 
 ::: details 小测（2）
 <QuizProvider>
-<Quiz answer="C">
+<Quiz>
 <template #description>
 
 解析：`&String`类型是一个单指针类型，所以在64位的系统里面它占用8个字节。而`&str`是一个特殊的切片引用，它包含了指针和切片的长度，因此占用了16个字节。所以`s3`的类型`&str`比`s2`的类型`&String`使用了更多的内存。你可以使用`std::mem::size_of`来自己验证：
@@ -511,15 +511,15 @@ fn main() {
 ```
 
 <RadioHolder name="404-1-1">
-<Radio value="A" label="s3比s2占用的字节更少" />
-<Radio value="B" label="s3和s2占用的字节一样" />
-<Radio value="C" label="s3比s2占用的字节更多" />
+<Radio label="s3比s2占用的字节更少" />
+<Radio label="s3和s2占用的字节一样" />
+<Radio label="s3比s2占用的字节更多" answer />
 </RadioHolder>
 
 </template>
 </Quiz>
 
-<Quiz :answer="{ compiled: false }" showingAnswer="编译失败">
+<Quiz>
 <template #description>
 
 解析：由于`s.as_bytes()`制造了对`s`的不可变引用，所以此时在循环体内修改`s`（即`push_str`）是不合法的。
@@ -541,7 +541,7 @@ fn main() {
 }
 ```
 
-<IsCompile name="404-1-2" />
+<IsCompile name="404-1-2" :answer="{ compiled: false }" />
 
 </template>
 </Quiz>

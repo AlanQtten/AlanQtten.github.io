@@ -342,25 +342,27 @@ let b = a; /*[!flag L2]*/
 
 ::: details 小测（2）
 <QuizProvider>
-<Quiz
-  answer="C"
-  description="解析：栈帧是与特定的函数相关联的，当函数结束时会被释放。而堆中的数据可以无限期地存活。注意堆栈中的数据都是可变、可被复制的。堆中也能存储指针（甚至有指向栈的指针，后面我们会看到）。"
->
+<Quiz>
+<template #description>
+
+解析：栈帧是与特定的函数相关联的，当函数结束时会被释放。而堆中的数据可以无限期地存活。注意堆栈中的数据都是可变、可被复制的。堆中也能存储指针（甚至有指向栈的指针，后面我们会看到）
+
+</template>
 <template #quiz>
 
 下述哪种说法最准确的描述了栈和堆的不同？
 
 <RadioHolder name="401-1-1">
-  <Radio value="A" label="栈存储着可复制的数据，堆存储着不可复制的数据"/>
-  <Radio value="B" label="栈存储着不可变的数据，堆存储着可变数据"/>
-  <Radio value="C" label="栈存储着和某个特定函数关联的数据，堆存储着与函数生命周期无关的数据"/>
-  <Radio value="D" label="栈可以存储指向堆的指针，而堆只能存储非指针数据"/>
+  <Radio label="栈存储着可复制的数据，堆存储着不可复制的数据" />
+  <Radio label="栈存储着不可变的数据，堆存储着可变数据" />
+  <Radio label="栈存储着和某个特定函数关联的数据，堆存储着与函数生命周期无关的数据" answer />
+  <Radio label="栈可以存储指向堆的指针，而堆只能存储非指针数据" />
 </RadioHolder>
 
 </template>
 </Quiz>
 
-<Quiz answer="2">
+<Quiz>
 <template #description>
 
 两个`盒子`存储了两份15，而`let b = a`只复制了堆指针，并没有复制堆中的值。
@@ -406,7 +408,7 @@ let c = Box::new(15); /*[!flag L1]*/
 </Wrapper>
 
 <span>最终，内存中有多少份数字15的复制体？用数字表示你的答案，比如0或1</span>
-<Input />
+<Input answer="2" />
 </template>
 </Quiz>
 </QuizProvider>
@@ -766,15 +768,17 @@ fn add_suffix(mut name: String) -> String {
 
 ::: details 小测（4）
 <QuizProvider>
-<Quiz
-  answer="A"
-  description="解析：在栈帧中存放一个空指针是完全安全的，重点在于不要使用空指针。（不管是读取还是释放）"
->
+<Quiz>
+<template #description>
+
+解析：在栈帧中存放一个空指针是完全安全的，重点在于不要使用空指针。（不管是读取还是释放）
+
+</template>
 <template #quiz>
 下面哪一个选项【不是】未定义行为？
 
 <RadioHolder name="401-2-1">
-  <Radio value="A" label="栈帧中存储着一个空指针" />
+  <Radio value="A" label="栈帧中存储着一个空指针" answer />
   <Radio value="B" label="释放同一片内存两次" />
   <Radio value="C" label="在if()中使用非bool类型的值" />
   <Radio value="D" label="使用一个空指针" />
@@ -782,10 +786,7 @@ fn add_suffix(mut name: String) -> String {
 </template>
 </Quiz>
 
-<Quiz
-  :answer="{ compiled: true, compiledResult: 'hello world' }"
-  showingAnswer="编译成功，输出：hello world"
->
+<Quiz>
 <template #quiz>
 判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
 
@@ -802,17 +803,23 @@ fn main() {
 }
 ```
 
-<IsCompile name="401-2-2" />
+<IsCompile 
+  name="401-2-2"
+  :answer="{
+    compiled: true,
+    result: 'hello world'
+  }"
+/>
 
 </template>
 </Quiz>
 
-<Quiz
-  :answer="{ compiled: false }"
-  showingAnswer="编译失败"
-  description="解析：变量s在if体里被移动了，所以在第8行使用它是不合法的。尽管在这个程序中，b永远是false，所以if永远不会被执行，但Rust通常不会尝试解析if是否会被执行，只会认为它“可能”会被执行，所以“可能”存在移动。"
->
+<Quiz>
+<template #description>
 
+解析：变量s在if体里被移动了，所以在第8行使用它是不合法的。尽管在这个程序中，b永远是false，所以if永远不会被执行，但Rust通常不会尝试解析if是否会被执行，只会认为它“可能”会被执行，所以“可能”存在移动。
+
+</template>
 <template #quiz>
 判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
 
@@ -828,15 +835,12 @@ fn main() {
 }
 ```
 
-<IsCompile name="401-2-3" />
+<IsCompile name="401-2-3" :answer="{ compiled: false }" />
 
 </template>
 </Quiz>
 
-<Quiz
-  :answer="['C', 'D', 'E']"
-  showingAnswer="C,D,E"
->
+<Quiz>
 <template #description>
 
 解析：核心概念在于，当堆内存传递给`move_a_box`后，它会在`move_a_box`调用结束后被释放，因此
@@ -861,9 +865,9 @@ fn move_a_box(b: Box<i32>) {
 
 <div class="flex flex-col">
 <CheckboxHolder name="401-2-4">
-<Checkbox label="都不会" value="A"/>
+<Checkbox label="都不会" />
 
-<Checkbox value="B">
+<Checkbox>
 
 ```rust
 let b = Box::new(0);
@@ -874,7 +878,7 @@ move_a_box(b2);
 
 </Checkbox>
 
-<Checkbox value="C">
+<Checkbox answer>
 
 ```rust
 let b = Box::new(0);
@@ -884,7 +888,7 @@ move_a_box(b);
 
 </Checkbox>
 
-<Checkbox value="D">
+<Checkbox answer>
 
 ```rust
 let b = Box::new(0);
@@ -894,7 +898,7 @@ let b2 = b;
 
 </Checkbox>
 
-<Checkbox value="E">
+<Checkbox answer>
 
 ```rust
 let b = Box::new(0);

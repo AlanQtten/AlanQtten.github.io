@@ -1,14 +1,8 @@
 - [ ] never stop learning rust...
 - [ ] remove all `@unocss-include` and include all js/ts file
-- [ ] refactor `import` and `export`
 - [ ] catchup for chapter 1 and chapter 2
 - [ ] refactor array value implement
 - [ ] arrow dir(difficult)
-
----
-quiz related refactor
-- [ ] auto generate more `showing answer`
-- [ ] auto generate value of `radio` and `checkbox`
 
 ---
 translate related 

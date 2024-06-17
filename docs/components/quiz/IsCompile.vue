@@ -1,31 +1,44 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { inject, onMounted, ref } from 'vue'
-import { disabledSymbol, onChangeSymbol, valueSymbol } from './quiz'
+import { disabledSymbol, onChangeSymbol, updateAnswerSymbol, updateShowingAnswerSymbol, valueSymbol } from './quiz'
 
-interface Value { compiled?: boolean, compiledResult?: string }
+interface Value { compiled?: boolean, result?: string }
 
-defineProps<{
+const { answer } = defineProps<{
   name: string
+  answer: Value
 }>()
 
 type OnChange = (v: Value) => void
 
-const defaultValue = ref<Value>(({ compiled: undefined, compiledResult: undefined }))
+const updateAnswer = inject<(v: Value) => void>(updateAnswerSymbol, () => {})
+const updateShowingAnswer = inject<(v: string) => void>(updateShowingAnswerSymbol, () => {})
+const defaultValue = ref<Value>(({ compiled: undefined, result: undefined }))
 const injectValue = inject<Ref<Value>>(valueSymbol, defaultValue)
 const onChange = inject<OnChange>(onChangeSymbol, () => {})
 const disabled = inject<boolean>(disabledSymbol)
 
 function handleRadioChange(e: Event) {
   onChange((e.target as HTMLInputElement).value === 'true'
-    ? { compiled: true, compiledResult: injectValue.value?.compiledResult }
+    ? { compiled: true, result: injectValue.value?.result }
     : { compiled: false },
   )
 }
 
 function handleInputChange(e: Event) {
-  onChange({ compiled: injectValue.value?.compiled, compiledResult: (e.target as HTMLInputElement).value })
+  onChange({ compiled: injectValue.value?.compiled, result: (e.target as HTMLInputElement).value })
 }
+
+onMounted(() => {
+  updateAnswer(answer)
+  if (answer.compiled) {
+    updateShowingAnswer(`编译成功，输出${answer.result}`)
+  }
+  else {
+    updateShowingAnswer('编译失败')
+  }
+})
 </script>
 
 <template>
@@ -63,7 +76,7 @@ function handleInputChange(e: Event) {
   <input
     v-if="injectValue?.compiled"
     type="text"
-    :value="injectValue?.compiledResult"
+    :value="injectValue?.result"
     :disabled="disabled"
     placeholder="请输入编译结果"
     class="block"

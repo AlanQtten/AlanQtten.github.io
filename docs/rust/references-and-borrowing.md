@@ -298,9 +298,7 @@ assert_eq!(s_len1, s_len2);
 ::: details 小测（2）
 
 <QuizProvider>
-<Quiz
-  answer="3"
->
+<Quiz>
 <template #description>
 
 解析：***y是正确的表达式，y的类型是`Box<&Box<i32>>`。它是一个指向堆内存中的指向栈中指向堆内存数据指针的指针的指针。因此y必须被解引用3次，每层关系一次。
@@ -345,14 +343,12 @@ let y = Box::new(&x); /*[!flag L1]*/
 
 如果想通过变量`y`复制出数字0，需要使用多少次解引用？用数字表示你的答案，比如0或1
 
-<Input />
+<Input answer="3" />
 
 </template>
 </Quiz>
 
-<Quiz
-  answer="D"
->
+<Quiz>
 <template #description>
 
 解析：引用是非拥有的指针。因此把&v传递给get_first函数并不会移动v的所有权，所以在get_first调用结束后，v也不会被释放。
@@ -397,10 +393,10 @@ fn main() {
 以下哪一项最好地解释了为什么`v`没有在`get_first`调用结束后被释放？
 
 <RadioHolder name="402-1-2">
-<Radio value="A" label="在调用get_first之后，v仍然被println所使用" />
-<Radio value="B" label="vr没有在get_first内被修改" />
-<Radio value="C" label="get_first返回了i32类型，没有返回集合本身" />
-<Radio value="D" label="vr是一个引用类型，并没有其指向集合的所有权" />
+<Radio label="在调用get_first之后，v仍然被println所使用" />
+<Radio label="vr没有在get_first内被修改" />
+<Radio label="get_first返回了i32类型，没有返回集合本身" />
+<Radio label="vr是一个引用类型，并没有其指向集合的所有权" answer />
 </RadioHolder>
 
 </template>
@@ -920,10 +916,7 @@ let z = /*[!perm R.{"collapse":true}]*/*y;
 
 ::: details 小测（3）
 <QuizProvider>
-<Quiz
-  :answer='["null"]'
-  showingAnswer="没有任何权限"
->
+<Quiz>
 <template #description>
 
 解析：可变借用符号`t = &mut s`移除了`s`的所有权限，直到`t`的生命周期结束
@@ -961,17 +954,15 @@ println!("{}", s);` })'
 在使用/* here */标记的位置，路径s的权限是什么？请选择
 
 <CheckboxHolder name="402-2-1">
-<Checkbox value="R" label="R" />
-<Checkbox value="W" label="W" />
-<Checkbox value="O" label="O" />
-<Checkbox value="null" label="没有任何权限" />
+<Checkbox label="R" />
+<Checkbox label="W" />
+<Checkbox label="O" />
+<Checkbox label="没有任何权限" answer />
 </CheckboxHolder>
 </template>
 </Quiz>
 
-<Quiz
-  answer="A"
->
+<Quiz>
 <template #description>
 
 解析：当`get_first`被调用时，Rust识别了其返回值`first`（的类型）指向了`strs`的数据，所以`strs`失去了写的权限。一旦`first`变量不再被使用了（也就是if块结束后），`strs`收回了写权限。
@@ -1030,17 +1021,15 @@ fn main() {
 
 下面哪种说法最准确地描述了为什么`strs`丢失、重新获得了<W />权限？
 <RadioHolder name="402-2-2">
-<Radio value="A" label="get_first返回了一个指向strs关联数据的不可变引用，所以first的生命周期内strs是不可读的" />
-<Radio value="B" label="在strs.push(..)之前，strs不需要读权限，所以它在这一步才收回了读权限" />
-<Radio value="C" label="由于first指向strs，所以只有在嵌套的域内（比如if）才是可变的" />
-<Radio value="D" label="strs在把不可变引用&strs传递给get_first期间是不可读的" />
+<Radio label="get_first返回了一个指向strs关联数据的不可变引用，所以first的生命周期内strs是不可读的" answer />
+<Radio label="在strs.push(..)之前，strs不需要读权限，所以它在这一步才收回了读权限" />
+<Radio label="由于first指向strs，所以只有在嵌套的域内（比如if）才是可变的" />
+<Radio label="strs在把不可变引用&strs传递给get_first期间是不可读的" />
 </RadioHolder>
 </template>
 </Quiz>
 
-<Quiz
-  answer="D"
->
+<Quiz>
 <template #description>
 
 解析：未定义行为的产生是由于`v1`在其内存被释放后被读取了。注意本题的其他三个选项对于程序的描述也是正确的，但是他们并没有解释未定义行为。比如，如果这个程序没有`println`，那么其他三个选项仍然是正确的，但程序不再会发生未定义行为了。
@@ -1083,10 +1072,10 @@ println!("{}", v1[0]); /*[!flag_error L1]*/
 下面哪一个选项最准确地描述了这个程序发生的未定义行为的种类？
 
 <RadioHolder name="402-2-3">
-<Radio value="A" label="在第二行，v1被移动到了v2" />
-<Radio value="B" label="v2拥有了堆中的集合数据，v1没有拥有" />
-<Radio value="C" label="在第三行的push后，v1指向了空指针" />
-<Radio value="D" label="v1[0]读取了v1，其指向了已经失效的内存" />
+<Radio label="在第二行，v1被移动到了v2" />
+<Radio label="v2拥有了堆中的集合数据，v1没有拥有" />
+<Radio label="在第三行的push后，v1指向了空指针" />
+<Radio label="v1[0]读取了v1，其指向了已经失效的内存" answer />
 </RadioHolder>
 </template>
 </Quiz>
@@ -1182,10 +1171,7 @@ fn main() {
 
 ::: details 小测（3）
 <QuizProvider>
-<Quiz 
-  :answer="{ compiled: false, }"
-  showingAnswer="编译失败"
->
+<Quiz>
 <template #description>
 
 解析：尽管形参`n`使用了`mut`标记，但传入的引用必须也使用`mut`。所以正确的使用是`incr(&mut n)`。
@@ -1206,14 +1192,11 @@ fn main() {
 }
 ```
 
-<IsCompile name="402-3-1" />
+<IsCompile name="402-3-1" :answer="{ compiled: false, }" />
 </template>
 </Quiz>
 
-<Quiz
-  :answer="{ compiled: false }"
-  showingAnswer="编译失败"
->
+<Quiz>
 <template #description>
 
 解析：在一个不可变引用存活的情况下（s2）创建一个不可变引用（s3）是不允许的。
@@ -1232,14 +1215,11 @@ fn main() {
 }
 ```
 
-<IsCompile name="402-3-2"/>
+<IsCompile name="402-3-2" :answer="{ compiled: false }" />
 </template>
 </Quiz>
 
-<Quiz
-  :answer="['C']"
-  showingAnswer="C"
->
+<Quiz>
 <template #description>
 
 解析：正如本节提到的，`v.push(n)`会导致`v`的重新分配，使得指向它之前内存的所有引用变的无效。因此调用`give_and_take(&v, 4)`会导致在此之前创建的引用指向无效内存。因此可以排除第一个选项，`let v2 = &v`只是创建了一个栈内引用，修改v并不会影响它。而第二个选项虽然持有了一个空指针，但并没有使用它，也不属于未定义行为，只有第三个选项读取了空指针（`n`）。
@@ -1270,7 +1250,7 @@ error[E0596]: cannot borrow `*v` as mutable, as it is behind a `&` reference
 假设编译器**没有编译失败**。选择以下可能导致未定义行为的程序，或选择“都不会”
 
 <CheckboxHolder name="402-3-3">
-<Checkbox value="A">
+<Checkbox>
 
 ```rust
 let v = vec![1, 2, 3];
@@ -1280,7 +1260,7 @@ println!("{}", v2[0]);
 ```
 
 </Checkbox>
-<Checkbox value="B">
+<Checkbox>
 
 ```rust
 let v = vec![1, 2, 3];
@@ -1290,7 +1270,7 @@ println!("{}", k);
 ```
 
 </Checkbox>
-<Checkbox value="C">
+<Checkbox answer>
 
 ```rust
 let v = vec![1, 2, 3];
@@ -1300,7 +1280,7 @@ println!("{}", n);
 ```
 
 </Checkbox>
-<Checkbox value="D" label="都不会" />
+<Checkbox label="都不会" />
 </CheckboxHolder>
 </template>
 </Quiz>

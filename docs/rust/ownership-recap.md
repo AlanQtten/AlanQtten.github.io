@@ -553,7 +553,7 @@ drop(v); /*[!flag_error L3]*/
 
 ::: details 小测（7）
 <QuizProvider>
-<Quiz answer="D">
+<Quiz>
 <template #description>
 
 解析：函数调用的目的是直接修改，因此最合适的类型签名就是接收可变引用。不可变引用或者普通的集合都是不合适的。
@@ -568,28 +568,28 @@ drop(v); /*[!flag_error L3]*/
 下面哪一个函数签名和这个功能最贴切？
 
 <RadioHolder name="405-1-1">
-<Radio value="A">
+<Radio>
 
 ```rust
 fn round_all(v: &Vec<f32>) -> Vec<f32>;
 ```
 
 </Radio>
-<Radio value="B">
+<Radio>
 
 ```rust
 fn round_all(v: Vec<f32>);
 ```
 
 </Radio>
-<Radio value="C">
+<Radio>
 
 ```rust
 fn round_all(v: &Vec<f32>);
 ```
 
 </Radio>
-<Radio value="D">
+<Radio answer>
 
 ```rust
 fn round_all(v: &mut Vec<f32>);
@@ -601,7 +601,7 @@ fn round_all(v: &mut Vec<f32>);
 </template>
 </Quiz>
 
-<Quiz answer="C">
+<Quiz>
 <template #description>
 
 解析：对于`haystack`，切片类型`&[String]`相比`&Vec<String>`可以接收更多类型的输入，所以它是更好的选择。对于`needle`，目标的子串不一定占用了堆分配的空间，所以`&str`比`String`更好。对于返回值，`Vec<String>`要求克隆输入的字符串，因此它是不合适的。`&[String]`也是不合适的，因为它只能返回连续的内容。`Vec<&String>`是最好的选择，因为它只需要分配指针空间，不需要分配字符串本身的空间。
@@ -616,28 +616,28 @@ fn round_all(v: &mut Vec<f32>);
 下面哪一个函数签名和这个功能最贴切？
 
 <RadioHolder name="405-1-2">
-<Radio value="C">
+<Radio>
 
 ```rust
 fn find_contains(haystack: &Vec<String>, needle: &str) -> &[String];
 ```
 
 </Radio>
-<Radio value="B">
+<Radio>
 
 ```rust
 fn find_contains(haystack: &[String], needle: &str) -> Vec<String>;
 ```
 
 </Radio>
-<Radio value="C">
+<Radio answer>
 
 ```rust
 fn find_contains(haystack: &[String], needle: &str) -> Vec<&String>;
 ```
 
 </Radio>
-<Radio value="D">
+<Radio>
 
 ```rust
 fn find_contains(haystack: &Vec<String>, needle: String) -> Vec<String>;
@@ -649,7 +649,7 @@ fn find_contains(haystack: &Vec<String>, needle: String) -> Vec<String>;
 </template>
 </Quiz>
 
-<Quiz answer="D">
+<Quiz>
 <template #description>
 
 解析：就像在4.3中的讨论过的一样，函数`split_at_mut`是使用了`unsafe`功能实现的。这个功能并没有完全禁用借用检查器，而是允许使用特定的不安全功能，比如裸指针。
@@ -682,15 +682,15 @@ fn main() {
 哪一个选项最好地描述了`split_at_mut`实现的可能性？
 
 <RadioHolder name="405-1-3">
-<Radio value="A" label="split_at_mut是特殊的编译器原语，无法在语言内部实现" />
-<Radio value="B" label="split_at_mut使用了不安全代码，禁用了借用检查器对可变引用安全性的检查" />
-<Radio value="C" label="split_at_mut调用了一个无法被Rust分析的C库" />
-<Radio value="D" label="split_at_mut使用了不安全的代码，通过裸指针避开了借用检查器" />
+<Radio label="split_at_mut是特殊的编译器原语，无法在语言内部实现" />
+<Radio label="split_at_mut使用了不安全代码，禁用了借用检查器对可变引用安全性的检查" />
+<Radio label="split_at_mut调用了一个无法被Rust分析的C库" />
+<Radio label="split_at_mut使用了不安全的代码，通过裸指针避开了借用检查器" answer />
 </RadioHolder>
 </template>
 </Quiz>
 
-<Quiz answer="D">
+<Quiz>
 <template #description>
 
 解析：<O />权限代表了一个对象的所有权。而一个对象只能有一个拥有者，因此对于不可复制的类型（比如`String`），引用不能移动所有权是十分重要的。如果两个变量认为它们拥有了同一个字符串，它们都会尝试销毁它，最终引发重复销毁。
@@ -727,16 +727,16 @@ let s_ref = &/*[!perm R.{"collapse":true}]*/s;` })'
 哪一个选项最准确地解释了为什么`*s_ref`没有<O />（拥有）权限？
 
 <RadioHolder name="405-1-4">
-<Radio value="A" label="所有权意味着可读取，而读取*s_ref会导致使用空指针" />
-<Radio value="B" label="所有权意味着修改，而修改*s_ref会导致使用空指针" />
-<Radio value="C" label="所有权意味着借用，而借用*s_ref会导致重复释放" />
-<Radio value="D" label="所有权意味着移动，而将一个引用移出会导致重复释放" />
+<Radio label="所有权意味着可读取，而读取*s_ref会导致使用空指针" />
+<Radio label="所有权意味着修改，而修改*s_ref会导致使用空指针" />
+<Radio label="所有权意味着借用，而借用*s_ref会导致重复释放" />
+<Radio label="所有权意味着移动，而将一个引用移出会导致重复释放" answer />
 </RadioHolder>
 
 </template>
 </Quiz>
 
-<Quiz :answer="['A', 'D']">
+<Quiz>
 <template #description>
 
 解析：借用检查器总会拒绝包含了未定义行为的程序，但偶尔也会拒绝不包含未定义行为的程序（即使它们是完全安全的）。从技术的角度来说，借用检查器是一个健全但不完备的分析系统。
@@ -747,16 +747,16 @@ let s_ref = &/*[!perm R.{"collapse":true}]*/s;` })'
 现有一系列Rust程序，都不包含`unsafe`的代码。选择以下对这些程序被借用检查器通过/拒绝描述正确的选项：
 
 <CheckboxHolder name="405-1-5">
-<Checkbox value="A" label="借用检查器有时会拒绝不含未定义行为的程序" />
-<Checkbox value="B" label="借用检查器有时会接收包含未定义行为的程序" />
-<Checkbox value="C" label="借用检查器总会通过不包含未定义行为的程序" />
-<Checkbox value="D" label="借用检查器总会拒绝包含未定义行为的程序" />
+<Checkbox label="借用检查器有时会拒绝不含未定义行为的程序" answer />
+<Checkbox label="借用检查器有时会接收包含未定义行为的程序" />
+<Checkbox label="借用检查器总会通过不包含未定义行为的程序" />
+<Checkbox label="借用检查器总会拒绝包含未定义行为的程序" answer />
 </CheckboxHolder>
 
 </template>
 </Quiz>
 
-<Quiz answer="A">
+<Quiz>
 <template #description>
 
 解析：这段代码会导致重复释放。
@@ -776,14 +776,14 @@ fn extract(b: &Box<i32>) -> i32 {
 如果借用检查器没有拒绝这个函数。请判断是否存在输入会让这个函数引发未定义行为：
 
 <RadioHolder name="405-1-6">
-<Radio value="A" label="会" />
-<Radio value="B" label="不会" />
+<Radio label="会" answer />
+<Radio label="不会" />
 </RadioHolder>
 
 </template>
 </Quiz>
 
-<Quiz answer="B">
+<Quiz>
 <template #description>
 
 解析：借用检查器拒绝这段代码的原因是它认为`get_first`和`get_second`会返回元组中任意的引用，所以`fst`和`snd`可能会指向同一份数据。但在这个程序里它们永远是不同的，所以这个函数是安全的。
@@ -813,8 +813,8 @@ fn transfer_string(strs: &mut (String, String)) {
 如果借用检查器没有拒绝这个函数。请判断是否存在输入会让这个函数引发未定义行为：
 
 <RadioHolder name="405-1-7">
-<Radio value="A" label="会" />
-<Radio value="B" label="不会" />
+<Radio label="会" />
+<Radio label="不会" answer />
 </RadioHolder>
 
 </template>

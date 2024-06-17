@@ -219,23 +219,25 @@ fn stringify_name_with_title(name: &Vec<String>) -> String {
 
 ::: details 小测（3）
 <QuizProvider>
-<Quiz
-  answer="A"
-  description="栈帧的生命周期无法被延长，因此这不是一种有效的做法"
->
+<Quiz>
+<template #description>
+
+解析：栈帧的生命周期无法被延长，因此这不是一种有效的做法
+
+</template>
 <template #quiz> 
 下面哪种做法无法修复“函数返回栈引用”这种错误？
 
 <RadioHolder name="403-1-1">
-<Radio value="A" label="延长栈帧的生命周期" />
-<Radio value="B" label="调用者提供一个可变的槽" />
-<Radio value="C" label="获取返回值的所有权" />
-<Radio value="D" label="使用引用计数指针" />
+<Radio label="延长栈帧的生命周期" answer />
+<Radio label="调用者提供一个可变的槽" />
+<Radio label="获取返回值的所有权" />
+<Radio label="使用引用计数指针" />
 </RadioHolder>
 </template>
 </Quiz>
 
-<Quiz answer="C">
+<Quiz>
 <template #description>
 
 解析：原函数并不希望修改原来的名字，所以将`name`的类型改成`&mut String`或者`String`都是不合适的。而编译器提示的`&*name`也是不够充分的————最让人满意的答案是通过`name.clone()`修改副本数据。
@@ -269,7 +271,7 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
 下面是四种针对这个程序的修复，哪一个修复和原程序的语义最接近？四个选项不同的部分已被高亮显示
 
 <RadioHolder name="403-1-2">
-<Radio value="A">
+<Radio>
 
 ```rust /name: &mut String/
 fn award_phd(name: &mut String) {
@@ -279,7 +281,7 @@ fn award_phd(name: &mut String) {
 
 </Radio>
 
-<Radio value="B">
+<Radio>
 
 ```rust /&*name/
 fn award_phd(name: &String) -> String {
@@ -291,7 +293,7 @@ fn award_phd(name: &String) -> String {
 
 </Radio>
 
-<Radio value="C">
+<Radio answer>
 
 ```rust /name.clone()/
 fn award_phd(name: &String) -> String {
@@ -303,7 +305,7 @@ fn award_phd(name: &String) -> String {
 
 </Radio>
 
-<Radio value="D">
+<Radio>
 
 ```rust /mut name: &String/
 fn award_phd(mut name: &String) -> String {
@@ -318,7 +320,7 @@ fn award_phd(mut name: &String) -> String {
 </template>
 </Quiz>
 
-<Quiz answer="B">
+<Quiz>
 <template #description>
 
 解析：因为这个函数应该直接修改集合，语义上它不应该返回一份集合的副本（即`-> Vec<f32>`）或消费原集合的所有权（`mut v: Vec<f32>`）。最好的办法就是将函数形参的类型签名从`&Vec<f32>`改为`&mut Vec<f32>`
@@ -351,7 +353,7 @@ er^ror[E0594]: cannot assign to `*n`, which is behind a `&` reference
 下面是四种针对这个程序的修复，哪一个修复和原程序的语义最接近？四个选项不同的部分已被高亮显示
 
 <RadioHolder name="403-1-3">
-<Radio value="A">
+<Radio>
 
 ```rust /mut n/ /&mut v.clone()/
 fn round_in_place(v: &Vec<f32>) {
@@ -363,7 +365,7 @@ fn round_in_place(v: &Vec<f32>) {
 
 </Radio>
 
-<Radio value="B">
+<Radio answer>
 
 ```rust /&mut Vec<f32>/
 fn round_in_place(v: &mut Vec<f32>) {
@@ -375,7 +377,7 @@ fn round_in_place(v: &mut Vec<f32>) {
 
 </Radio>
 
-<Radio value="C">
+<Radio>
 
 ```rust /-> Vec<f32>/ /let mut / / = Vec::new();/ /.push(n.round());/ /v2/
 ```rust
@@ -390,7 +392,7 @@ fn round_in_place(v: &Vec<f32>) -> Vec<f32> {
 
 </Radio>
 
-<Radio value="D">
+<Radio>
 
 ```rust /mut v: Vec<f32>/
 fn round_in_place(mut v: Vec<f32>) {
@@ -892,7 +894,7 @@ unsafe { *x += *y ; } // 除非你非常清楚自己在做什么，否则别这�
 
 ::: details 小测（5）
 <QuizProvider>
-<Quiz answer="B">
+<Quiz>
 <template #description>
 
 解析：如果一个`String`在不移动的情况下被复制了，那么两个变量可能会拥有同一个字符串，最终导致内存的重复释放。
@@ -903,15 +905,15 @@ unsafe { *x += *y ; } // 除非你非常清楚自己在做什么，否则别这�
 下面哪一个描述最正确地解释了为什么`i32`可以在不移动的情况下复制，而`String`不行？
 
 <RadioHolder name="403-2-1">
-<Radio value="A" label="i32是Rust中的一种原始类型，而String不是" />
-<Radio value="B" label="String拥有了堆中的数据，而i32没有" />
-<Radio value="C" label="String可以被存放在堆中，而i32只能被存放在栈中" />
-<Radio value="D" label="i32占有的内存比String小" />
+<Radio label="i32是Rust中的一种原始类型，而String不是" />
+<Radio label="String拥有了堆中的数据，而i32没有" answer />
+<Radio label="String可以被存放在堆中，而i32只能被存放在栈中" />
+<Radio label="i32占有的内存比String小" />
 </RadioHolder>
 </template>
 </Quiz>
 
-<Quiz answer="B">
+<Quiz>
 <template #description>
 
 解析：`println`技术上来说是安全的，因为字符串在当前的块结束时才会被释放。但在程序结束时未定义行为出现了，字符串会由于`s`和`s2`的缘故被释放两次。
@@ -931,16 +933,16 @@ println!("{s2}");
 下面哪一个描述最正确地描述了如果允许这个程序编译，可能出现的未定义行为？
 
 <RadioHolder name="403-2-2">
-<Radio value="A" label="这个程序不存在未定义行为" />
-<Radio value="B" label="字符串在程序结束时会被释放两次" />
-<Radio value="C" label="println中读取s2的行为使用了被释放的内存" />
-<Radio value="D" label="解引用*s_ref使用了被释放的内存" />
+<Radio label="这个程序不存在未定义行为" />
+<Radio label="字符串在程序结束时会被释放两次" answer />
+<Radio label="println中读取s2的行为使用了被释放的内存" />
+<Radio label="解引用*s_ref使用了被释放的内存" />
 </RadioHolder>
 
 </template>
 </Quiz>
 
-<Quiz answer="C">
+<Quiz>
 <template #description>
 
 解析：这段代码是安全的。执行的话也不存在未定义行为。（如果`i`越界了，那么Rust会在运行时崩溃，而不是导致未定义行为）
@@ -966,16 +968,16 @@ fn main() {
 下面哪一个描述最正确地描述了如果允许这个程序编译，可能出现的未定义行为？
 
 <RadioHolder name="403-2-3">
-<Radio value="A" label="v[i - 1]读取了被释放的内存" />
-<Radio value="B" label="&mut v[i]创建了指向释放内存的指针" />
-<Radio value="C" label="这个程序不存在未定义行为" />
-<Radio value="D" label="赋值*n使用了被释放的内存" />
+<Radio label="v[i - 1]读取了被释放的内存" />
+<Radio label="&mut v[i]创建了指向释放内存的指针" />
+<Radio label="这个程序不存在未定义行为" answer />
+<Radio label="赋值*n使用了被释放的内存" />
 </RadioHolder>
 
 </template>
 </Quiz>
 
-<Quiz :answer="['A', 'B', 'C']">
+<Quiz>
 <template #description>
 
 解析：`let mut name = *name`使得入参`name`的所有权被移除了。然而，调用者仍然保留了原始字符串的所有权。因此在`award_phd`完成调用后，字符串被销毁了。上面的每一个程序都存在未定义行为，因为`name`最终会被销毁两次。不管`name`或其引用有没有在调用`award_phd`后被读取。
@@ -1009,7 +1011,7 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
 假设编译器**没有编译失败**。选择以下可能导致未定义行为的程序，或选择“都不会”
 
 <CheckboxHolder name="403-2-4">
-<Checkbox value="A">
+<Checkbox answer>
 
 ```rust
 let name = String::from("Ferris");
@@ -1019,7 +1021,7 @@ println!("{}", name);
 
 </Checkbox>
 
-<Checkbox value="B">
+<Checkbox answer>
 
 ```rust
 let name = String::from("Ferris");
@@ -1030,7 +1032,7 @@ println!("{}", name_ref);
 
 </Checkbox>
 
-<Checkbox value="C">
+<Checkbox answer>
 
 ```rust
 let name = String::from("Ferris");
@@ -1039,16 +1041,13 @@ award_phd(&name);
 
 </Checkbox>
 
-<Checkbox value="null" label="都不会" />
+<Checkbox label="都不会" />
 </CheckboxHolder>
 
 </template>
 </Quiz>
 
-<Quiz 
-  :answer="{ compiled: true, compiledResult: '0 2' }"
-  showingAnswer="编译成功，输出：0 2"
->
+<Quiz>
 <template #description>
 
 解析：这段程序可以正常编译，`x`复制了`point[0]`，因而允许`y`创建了对`point[1]`的可变借用。`x += 1`没有影响到`point`，而`*y += 1`影响了，因此结果是`0 2`。
@@ -1069,7 +1068,7 @@ fn main() {
 }
 ```
 
-<IsCompile name="403-2-5" />
+<IsCompile name="403-2-5" :answer="{ compiled: true, result: '0 2' }" />
 
 </template>
 </Quiz>

@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import { inject, ref } from 'vue'
+import { inject, onMounted, ref } from 'vue'
 import { disabledSymbol, onChangeSymbol, valueSymbol } from './quiz'
 
-defineProps<{
+const { answer, value } = defineProps<{
   label?: string
   value: string
+  answer?: boolean
 }>()
 
 const name = inject<string>('name')
+const updateAnswer = inject<(v: string) => void>('updateAnswer', () => {})
 
 type OnChange = (v: string) => void
 
@@ -20,6 +22,12 @@ const disabled = inject<boolean>(disabledSymbol)
 function handleChange(e: Event) {
   onChange((e.target as HTMLInputElement).value)
 }
+
+onMounted(() => {
+  if (answer) {
+    updateAnswer(value)
+  }
+})
 </script>
 
 <template>

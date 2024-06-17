@@ -2,21 +2,26 @@
 import { computed, provide, ref } from 'vue'
 import objectEqual from '../../utils/object-equal'
 import arrayEqual from '../../utils/array-equal'
-import { disabledSymbol, onChangeSymbol, valueSymbol } from './quiz'
+import { disabledSymbol, onChangeSymbol, updateAnswerSymbol, updateShowingAnswerSymbol, valueSymbol } from './quiz'
 
 type Answer = string | number | object
 
-const { answer, defaultValue = '' } = withDefaults(defineProps<{
+defineProps<{
   questionMark?: number | string
-  answer: Answer
-  showingAnswer?: string
-  description?: string
-  defaultValue?: any
-}>(), {
-  questionMark: 1,
-})
+}>()
 
-const inputAnswer = ref(defaultValue)
+const answer = ref<any>(null)
+const showingAnswer = ref('')
+
+function internalUpdateAnswer(_answer) {
+  answer.value = _answer
+}
+
+function internalUpdateShowingAnswer(_showingAnswer) {
+  showingAnswer.value = _showingAnswer
+}
+
+const inputAnswer = ref('')
 const freezeAnswer = ref()
 function handleAnswer() {
   if (!inputAnswer.value)
@@ -38,13 +43,13 @@ const isCorrect = computed(() => {
     return arrayEqual(inputAnswer.value, answer)
   }
 
-  const type = typeof answer
+  const type = typeof answer.value
   switch (type) {
     case 'string':
     case 'number':
-      return inputAnswer.value === answer
+      return inputAnswer.value === answer.value
     case 'object':
-      return objectEqual(inputAnswer.value, answer)
+      return objectEqual(inputAnswer.value, answer.value)
     default:
       return false
   }
@@ -53,6 +58,8 @@ const isCorrect = computed(() => {
 provide(valueSymbol, inputAnswer)
 provide(onChangeSymbol, onChange)
 provide(disabledSymbol, freezeAnswer)
+provide(updateAnswerSymbol, internalUpdateAnswer)
+provide(updateShowingAnswerSymbol, internalUpdateShowingAnswer)
 </script>
 
 <template>
@@ -70,15 +77,9 @@ provide(disabledSymbol, freezeAnswer)
     </div>
 
     <div v-else>
-      <span>回答错误，正确答案：{{ showingAnswer ?? answer }}</span>
+      <span>回答错误，正确答案：{{ showingAnswer || answer }}</span>
     </div>
 
-    <template v-if="$slots.description">
-      <slot name="description" />
-    </template>
-
-    <p v-else>
-      {{ description }}
-    </p>
+    <slot name="description" />
   </template>
 </template>
