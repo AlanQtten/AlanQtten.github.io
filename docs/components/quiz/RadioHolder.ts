@@ -1,18 +1,14 @@
-import { cloneVNode, defineComponent, inject, provide, toRefs } from 'vue'
+import { cloneVNode, defineComponent, inject, provide } from 'vue'
 import { updateAnswerSymbol } from './quiz'
 
 export default defineComponent({
-  props: ['name'],
   setup(props, { slots }) {
-    const { name } = toRefs(props)
-
     const updateAnswer = inject<(v: string) => void>(updateAnswerSymbol, () => {})
 
     function internalUpdateAnswer(payload: string) {
       updateAnswer(payload)
     }
 
-    provide('name', name)
     provide('updateAnswer', internalUpdateAnswer)
 
     return () => {

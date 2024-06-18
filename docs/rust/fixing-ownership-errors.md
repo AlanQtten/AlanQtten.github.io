@@ -10,7 +10,8 @@ import {
   RadioHolder,
   Checkbox,
   CheckboxHolder,
-  IsCompile
+  IsCompile,
+  IsCompileText
 } from "../components/quiz"
 import { lr } from "../utils/renderer"
 </script>
@@ -228,7 +229,7 @@ fn stringify_name_with_title(name: &Vec<String>) -> String {
 <template #quiz> 
 下面哪种做法无法修复“函数返回栈引用”这种错误？
 
-<RadioHolder name="403-1-1">
+<RadioHolder>
 <Radio label="延长栈帧的生命周期" answer />
 <Radio label="调用者提供一个可变的槽" />
 <Radio label="获取返回值的所有权" />
@@ -270,7 +271,7 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
 
 下面是四种针对这个程序的修复，哪一个修复和原程序的语义最接近？四个选项不同的部分已被高亮显示
 
-<RadioHolder name="403-1-2">
+<RadioHolder>
 <Radio>
 
 ```rust /name: &mut String/
@@ -352,7 +353,7 @@ er^ror[E0594]: cannot assign to `*n`, which is behind a `&` reference
 
 下面是四种针对这个程序的修复，哪一个修复和原程序的语义最接近？四个选项不同的部分已被高亮显示
 
-<RadioHolder name="403-1-3">
+<RadioHolder>
 <Radio>
 
 ```rust /mut n/ /&mut v.clone()/
@@ -904,7 +905,7 @@ unsafe { *x += *y ; } // 除非你非常清楚自己在做什么，否则别这�
 
 下面哪一个描述最正确地解释了为什么`i32`可以在不移动的情况下复制，而`String`不行？
 
-<RadioHolder name="403-2-1">
+<RadioHolder>
 <Radio label="i32是Rust中的一种原始类型，而String不是" />
 <Radio label="String拥有了堆中的数据，而i32没有" answer />
 <Radio label="String可以被存放在堆中，而i32只能被存放在栈中" />
@@ -932,7 +933,7 @@ println!("{s2}");
 
 下面哪一个描述最正确地描述了如果允许这个程序编译，可能出现的未定义行为？
 
-<RadioHolder name="403-2-2">
+<RadioHolder>
 <Radio label="这个程序不存在未定义行为" />
 <Radio label="字符串在程序结束时会被释放两次" answer />
 <Radio label="println中读取s2的行为使用了被释放的内存" />
@@ -967,7 +968,7 @@ fn main() {
 
 下面哪一个描述最正确地描述了如果允许这个程序编译，可能出现的未定义行为？
 
-<RadioHolder name="403-2-3">
+<RadioHolder>
 <Radio label="v[i - 1]读取了被释放的内存" />
 <Radio label="&mut v[i]创建了指向释放内存的指针" />
 <Radio label="这个程序不存在未定义行为" answer />
@@ -1010,7 +1011,7 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
 
 假设编译器**没有编译失败**。选择以下可能导致未定义行为的程序，或选择“都不会”
 
-<CheckboxHolder name="403-2-4">
+<CheckboxHolder>
 <Checkbox answer>
 
 ```rust
@@ -1055,7 +1056,7 @@ award_phd(&name);
 </template>
 <template #quiz>
 
-判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
+<IsCompileText />
 
 ```rust
 fn main() {
@@ -1068,7 +1069,7 @@ fn main() {
 }
 ```
 
-<IsCompile name="403-2-5" :answer="{ compiled: true, result: '0 2' }" />
+<IsCompile :answer="{ compiled: true, result: '0 2' }" />
 
 </template>
 </Quiz>

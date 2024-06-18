@@ -8,6 +8,7 @@
     Radio,
     RadioHolder,
     IsCompile,
+    IsCompileText,
   } from "../components/quiz";
   import { lr } from "../utils/renderer"
   import { Vec } from "../utils/generateStructure"
@@ -510,7 +511,7 @@ fn main() {
 }
 ```
 
-<RadioHolder name="404-1-1">
+<RadioHolder>
 <Radio label="s3比s2占用的字节更少" />
 <Radio label="s3和s2占用的字节一样" />
 <Radio label="s3比s2占用的字节更多" answer />
@@ -527,7 +528,7 @@ fn main() {
 </template>
 <template #quiz>
 
-判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
+<IsCompileText />
 
 ```rust
 fn main() {
@@ -541,7 +542,7 @@ fn main() {
 }
 ```
 
-<IsCompile name="404-1-2" :answer="{ compiled: false }" />
+<IsCompile :answer="{ compiled: false }" />
 
 </template>
 </Quiz>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { inject, onMounted, ref } from 'vue'
-import { disabledSymbol, onChangeSymbol, valueSymbol } from './quiz'
+import { disabledSymbol, nameSymbol, onChangeSymbol, valueSymbol } from './quiz'
 
 const { value, answer } = defineProps<{
   label?: string
@@ -9,7 +9,7 @@ const { value, answer } = defineProps<{
   answer?: boolean
 }>()
 
-const name = inject<string>('name')
+const name = inject<string>(nameSymbol)
 
 type GroupValue = string[]
 type OnChange = (v: GroupValue) => void

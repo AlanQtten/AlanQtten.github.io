@@ -1,14 +1,28 @@
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue'
+import { computed, onMounted, provide, ref } from 'vue'
 import objectEqual from '../../utils/object-equal'
 import arrayEqual from '../../utils/array-equal'
-import { disabledSymbol, onChangeSymbol, updateAnswerSymbol, updateShowingAnswerSymbol, valueSymbol } from './quiz'
+import {
+  disabledSymbol,
+  nameSymbol,
+  onChangeSymbol,
+  updateAnswerSymbol,
+  updateShowingAnswerSymbol,
+  valueSymbol,
+} from './quiz'
+import { getQuizName } from './utils'
 
 type Answer = string | number | object
 
 defineProps<{
   questionMark?: number | string
 }>()
+
+const formItemName = ref('')
+onMounted(() => {
+  formItemName.value = getQuizName()
+})
+provide(nameSymbol, formItemName)
 
 const answer = ref<any>(null)
 const showingAnswer = ref('')

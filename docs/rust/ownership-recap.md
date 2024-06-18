@@ -567,7 +567,7 @@ drop(v); /*[!flag_error L3]*/
 
 下面哪一个函数签名和这个功能最贴切？
 
-<RadioHolder name="405-1-1">
+<RadioHolder>
 <Radio>
 
 ```rust
@@ -615,7 +615,7 @@ fn round_all(v: &mut Vec<f32>);
 
 下面哪一个函数签名和这个功能最贴切？
 
-<RadioHolder name="405-1-2">
+<RadioHolder>
 <Radio>
 
 ```rust
@@ -681,7 +681,7 @@ fn main() {
 
 哪一个选项最好地描述了`split_at_mut`实现的可能性？
 
-<RadioHolder name="405-1-3">
+<RadioHolder>
 <Radio label="split_at_mut是特殊的编译器原语，无法在语言内部实现" />
 <Radio label="split_at_mut使用了不安全代码，禁用了借用检查器对可变引用安全性的检查" />
 <Radio label="split_at_mut调用了一个无法被Rust分析的C库" />
@@ -726,7 +726,7 @@ let s_ref = &/*[!perm R.{"collapse":true}]*/s;` })'
 
 哪一个选项最准确地解释了为什么`*s_ref`没有<O />（拥有）权限？
 
-<RadioHolder name="405-1-4">
+<RadioHolder>
 <Radio label="所有权意味着可读取，而读取*s_ref会导致使用空指针" />
 <Radio label="所有权意味着修改，而修改*s_ref会导致使用空指针" />
 <Radio label="所有权意味着借用，而借用*s_ref会导致重复释放" />
@@ -746,7 +746,7 @@ let s_ref = &/*[!perm R.{"collapse":true}]*/s;` })'
 
 现有一系列Rust程序，都不包含`unsafe`的代码。选择以下对这些程序被借用检查器通过/拒绝描述正确的选项：
 
-<CheckboxHolder name="405-1-5">
+<CheckboxHolder>
 <Checkbox label="借用检查器有时会拒绝不含未定义行为的程序" answer />
 <Checkbox label="借用检查器有时会接收包含未定义行为的程序" />
 <Checkbox label="借用检查器总会通过不包含未定义行为的程序" />
@@ -775,7 +775,7 @@ fn extract(b: &Box<i32>) -> i32 {
 
 如果借用检查器没有拒绝这个函数。请判断是否存在输入会让这个函数引发未定义行为：
 
-<RadioHolder name="405-1-6">
+<RadioHolder>
 <Radio label="会" answer />
 <Radio label="不会" />
 </RadioHolder>
@@ -812,7 +812,7 @@ fn transfer_string(strs: &mut (String, String)) {
 
 如果借用检查器没有拒绝这个函数。请判断是否存在输入会让这个函数引发未定义行为：
 
-<RadioHolder name="405-1-7">
+<RadioHolder>
 <Radio label="会" />
 <Radio label="不会" answer />
 </RadioHolder>

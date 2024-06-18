@@ -11,7 +11,8 @@ import {
   Radio,
   CheckboxHolder,
   Checkbox,
-  IsCompile
+  IsCompile,
+  IsCompileText
 } from '../components/quiz'
 import ShikiCode from '../components/code/ShikiCode.vue'
 import { R, W, O, F, DoubleLetter } from '../components/letter'
@@ -392,7 +393,7 @@ fn main() {
 
 以下哪一项最好地解释了为什么`v`没有在`get_first`调用结束后被释放？
 
-<RadioHolder name="402-1-2">
+<RadioHolder>
 <Radio label="在调用get_first之后，v仍然被println所使用" />
 <Radio label="vr没有在get_first内被修改" />
 <Radio label="get_first返回了i32类型，没有返回集合本身" />
@@ -953,7 +954,7 @@ println!("{}", s);` })'
 
 在使用/* here */标记的位置，路径s的权限是什么？请选择
 
-<CheckboxHolder name="402-2-1">
+<CheckboxHolder>
 <Checkbox label="R" />
 <Checkbox label="W" />
 <Checkbox label="O" />
@@ -1020,7 +1021,7 @@ fn main() {
 />
 
 下面哪种说法最准确地描述了为什么`strs`丢失、重新获得了<W />权限？
-<RadioHolder name="402-2-2">
+<RadioHolder>
 <Radio label="get_first返回了一个指向strs关联数据的不可变引用，所以first的生命周期内strs是不可读的" answer />
 <Radio label="在strs.push(..)之前，strs不需要读权限，所以它在这一步才收回了读权限" />
 <Radio label="由于first指向strs，所以只有在嵌套的域内（比如if）才是可变的" />
@@ -1071,7 +1072,7 @@ println!("{}", v1[0]); /*[!flag_error L1]*/
 
 下面哪一个选项最准确地描述了这个程序发生的未定义行为的种类？
 
-<RadioHolder name="402-2-3">
+<RadioHolder>
 <Radio label="在第二行，v1被移动到了v2" />
 <Radio label="v2拥有了堆中的集合数据，v1没有拥有" />
 <Radio label="在第三行的push后，v1指向了空指针" />
@@ -1178,7 +1179,8 @@ fn main() {
 
 </template>
 <template #quiz>
-判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
+
+<IsCompileText />
 
 ```rust
 fn incr(n: &mut i32) {
@@ -1192,7 +1194,7 @@ fn main() {
 }
 ```
 
-<IsCompile name="402-3-1" :answer="{ compiled: false, }" />
+<IsCompile :answer="{ compiled: false, }" />
 </template>
 </Quiz>
 
@@ -1203,7 +1205,8 @@ fn main() {
 
 </template>
 <template #quiz>
-判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
+
+<IsCompileText />
 
 ```rust
 fn main() {
@@ -1215,7 +1218,7 @@ fn main() {
 }
 ```
 
-<IsCompile name="402-3-2" :answer="{ compiled: false }" />
+<IsCompile :answer="{ compiled: false }" />
 </template>
 </Quiz>
 
@@ -1249,7 +1252,7 @@ error[E0596]: cannot borrow `*v` as mutable, as it is behind a `&` reference
 
 假设编译器**没有编译失败**。选择以下可能导致未定义行为的程序，或选择“都不会”
 
-<CheckboxHolder name="402-3-3">
+<CheckboxHolder>
 <Checkbox>
 
 ```rust

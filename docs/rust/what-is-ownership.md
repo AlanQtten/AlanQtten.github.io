@@ -7,8 +7,9 @@ import {
   Radio,
   Input,
   IsCompile,
+  IsCompileText,
   CheckboxHolder,
-  Checkbox
+  Checkbox,
 } from '../components/quiz'
 </script>
 
@@ -352,7 +353,7 @@ let b = a; /*[!flag L2]*/
 
 下述哪种说法最准确的描述了栈和堆的不同？
 
-<RadioHolder name="401-1-1">
+<RadioHolder>
   <Radio label="栈存储着可复制的数据，堆存储着不可复制的数据" />
   <Radio label="栈存储着不可变的数据，堆存储着可变数据" />
   <Radio label="栈存储着和某个特定函数关联的数据，堆存储着与函数生命周期无关的数据" answer />
@@ -777,7 +778,7 @@ fn add_suffix(mut name: String) -> String {
 <template #quiz>
 下面哪一个选项【不是】未定义行为？
 
-<RadioHolder name="401-2-1">
+<RadioHolder>
   <Radio value="A" label="栈帧中存储着一个空指针" answer />
   <Radio value="B" label="释放同一片内存两次" />
   <Radio value="C" label="在if()中使用非bool类型的值" />
@@ -788,7 +789,8 @@ fn add_suffix(mut name: String) -> String {
 
 <Quiz>
 <template #quiz>
-判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
+
+<IsCompileText />
 
 ```rust
 fn add_suffix(mut s: String) -> String {
@@ -804,7 +806,6 @@ fn main() {
 ```
 
 <IsCompile 
-  name="401-2-2"
   :answer="{
     compiled: true,
     result: 'hello world'
@@ -821,7 +822,8 @@ fn main() {
 
 </template>
 <template #quiz>
-判断下面的程序是否编译成功，如果成功，写出执行后的输出结果。
+
+<IsCompileText />
 
 ```rust
 fn main() {
@@ -835,7 +837,7 @@ fn main() {
 }
 ```
 
-<IsCompile name="401-2-3" :answer="{ compiled: false }" />
+<IsCompile :answer="{ compiled: false }" />
 
 </template>
 </Quiz>
@@ -864,7 +866,7 @@ fn move_a_box(b: Box<i32>) {
 下面有四个被Rust编译器拒绝的程序，想象一下如果Rust允许这些代码编译通过。请选择哪些代码会导致未定义行为，或选择“都不会”
 
 <div class="flex flex-col">
-<CheckboxHolder name="401-2-4">
+<CheckboxHolder>
 <Checkbox label="都不会" />
 
 <Checkbox>

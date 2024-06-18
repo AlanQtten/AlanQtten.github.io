@@ -1,10 +1,8 @@
-import { cloneVNode, defineComponent, inject, provide, ref, toRefs, watch } from 'vue'
+import { cloneVNode, defineComponent, inject, provide, ref, watch } from 'vue'
 import { updateAnswerSymbol, updateShowingAnswerSymbol } from './quiz'
 
 export default defineComponent({
-  props: ['name'],
   setup(props, { slots }) {
-    const { name } = toRefs(props)
     const updateAnswer = inject<(answer: string[]) => void>(updateAnswerSymbol, () => {})
     const updateShowingAnswer = inject<(sa: string) => void>(updateShowingAnswerSymbol, () => {})
 
@@ -13,7 +11,6 @@ export default defineComponent({
       correctAnswer.value.add(payload)
     }
 
-    provide('name', name)
     provide('updateAnswer', internalUpdateAnswer)
 
     watch(

@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
 import { inject, onMounted, ref } from 'vue'
-import { disabledSymbol, onChangeSymbol, updateAnswerSymbol, updateShowingAnswerSymbol, valueSymbol } from './quiz'
+import { disabledSymbol, nameSymbol, onChangeSymbol, updateAnswerSymbol, updateShowingAnswerSymbol, valueSymbol } from './quiz'
 
 interface Value { compiled?: boolean, result?: string }
 
 const { answer } = defineProps<{
-  name: string
   answer: Value
 }>()
 
 type OnChange = (v: Value) => void
 
+const name = inject(nameSymbol)
 const updateAnswer = inject<(v: Value) => void>(updateAnswerSymbol, () => {})
 const updateShowingAnswer = inject<(v: string) => void>(updateShowingAnswerSymbol, () => {})
 const defaultValue = ref<Value>(({ compiled: undefined, result: undefined }))
