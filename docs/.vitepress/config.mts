@@ -29,7 +29,7 @@ const rustList = [
       { text: '3.2 数据类型', link: 'data-types' },
       { text: '3.3 函数', link: 'functions' },
       { text: '3.4 注释', link: 'comments' },
-      // { text: '3.5 流程控制', link: 'control-flow' },
+      { text: '3.5 流程控制', link: 'control-flow' },
     ],
   },
   {
