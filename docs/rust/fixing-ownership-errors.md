@@ -3,8 +3,8 @@ import ShikiCode from "../components/code/ShikiCode.vue"
 import { W, R, O } from "../components/letter"
 import { h } from "vue"
 import { Wrapper, MemoryGraph } from "../components/memory-graph"
-import { 
-  Quiz,  
+import {
+  Quiz,
   QuizProvider,
   Radio,
   RadioHolder,
@@ -226,7 +226,7 @@ fn stringify_name_with_title(name: &Vec<String>) -> String {
 解析：栈帧的生命周期无法被延长，因此这不是一种有效的做法
 
 </template>
-<template #quiz> 
+<template #quiz>
 下面哪种做法无法修复“函数返回栈引用”这种错误？
 
 <RadioHolder>
@@ -265,7 +265,7 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
 3|    let mut name = *name;
  |                   ^^^^^
  |                   |
- |                   move occurs because `*name` has type `String`, which does not implement the `Copy` trait 
+ |                   move occurs because `*name` has type `String`, which does not implement the `Copy` trait
  |                   help: consider borrowing here: `&*name`
 ```
 
@@ -348,7 +348,7 @@ er^ror[E0594]: cannot assign to `*n`, which is behind a `&` reference
 3|    for n in v {
  |             - this iterator yields `&` reference
 4|        *n = n.round();
- |        ^^^^^^^^^^^^^^ `n` is a `&` reference, so the data it refers to cannot be written 
+ |        ^^^^^^^^^^^^^^ `n` is a `&` reference, so the data it refers to cannot be written
 ```
 
 下面是四种针对这个程序的修复，哪一个修复和原程序的语义最接近？四个选项不同的部分已被高亮显示
@@ -434,7 +434,7 @@ fn round_in_place(mut v: Vec<f32>) {
             { var: 'largest', operation: 'g', P: ['p', 'e', 'p'] },
             { var: '*largest', operation: 'g', P: ['p', 'e', 'e'] },
           ]
-        }) 
+        })
         case 2: return lr({
           defaultCollapse: true,
           perms: [
@@ -696,19 +696,19 @@ assert!(v.len() == 0);
           { var: 'name.0', operation: 'b', P: [null, 's', 's'], collapse: true },
           { var: 'first', operation: 'g', P: ['p', 'e', 'p'] },
           { var: '*first', operation: 'g', P: ['p', 'e', 'e'] },
-        ] }) 
+        ] })
         case 6: return lr({ defaultCollapse: true, perms: [
           { var: 'name', operation: 'l', P: ['s', 'e', 'e'] },
           { var: 'name.0', operation: 'l', P: ['s', 'e', 'e'], },
           { var: 'name.1', operation: 'b', P: 's', },
           { var: 'first', operation: 'b', P: ['s', 'e', 's'] },
           { var: '*first', operation: 'b', P: ['s', 'e', 'e'] },
-        ] }) 
+        ] })
       }
     }
   }"
   :init-code='() => ({ lang: "rust", code: `let mut name = (
-    String::from("Ferris"), 
+    String::from("Ferris"),
     String::from("Rustacean")
 );
 let first = &/*[!perm R.{"collapse":true}]*/name.0;
@@ -788,7 +788,7 @@ error[E0502]: cannot borrow `name.1` as mutable because it is also borrowed as i
 
 跟上一个问题类似的问题是借用数组的元素。比如，观察下面的程序就能看到，哪些路径在创建数组元素的可变引用时被借用了：
 
-<ShikiCode 
+<ShikiCode
   :inserter="({ after, line }) => {
     if(!after) {
       switch(line) {

@@ -43,6 +43,13 @@ const rustList = [
       { text: '4.5 所有权回顾', link: 'ownership-recap' },
     ],
   },
+  {
+    text: '5. 使用结构体存储相关联的数据',
+    link: 'using-structs-to-structure-related-data',
+    items: [
+      { text: '5.1 定义和实例化结构体', link: 'defining-and-instantiating-structs' },
+    ],
+  },
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]

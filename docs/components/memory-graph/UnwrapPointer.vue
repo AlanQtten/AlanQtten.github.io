@@ -29,9 +29,15 @@ function wrapResolveRef(_ref: HTMLElement) {
 
     <template v-if="detail.body?.length">
       <table class="!m-0">
-        <tr v-for="item in detail.body" :key="item.name">
-          <td>{{ item.name }}</td>
-          <td v-if="item.point2 || item.point2 === 0" :ref="el => resolveRef(el)" :class="$style.pointer" />
+        <tr v-for="item in detail.body" :key="item.name" class="bg-transparent!">
+          <td v-if="item.name">
+            {{ item.name }}
+          </td>
+          <td v-if="item.point2 || item.point2 === 0" :ref="el => resolveRef(el)" :class="[$style.pointer, item.class]" />
+          <!-- array value -->
+          <td v-else-if="Array.isArray(item.value)" :class="$style.arrayValue">
+            <span v-for="(value, j) in item.value" :key="j">{{ value }}</span>
+          </td>
           <td v-else>
             <UnwrapPointer v-if="typeof item.value === 'object'" :resolve-ref="wrapResolveRef" :detail="item.value" />
             <template v-else>
@@ -60,5 +66,27 @@ function wrapResolveRef(_ref: HTMLElement) {
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.arrayValue {
+  text-align: left!important;
+  white-space: nowrap;
+}
+
+.arrayValue span {
+  position: relative;
+  margin-right: 9px;
+}
+
+.arrayValue span:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  bottom: 1px;
+  width: 1px;
+  background-color: var(--aq);
+  right: -5px;
+  /* content: '|';
+  display: inline-block; */
 }
 </style>

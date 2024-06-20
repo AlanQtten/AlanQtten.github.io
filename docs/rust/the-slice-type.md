@@ -2,7 +2,7 @@
   import { ref } from "vue"
   import { Wrapper, MemoryGraph, DetailMode } from "../components/memory-graph";
   import ShikiCode from "../components/code/ShikiCode.vue";
-  import { 
+  import {
     Quiz,
     QuizProvider,
     Radio,
@@ -231,22 +231,22 @@ let s2: &String = &s; /*[!flag L1]*/
     stack: [
       { name: 'main', body: [
         { key: 's', point2: 0, detail: vec11_0 },
-        { 
-          key: 'hello', 
-          point2: '0.0-5', 
+        {
+          key: 'hello',
+          point2: '0.0-5',
           modifier: { Q: ([a,b,c,d], pkg) => [a,b,pkg.pointerEndLeft * 0.73,d] },
           detail: { body: [{ name: 'ptr', point2: '0.0-5' }, { name: 'len', value: 5 }] }
         },
-        { 
-          key: 'world', 
-          point2: '0.6-11', 
+        {
+          key: 'world',
+          point2: '0.6-11',
           modifier: { Q: ([a,b,c,d], pkg) => [a,b,pkg.pointerEndLeft * 0.65,d] },
           detail: { body: [{ name: 'ptr', point2: '0.6-11' }, { name: 'len', value: 5 }] }
         },
         { key: 's2', point2: 'main.s' }
       ] }
     ],
-    heap: [{ id: 0, value: ['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'] }] 
+    heap: [{ id: 0, value: ['h', 'e', 'l', 'l', 'o', ' ', 'w', 'o', 'r', 'l', 'd'] }]
   }"
 />
 </DetailMode>
@@ -257,7 +257,7 @@ let s2: &String = &s; /*[!flag L1]*/
 
 由于切片也是引用，它们也能改变引用数据的权限，比如，从下面可以看到`hello`从`s`创建后，`s`丢失了写和拥有权限：
 
-<ShikiCode 
+<ShikiCode
   :inserter="({ after, line }) => {
     if(!after) {
       switch(line) {
@@ -376,7 +376,7 @@ fn second_word(s: &String) -> &str {
             { var: 'word', operation: 'g', P: ['p', 'e', 'p'] },
             { var: '*word', operation: 'g', P: ['p', 'e', 'e'] },
           ]
-        }) 
+        })
       }
     }
   }"
@@ -398,7 +398,7 @@ error[E0502]: cannot borrow `s` as mutable because it is also borrowed as immuta
   |
 16|    let word = first_word(&s);
   |                          -- immutable borrow occurs here
-17|    
+17|
 18|    s.clear(); // error!
   |    ^^^^^^^^^ mutable borrow occurs here
 19|

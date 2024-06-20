@@ -49,19 +49,19 @@ fn greet(g1: String, g2: String) {
   title="L1"
   :memory="{
     stack: [
-      { 
-        name: 'main', 
+      {
+        name: 'main',
         body: [
           { key: 'm1', point2: 0, moved: true },
           { key: 'm2', point2: 1, moved: true }
-        ] 
+        ]
       },
-      { 
-        name: 'greet', 
+      {
+        name: 'greet',
         body: [
-          { key: 'g1', point2: 1, svgCurve: { x1: 0.5, y1: 0.9, x2: 0.6, y2: 0.5 } }, 
+          { key: 'g1', point2: 1, svgCurve: { x1: 0.5, y1: 0.9, x2: 0.6, y2: 0.5 } },
           { key: 'g2', point2: 1, svgCurve: { x1: 0.5, y1: 0.9, x2: 0.6, y2: 0.5 } }
-        ] 
+        ]
       },
     ],
     heap: [
@@ -77,7 +77,7 @@ fn greet(g1: String, g2: String) {
   :memory="{
     stack: [
       { name: 'main', body: [
-        { key: 'm1', point2: 'null', moved: true }, 
+        { key: 'm1', point2: 'null', moved: true },
         { key: 'm2', point2: 'null', moved: true }
       ] }
     ]
@@ -90,7 +90,7 @@ fn greet(g1: String, g2: String) {
   :memory="{
     stack: [
       { name: 'main', body: [
-        { key: 'm1', point2: 'null_error', moved: true }, 
+        { key: 'm1', point2: 'null_error', moved: true },
         { key: 'm2', point2: 'null', moved: true }
       ] }
     ]
@@ -174,17 +174,17 @@ fn greet(g1: &String, g2: &String) { // 注意符号"&"
   title="L2"
   :memory="{
     stack: [
-      { 
-        name: 'main', 
+      {
+        name: 'main',
         body: [
-          { key: 'm1', point2: 0 }, 
+          { key: 'm1', point2: 0 },
           { key: 'm2', point2: 1 },
         ]
       },
-      { 
-        name: 'greet', 
+      {
+        name: 'greet',
         body: [
-          { key: 'g1', point2: 'main.m1' }, 
+          { key: 'g1', point2: 'main.m1' },
           { key: 'g2', point2: 'main.m2' },
         ]
       }
@@ -324,10 +324,10 @@ let y = Box::new(&x); /*[!flag L1]*/
   title="L2"
   :memory="{
     stack: [
-      { 
-        name: 'main', 
+      {
+        name: 'main',
         body: [
-          { key: 'x', point2: 0, }, 
+          { key: 'x', point2: 0, },
           { key: 'y', point2: 1, },
         ]
       },
@@ -622,18 +622,18 @@ v.push(4);` })"
 
 接着，让我们探索这个图表的更多细节。首先，为什么会同时有`num`和`*num`？因为通过引用访问数据和操作引用本身是不同的。比如，如果我们使用`let mut`定义了一个数字的引用：
 
-<ShikiCode 
+<ShikiCode
   :inserter="({ after, line }) => {
     if(!after) {
       switch(line) {
         case 0: return lr({ perms: [{ var: 'x', operation: 'g', P: ['p', 'e', 'p'] }] });
         case 1: return lr(
-          { perms: 
+          { perms:
             [
               { var: 'x', operation: 'b', P: [null, 'e', 's'] },
               { var: 'x_ref', operation: 'g', P: 'p' },
               { var: '*x_ref', operation: 'g', P: ['p', 'e', 'e'] },
-            ] 
+            ]
           });
       }
     }
@@ -653,28 +653,28 @@ let mut x_ref = &x;` })"
 
 其次，为什么在路径不可用时，它会失去所有的权限呢？因为有些权限是互斥的。如果`num = &v[2]`，那么在`num`使用期间，`v`不能被修改或者销毁。但这并不意味着我们不能多次使用`num`。比如，如果我们给上面的程序增加一次`print`，那么`num`只是稍晚丢失权限而已：
 
-<ShikiCode 
-  :inserter="({ line, before, after }) => { 
+<ShikiCode
+  :inserter="({ line, before, after }) => {
     if(!after) {
       switch(line) {
         case 0: return lr({ perms: [{ var: 'v', operation: 'g', P: 'p' }]}
         );
         case 1: return lr(
-          { 
+          {
             perms: [
               { var: 'v', operation: 'b', P: [null, 's', 's'] },
               { var: 'num', operation: 'g', P: ['p', 'e', 'p'] },
               { var: '*num', operation: 'g', P: ['p', 'e', 'e'] },
-            ] 
+            ]
           }
         );
         case 3: return lr(
-          { 
+          {
             perms: [
               { var: 'v', operation: 'r', P: [null, 'p', 'p'] },
               { var: 'num', operation: 'l', P: ['s', 'e', 's'] },
               { var: '*num', operation: 'l', P: ['s', 'e', 'e'] },
-            ] 
+            ]
           }
         );
         case 4: return lr({ perms: [{ var: 'v', operation: 'g', P: 's' }]})
@@ -694,7 +694,7 @@ v.push(4);` })'
 
 Rust在内置的**借用检查器**里使用了这些权限。借用检查器会在包含引用的程序中寻找隐含的不安全行为。回到我们最早看到的不安全程序。这一次我们会加上图表来进行说明：
 
-<ShikiCode 
+<ShikiCode
   :inserter="({ before, after, line }) => {
     if(!after) {
       switch(line) {
@@ -706,7 +706,7 @@ Rust在内置的**借用检查器**里使用了这些权限。借用检查器会
         ] });
       }
     }
-  }" 
+  }"
   :init-code='() => ({ lang: "rust", code: `let mut v: Vec<i32> = vec![1, 2, 3];
 let num: &i32 = &/*[!perm R]*/v[2];
 v/*[!perm_double R.W.{"letterBProps":{"missing": true}}]*/.push(4);
@@ -770,7 +770,7 @@ println!("Vector is now {:?}", /*[!perm R.{"collapse":true}]*/v);` })'
 />
 
 > [!NOTE]
-> 
+>
 > 当所期望的权限和当前的例子关联性不高时，我们会使用缩略点比如<R collapse />。可以将鼠标移动到上面来查看其具体对应的权限字母。
 
 可变的引用可以使用`&mut`来创建。`num`的类型被写作`&mut i32`。和不可变引用做对比的话，可以看到它们的权限有两个重要的不同点：
@@ -847,7 +847,7 @@ println!("{} {}", /*[!perm R.{"collapse":true}]*/*num, /*[!perm R.{"collapse":tr
         case 3: return lr({ defaultCollapse: true, perms: [
           { var: 'x', operation: 'l', P: 's' },
           { var: 'z', operation: 'l', P: ['s', 'e', 's'] },
-        ] }) 
+        ] })
       }
     }
   }"
@@ -926,7 +926,7 @@ let z = /*[!perm R.{"collapse":true}]*/*y;
 <template #quiz>
 现有如下程序
 
-<ShikiCode 
+<ShikiCode
   :inserter="({ before, after, line }) => {
     if(!after) {
       switch(line) {
@@ -1058,7 +1058,7 @@ println!("{}", v1[0]); /*[!flag_error L1]*/
   :memory="{
     stack: [
       { name: 'main', body: [
-        { key: 'm1', point2: 'null_error', moved: true }, 
+        { key: 'm1', point2: 'null_error', moved: true },
         { key: 'm2', point2: 0 }
       ] }
     ],
@@ -1109,7 +1109,7 @@ println!("{}", s_ref);` })'
 
 这个例子的关键在于，Rust知道`s_ref`存活了多久。但是如果不知道一个引用的存活周期，Rust仍需要一些保障机制。更明确地说，当引用被作为函数的输入或输出时。比如，下面是一个安全的程序，它返回了一个对集合中第一个元素的引用：
 
-<ShikiCode 
+<ShikiCode
   :init-code='() => ({ lang: "rust", code: `fn first(strings: &Vec<String>) -> &String {
     let s_ref = &/*[!perm_double R.F.{"collapse":true}]*/strings[0];
     /*[!perm_double R.F]*/s_ref
