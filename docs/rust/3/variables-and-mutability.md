@@ -7,7 +7,7 @@ import {
   IsCompile,
   IsCompileText,
   Input
-} from "../components/quiz"
+} from "../../components/quiz"
 
 </script>
 
@@ -132,8 +132,8 @@ fn main() {
 }
 ```
 
-<IsCompile 
-  :answer="{ compiled: false }" 
+<IsCompile
+  :answer="{ compiled: false }"
 />
 
 </template>
@@ -197,7 +197,7 @@ fn main() {
 }
 ```
 
-<IsCompile 
+<IsCompile
   :answer="{
     compiled: true,
     result: '2'
@@ -297,7 +297,7 @@ fn main() {
 }
 ```
 
-<IsCompile 
+<IsCompile
   :answer="{
     compiled: true,
     result: '1'
@@ -325,7 +325,7 @@ fn main() {
 }
 ```
 
-<IsCompile 
+<IsCompile
   :answer="{
     compiled: false,
   }"

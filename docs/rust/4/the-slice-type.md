@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from "vue"
-  import { Wrapper, MemoryGraph, DetailMode } from "../components/memory-graph";
-  import ShikiCode from "../components/code/ShikiCode.vue";
+  import { Wrapper, MemoryGraph, DetailMode } from "../../components/memory-graph";
+  import ShikiCode from "../../components/code/ShikiCode.vue";
   import {
     Quiz,
     QuizProvider,
@@ -9,9 +9,9 @@
     RadioHolder,
     IsCompile,
     IsCompileText,
-  } from "../components/quiz";
-  import { lr } from "../utils/renderer"
-  import { Vec } from "../utils/generateStructure"
+  } from "../../components/quiz";
+  import { lr } from "../../utils/renderer"
+  import { Vec } from "../../utils/generateStructure"
 
   const vec11_0 = ref({ title: 'String', body: [{ name: 'vec', value: Vec({ cap: 11, point2: 0 }) }] })
 </script>

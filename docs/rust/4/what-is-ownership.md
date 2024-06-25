@@ -1,6 +1,6 @@
 <script setup>
-import { MemoryGraph, Wrapper } from '../components/memory-graph'
-import { 
+import { MemoryGraph, Wrapper } from '../../components/memory-graph'
+import {
   Quiz,
   QuizProvider,
   RadioHolder,
@@ -10,7 +10,7 @@ import {
   IsCompileText,
   CheckboxHolder,
   Checkbox,
-} from '../components/quiz'
+} from '../../components/quiz'
 </script>
 
 # 什么是所有权
@@ -59,8 +59,8 @@ Rust的目标是把程序编译成尽可能高效的二进制文件，这就要�
 error[E0425]: cannot find value `x` in this scope
 --> src/main.rs:8:1
  |
-8|		read(x); // 哦不，x没有定义！
- |		     ^ not found in this scope
+8|    read(x); // 哦不，x没有定义！
+ |         ^ not found in this scope
 ```
 
 你可能会有一种直觉：对Rust来说保证变量在使用前已经被定义是很有利的。但这是为什么呢？为了阐明这个规则，我们需要先提出一个问题：**如果Rust允许一个被拒绝的程序进行编译，会发生什么？**
@@ -69,10 +69,10 @@ error[E0425]: cannot find value `x` in this scope
 
 ```asm
 main:
-	; ...
-	mov		edi, 1
-	call	read
-	; ...
+  ; ...
+  mov   edi, 1
+  call  read
+  ; ...
 ```
 
 这段汇编代码会：
@@ -84,10 +84,10 @@ main:
 
 ```asm
 main:
-	; ...
-	call	read
-	mov		edi, 1	; mov 在 call的后面
-	; ...
+  ; ...
+  call  read
+  mov   edi, 1  ; mov 在 call的后面
+  ; ...
 ```
 
 这段程序是不安全的，因为`read`期望`edi`是一个`bool`类型（即数字0或1）。但`edi`却可能是任意值：`2`，`100`，`0x1337BEEF`。当`read`函数出于任何目的想要使用`y`时，立刻就会导致**未定义行为**
@@ -143,12 +143,12 @@ fn plus_one(x: i32) -> i32 {
 
 <template #graph>
 <div class="flex gap-8">
-  <MemoryGraph 
+  <MemoryGraph
     title="L1"
     :memory="{ stack: [{ name: 'main', body: [{ key: 'n', value: 5 }] }]}"
   />
 
-  <MemoryGraph 
+  <MemoryGraph
     title="L2"
     :memory="{
       stack: [
@@ -158,7 +158,7 @@ fn plus_one(x: i32) -> i32 {
     }"
   />
 
-  <MemoryGraph 
+  <MemoryGraph
     title="L1"
     :memory="{
       stack: [{ name: 'main', body: [{ key: 'n', value: 5 }, { key: 'y', value: 6 }] }]
@@ -195,26 +195,26 @@ b += 1; /*[!flag L3]*/
 
 <template #graph>
 <div class="flex gap-8">
-  <MemoryGraph 
+  <MemoryGraph
     title="L1"
     :memory="{
       stack: [{ name: 'main', body: [{ key: 'a', value: 5 }] }]
     }"
   />
 
-  <MemoryGraph 
+  <MemoryGraph
     title="L2"
     :memory="{
       stack: [
-        { 
-          name: 'main', 
-          body: [{ key: 'a', value: 5 }, { key: 'b', value: 5 }] 
+        {
+          name: 'main',
+          body: [{ key: 'a', value: 5 }, { key: 'b', value: 5 }]
         }
       ]
     }"
   />
 
-  <MemoryGraph 
+  <MemoryGraph
     title="L3"
     :memory="{
       stack: [
@@ -225,8 +225,6 @@ b += 1; /*[!flag L3]*/
 </div>
 </template>
 </Wrapper>
-
-
 
 变量a的值被复制到了变量b，在b发生变化时，a的值仍然保持不变。
 
@@ -246,32 +244,32 @@ let b = a; /*[!flag L2]*/
 
 <template #graph>
 <div class="flex flex-col gap-8">
-  <MemoryGraph 
+  <MemoryGraph
     title="L1"
     :memory="{ stack: [{ name: 'main', body: [
-      { 
-        key: 'a', 
+      {
+        key: 'a',
         value: [
           0,0,0,0,0,0,0,0,0,0,0,'...',0
-        ] 
+        ]
       }
     ] }]}"
   />
 
-  <MemoryGraph 
+  <MemoryGraph
     title="L2"
     :memory="{ stack: [{ name: 'main', body: [
-      { 
-        key: 'a', 
+      {
+        key: 'a',
         value: [
           0,0,0,0,0,0,0,0,0,0,0,'...',0
-        ] 
+        ]
       },
-      { 
-        key: 'b', 
+      {
+        key: 'b',
         value: [
           0,0,0,0,0,0,0,0,0,0,0,'...',0
-        ] 
+        ]
       }
     ] }]}"
   />
@@ -302,7 +300,7 @@ let b = a; /*[!flag L2]*/
         { name: 'main', body: [{ key: 'a', point2: 0 }] }
       ],
       heap: [
-        { 
+        {
           id: 0,
           value: [
             0,0,0,0,0,0,0,0,0,0,0,'...',0
@@ -316,16 +314,16 @@ let b = a; /*[!flag L2]*/
     title="L2"
     :memory="{
       stack: [
-        { 
-          name: 'main', 
+        {
+          name: 'main',
           body: [
-            { key: 'a', point2: 0, moved: true }, 
+            { key: 'a', point2: 0, moved: true },
             { key: 'b', point2: 0 }
-          ] 
+          ]
         }
       ],
       heap: [
-        { 
+        {
           id: 0,
           value: [
             0,0,0,0,0,0,0,0,0,0,0,'...',0
@@ -390,13 +388,13 @@ let c = Box::new(15); /*[!flag L1]*/
   title="L1"
   :memory="{
     stack: [
-      { 
-        name: 'main', 
+      {
+        name: 'main',
         body: [
           { key: 'a', point2: 0, moved: true },
           { key: 'b', point2: 0 },
           { key: 'c', point2: 1 },
-        ] 
+        ]
       }
     ],
     heap: [
@@ -442,7 +440,7 @@ assert!(b[0] == 0); /*[!flag_error L3]*/
       { name: 'main', body: [{ key: 'b', point2: 0 }] }
     ],
     heap: [
-      { 
+      {
         id: 0,
         value: [
           0,0,0,0,0,0,0,0,0,0,0,'...',0
@@ -688,12 +686,12 @@ fn add_suffix(mut name: String) -> String {
 error[E0382]: borrow of moved value: `first`
 --> test.rs:4:35
  |
-2|		let first = String::from("Ferris");
- |		    ----- move occurs because `first` has type `String`, which does not implement the `Copy` trait
-3|		let full = add_suffix(first);
- |		                      ----- value moved here
-4|		println!("{full}, originally {first}"); // first 在这里被使用了
- |		                              ^^^^^ value borrowed here after move
+2|    let first = String::from("Ferris");
+ |        ----- move occurs because `first` has type `String`, which does not implement the `Copy` trait
+3|    let full = add_suffix(first);
+ |                          ----- value moved here
+4|    println!("{full}, originally {first}"); // first 在这里被使用了
+ |                                  ^^^^^ value borrowed here after move
 ```
 
 让我们跟随这个错误的脚步。Rust告诉我们在程序第三行调用`add_suffix`时，`first`被移动了。错误信息阐明了`first`被移动的原因是它的类型是`String`，这个类型没有实现`Copy`。我们很快会讨论`Copy`，简而言之，如果你使用`i32`而不是`String`，就不会得到这个错误。最后，错误信息指出在`first`被移动后我们使用了它（错误中说的是”借用“，后面我们会讨论）。
@@ -805,7 +803,7 @@ fn main() {
 }
 ```
 
-<IsCompile 
+<IsCompile
   :answer="{
     compiled: true,
     result: 'hello world'
@@ -912,7 +910,6 @@ println!("{}", b)
 </CheckboxHolder>
 </div>
 
-
 </template>
 </Quiz>
 </QuizProvider>
@@ -928,27 +925,3 @@ println!("{}", b)
 - 堆数据只能被当前拥有者访问，过去的拥有者无法访问
 
 我们不仅强调了Rust的保护机制是如何工作的，也强调了为什么要避免未定义行为。当程序没有通过Rust编译器的编译，而你不理解Rust抛出的错误信息，很容易为之变得苦恼。本节讨论的基础概念应该能够帮助你解释Rust的错误信息，帮助你设计更加“Rust风格”的API。
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -6,7 +6,7 @@ import {
   Radio,
   IsCompile,
   IsCompileText
-} from "../components/quiz"
+} from "../../components/quiz"
 
 </script>
 

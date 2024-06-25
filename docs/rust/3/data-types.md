@@ -6,7 +6,7 @@ import {
   Radio,
   IsCompile,
   IsCompileText
-} from "../components/quiz"
+} from "../../components/quiz"
 
 </script>
 
@@ -25,15 +25,15 @@ let guess: u32 = "42".parse().expect("Not a number!");
 ```
 $ cargo build
     Compiling no_type_annotations v0.1.0(file:///projects/no_type_annotations)
-error [E0282]: type annotations need 
+error [E0282]: type annotations need
  --> src/main.rs:2:9
   |
 2 |    let guess = "42".parse().expect("Not a number!");
   |        ^^^^^
-  | 
+  |
 help: consider giving `guess` an explicit type
   |
-2 |    let guess: _ = "42".parse().expect("Not a number!"); 
+2 |    let guess: _ = "42".parse().expect("Not a number!");
   |             +++
 For more information about this error, try `rustc --explain E0282`.
 error: could not compile `no_type_annotations` due to previous error
@@ -137,7 +137,7 @@ fn main() {
 ```rust
 fn main() {
     let t = true;
-    
+
     let f: bool = false // 手动标注
 }
 ```
@@ -224,7 +224,7 @@ fn main() {
 }
 ```
 
-<IsCompile 
+<IsCompile
   :answer="{ compiled: false }"
 />
 
@@ -356,7 +356,7 @@ fn main() {
         .trim()
         .parse()
         .expect("Index entered was not a number");
-    
+
     let element = a[index];
 
     println!("The value of the element at index {index} is: {element}");

@@ -1,8 +1,8 @@
 <script setup>
 import { ref, h } from "vue"
-import { Vec } from "../utils/generateStructure"
+import { Vec } from "../../utils/generateStructure"
 
-import { Wrapper, DetailMode, MemoryGraph } from '../components/memory-graph'
+import { Wrapper, DetailMode, MemoryGraph } from '../../components/memory-graph'
 import {
   Quiz,
   QuizProvider,
@@ -13,10 +13,10 @@ import {
   Checkbox,
   IsCompile,
   IsCompileText
-} from '../components/quiz'
-import ShikiCode from '../components/code/ShikiCode.vue'
-import { R, W, O, F, DoubleLetter } from '../components/letter'
-import { lr } from "../utils/renderer"
+} from '../../components/quiz'
+import ShikiCode from '../../components/code/ShikiCode.vue'
+import { R, W, O, F, DoubleLetter } from '../../components/letter'
+import { lr } from "../../utils/renderer"
 
 const vec3_0 = ref(Vec({ cap: 3, point2: 0 }))
 </script>

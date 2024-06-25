@@ -3,17 +3,17 @@ import { ref } from "vue";
 import {
   Wrapper,
   MemoryGraph,
-} from "../components/memory-graph";
-import ShikiCode from "../components/code/ShikiCode.vue"
+} from "../../components/memory-graph";
+import ShikiCode from "../../components/code/ShikiCode.vue"
 import {
   lr
-} from "../utils/renderer"
+} from "../../utils/renderer"
 import {
   QuizProvider,
   Quiz,
   IsCompile,
   IsCompileText,
-} from "../components/quiz"
+} from "../../components/quiz"
 
 const userStruct1 = ref({
   title: 'User',

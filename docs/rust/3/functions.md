@@ -7,7 +7,7 @@ import {
   RadioHolder,
   Radio,
   Input
-} from '../components/quiz'
+} from '../../components/quiz'
 </script>
 
 # 函数

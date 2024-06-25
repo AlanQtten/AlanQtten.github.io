@@ -20,8 +20,30 @@ const projects = [
 
 // 🚧
 
+interface Route {
+  text: string
+  link: string
+  items?: Route[]
+}
+
+function folder(_f: Route, folderIndex: number) {
+  const newF = {
+    ..._f,
+    link: `${folderIndex}/${_f.link}`,
+  }
+
+  if (_f.items?.length) {
+    return {
+      ...newF,
+      items: _f.items.map(_f2 => folder(_f2, folderIndex)),
+    }
+  }
+
+  return newF
+}
+
 const rustList = [
-  {
+  folder({
     text: '3. 常规编程概念',
     link: 'common-programming-concepts',
     items: [
@@ -31,8 +53,8 @@ const rustList = [
       { text: '3.4 注释', link: 'comments' },
       { text: '3.5 流程控制', link: 'control-flow' },
     ],
-  },
-  {
+  }, 3),
+  folder({
     text: '4. 理解所有权',
     link: 'understanding-ownership',
     items: [
@@ -42,8 +64,8 @@ const rustList = [
       { text: '4.4 切片类型', link: 'the-slice-type' },
       { text: '4.5 所有权回顾', link: 'ownership-recap' },
     ],
-  },
-  {
+  }, 4),
+  folder({
     text: '5. 使用结构体存储相关联的数据',
     link: 'using-structs-to-structure-related-data',
     items: [
@@ -51,7 +73,7 @@ const rustList = [
       { text: '5.2 一个使用结构体的例子', link: 'an-example-program-using-structs' },
       { text: '5.3 方法', link: 'method-syntax' },
     ],
-  },
+  }, 5),
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]

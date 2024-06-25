@@ -1,8 +1,8 @@
 <script setup>
-import { Wrapper, MemoryGraph } from "../components/memory-graph";
-import ShikiCode from "../components/code/ShikiCode.vue";
-import { R, W, O } from "../components/letter"
-import { lr } from "../utils/renderer"
+import { Wrapper, MemoryGraph } from "../../components/memory-graph";
+import ShikiCode from "../../components/code/ShikiCode.vue";
+import { R, W, O } from "../../components/letter"
+import { lr } from "../../utils/renderer"
 import {
   QuizProvider,
   Quiz,
@@ -10,7 +10,7 @@ import {
   RadioHolder,
   Checkbox,
   CheckboxHolder
-} from "../components/quiz"
+} from "../../components/quiz"
 
 </script>
 

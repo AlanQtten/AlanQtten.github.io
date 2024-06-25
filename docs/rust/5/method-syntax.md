@@ -6,18 +6,18 @@ import {
   Radio,
   IsCompile,
   IsCompileText
-} from "../components/quiz"
-import ShikiCode from "../components/code/ShikiCode.vue"
-import { lr } from "../utils/renderer"
+} from "../../components/quiz"
+import ShikiCode from "../../components/code/ShikiCode.vue"
+import { lr } from "../../utils/renderer"
 import {
   R,
   O,
   W
-} from "../components/letter"
+} from "../../components/letter"
 import {
   Wrapper,
   MemoryGraph
-} from "../components/memory-graph"
+} from "../../components/memory-graph"
 
 </script>
 

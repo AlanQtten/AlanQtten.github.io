@@ -6,7 +6,7 @@ import {
   IsCompile,
   RadioHolder,
   Radio
-} from "../components/quiz"
+} from "../../components/quiz"
 
 </script>
 

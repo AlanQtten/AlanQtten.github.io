@@ -1,8 +1,8 @@
 <script setup>
-import ShikiCode from "../components/code/ShikiCode.vue"
-import { W, R, O } from "../components/letter"
+import ShikiCode from "../../components/code/ShikiCode.vue"
+import { W, R, O } from "../../components/letter"
 import { h } from "vue"
-import { Wrapper, MemoryGraph } from "../components/memory-graph"
+import { Wrapper, MemoryGraph } from "../../components/memory-graph"
 import {
   Quiz,
   QuizProvider,
@@ -12,8 +12,8 @@ import {
   CheckboxHolder,
   IsCompile,
   IsCompileText
-} from "../components/quiz"
-import { lr } from "../utils/renderer"
+} from "../../components/quiz"
+import { lr } from "../../utils/renderer"
 </script>
 
 # 修复错误的所有权
