@@ -1,4 +1,4 @@
-<script setup> 
+<script setup>
 import { Wrapper, MemoryGraph } from "../components/memory-graph";
 import ShikiCode from "../components/code/ShikiCode.vue";
 import { R, W, O } from "../components/letter"
@@ -32,10 +32,10 @@ class Document:
     """Create a new document"""
     self.words = words
 
-  def add_word(self, word: str): 
+  def add_word(self, word: str):
     """Add a word to the document"""
     self.words.append(word)
-  
+
   def get_words(self) -> List[str]:
     """Get a list of all the words in the document"""
     return self.words
@@ -79,13 +79,13 @@ fn get_words(this: &Document) -> &[String] {
 这个Rust API和之前的Python API不同的关键在于：
 - 函数`new_document`消费了输入集合`words`的所有权。即`Document`拥有了单词集合。可预料到的是，这个单词集合会在其拥有者`Document`生命周期结束时被销毁。
 - 函数`add_word`需要一个可变引用`&mut Document`才能操作document。它也消费了输入数据`word`的所有权，也就是说没有任何其他人能够操作document单独的单词。
-- 函数`get_words`返回了一个明确的document中字符串不可变引用。想要基于这些单词创建一个新的document，只能深度克隆它，比如： 
+- 函数`get_words`返回了一个明确的document中字符串不可变引用。想要基于这些单词创建一个新的document，只能深度克隆它，比如：
 
 ```rust
 fn main() {
     let words = vec!["hello".to_string()];
     let d = new_document();
-    
+
     // .to_vec() 可以将通过逐个元素克隆的方式
     // 将 &[String] 转化成 Vec<String>
     let words_copy = get_words(&d).to_vec();
@@ -140,7 +140,7 @@ fn inner(x: &mut i32) {
   title="L1"
   :memory="{
     stack: [
-      { 
+      {
         name: 'main',
         body: [{ key: 'a_num', value: 0 }]
       },
@@ -201,8 +201,8 @@ fn main() {
   :memory="{
     stack: [{ name: 'main', body: [
       { key: 's', point2: 0, },
-      { 
-        key: 's_slice', 
+      {
+        key: 's_slice',
         point2: '0.2-5',
         modifier: { Q: ([a,b,c,d], pkg) => [a,b,pkg.pointerEndLeft * 0.7,d] },
        }
@@ -445,8 +445,8 @@ Rust的权限设计是为了避免未定义行为。比如，很常见的一种�
 ```rust
 let mut v = vec![1, 2, 3];
 let n = &v[0]; /*[!flag L1]*/
-v.push(4); /*[!flag L2]*/ 
-println!("{n}"); /*[!flag_error L3]*/ 
+v.push(4); /*[!flag L2]*/
+println!("{n}"); /*[!flag_error L3]*/
 ```
 
 </template>
@@ -499,7 +499,7 @@ let v = vec![1, 2, 3];
 let v_ref: &Vec<i32> = &v;
 let v2 = *v_ref; /*[!flag L1]*/
 drop(v2); /*[!flag L2]*/
-drop(v); /*[!flag_error L3]*/ 
+drop(v); /*[!flag_error L3]*/
 ```
 
 </template>

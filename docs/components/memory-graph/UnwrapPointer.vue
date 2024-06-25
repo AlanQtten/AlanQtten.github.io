@@ -4,7 +4,12 @@ import type { Point2 } from './MemoryGraph.vue'
 
 export interface Detail {
   title: string
-  body: Array<{ name: string, value: Detail, point2?: Point2 }>
+  body: Array<{
+    name: string
+    value: Detail
+    point2?: Point2
+    class: string
+  }>
 }
 
 const props = defineProps<{
@@ -33,7 +38,21 @@ function wrapResolveRef(_ref: HTMLElement) {
           <td v-if="item.name">
             {{ item.name }}
           </td>
-          <td v-if="item.point2 || item.point2 === 0" :ref="el => resolveRef(el)" :class="[$style.pointer, item.class]" />
+          <!-- null -->
+          <td v-if="item.point2 === 'null'" :ref="el => resolveRef(el)">
+            <div :class="$style.pointToNullValue">
+              <div />
+            </div>
+          </td>
+
+          <!-- null_error -->
+          <td v-else-if="item.point2 === 'null_error'" :ref="el => resolveRef(el)">
+            <div :class="[$style.pointToNullValue, $style.pointToNullValueError]">
+              <div />
+            </div>
+          </td>
+
+          <td v-else-if="item.point2 || item.point2 === 0" :ref="el => resolveRef(el)" :class="[$style.pointer, item.class]" />
           <!-- array value -->
           <td v-else-if="Array.isArray(item.value)" :class="$style.arrayValue">
             <span v-for="(value, j) in item.value" :key="j">{{ value }}</span>
@@ -88,5 +107,46 @@ function wrapResolveRef(_ref: HTMLElement) {
   right: -5px;
   /* content: '|';
   display: inline-block; */
+}
+
+.pointToNullValue {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  position: relative;
+  &>div {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid var(--aq);
+    border-radius: 50%;
+  }
+
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 65%;
+    background-color: var(--aq);
+  }
+
+  &::before { transform: translate(-50%, -50%) rotate(45deg); }
+  &::after { transform: translate(-50%, -50%) rotate(-45deg); }
+}
+
+.pointToNullValueError {
+  border: 2px dashed var(--aq-error);
+  &>div {
+    border: 2px solid var(--aq-error);
+  }
+
+  &::before, &::after {
+    background-color: var(--aq-error);
+  }
 }
 </style>

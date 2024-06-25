@@ -34,6 +34,7 @@ interface Frame {
     moved: boolean
     detail: Detail
     forceShowDetail?: boolean
+    forceAsRef?: boolean
   }>
 }
 
@@ -70,20 +71,82 @@ const validPointTo = (pt?: Point2) => pt !== undefined && pt !== null && pt !== 
 watch(
   [pointer, heapBlock, wrapper, detailMode],
   ([pointerValue, heapEl, wrapperEl]) => {
-    if (Object.keys(pointerValue).length && heapEl?.length && wrapperEl) {
-      const _linkers: Linker[] = []
+    if (!Object.keys(pointerValue).length || !wrapperEl) {
+      return
+    }
 
+    const _linkers: Linker[] = []
+
+    try {
       memory.stack.forEach((frame) => {
         frame.body.forEach((ele, frameIndex) => {
-          if (validPointTo(ele.point2)) {
+          if (validPointTo(ele.point2) && typeof ele.point2 === 'string' && !/^\d+\./.test(ele.point2) && ele.point2.includes('.')) {
             const start = pointerValue[frame.name][frameIndex]
+            // stack ---> stack by scope.key
+            const [targetScopeName, targetFrameKey] = ele.point2.split('.')
 
-            if (Array.isArray(ele.point2)) {
-              ele.point2.forEach(([elClassName, p2]) => {
-                const start = wrapper.value.querySelector(`.${elClassName}`) as HTMLElement
+            const targetScopeIndex = memory.stack.findIndex(frame => frame.name === targetScopeName)
+            const [targetFrame, targetFrameIndex] = findElementAndIndex(memory.stack[targetScopeIndex].body, variable => variable.key === targetFrameKey)!
 
-                // stack ---> heap by id
-                const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === p2)]
+            const end = pointer.value[targetScopeName][targetFrameIndex]
+
+            const [svg] = line(start, end, LineType.right2right, {
+              wrapper: wrapper.value,
+              pointTo: 'edge',
+              modifier: {
+                pointStart(p, pkg) {
+                  if (validPointTo(targetFrame.point2)) {
+                    return [p[0], p[1] + pkg.endHeight * 0.25]
+                  }
+                  return p
+                },
+              },
+            })
+
+            _linkers.push({
+              style: svg.style,
+              path: {
+                d: svg.path.d,
+              },
+              polygon: {
+                transform: svg.polygon.transform,
+              },
+            })
+          }
+        })
+      })
+
+      if (heapEl?.length) {
+        memory.stack.forEach((frame) => {
+          frame.body.forEach((ele, frameIndex) => {
+            if (validPointTo(ele.point2)) {
+              const start = pointerValue[frame.name][frameIndex]
+
+              if (Array.isArray(ele.point2)) {
+                (ele.point2 as [string, number][]).forEach(([elClassName, p2]) => {
+                  const start = wrapper.value.querySelector(`.${elClassName}`) as HTMLElement
+
+                  // stack ---> heap by id
+                  const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === p2)]
+                  const [svg] = line(start, end, LineType.right2left, { wrapper: wrapper.value, pointTo: 'edge' })
+                  const commonStyle: CSSProperties = ele.moved ? { opacity: 0.3 } : {}
+
+                  _linkers.push({
+                    style: svg.style,
+                    path: {
+                      d: svg.path.d,
+                      style: commonStyle,
+                    },
+                    polygon: {
+                      transform: svg.polygon.transform,
+                      style: commonStyle,
+                    },
+                  })
+                })
+              }
+              else if (typeof ele.point2 === 'number') {
+              // stack ---> heap by id
+                const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === ele.point2)]
                 const [svg] = line(start, end, LineType.right2left, { wrapper: wrapper.value, pointTo: 'edge' })
                 const commonStyle: CSSProperties = ele.moved ? { opacity: 0.3 } : {}
 
@@ -98,241 +161,138 @@ watch(
                     style: commonStyle,
                   },
                 })
-              })
-            }
-            else if (typeof ele.point2 === 'number') {
-              // stack ---> heap by id
-              const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === ele.point2)]
-              const [svg] = line(start, end, LineType.right2left, { wrapper: wrapper.value, pointTo: 'edge' })
-              const commonStyle: CSSProperties = ele.moved ? { opacity: 0.3 } : {}
+              }
+              else if (/^\d+\./.test(ele.point2)) {
+                const [targetHeapId, targetHeapIndexOrRange] = ele.point2.split('.')
 
-              _linkers.push({
-                style: svg.style,
-                path: {
-                  d: svg.path.d,
-                  style: commonStyle,
-                },
-                polygon: {
-                  transform: svg.polygon.transform,
-                  style: commonStyle,
-                },
-              })
-            }
-            else if (/^\d+\./.test(ele.point2)) {
-              const [targetHeapId, targetHeapIndexOrRange] = ele.point2.split('.')
-
-              if (targetHeapIndexOrRange.includes('-')) {
+                if (targetHeapIndexOrRange.includes('-')) {
                 // stack ---> heap by collection slice
-                const _targetHeapId = +targetHeapId
-                const [targetHeapIndexStart, targetHeapIndexEnd] = targetHeapIndexOrRange.split('-').map(Number)
+                  const _targetHeapId = +targetHeapId
+                  const [targetHeapIndexStart, targetHeapIndexEnd] = targetHeapIndexOrRange.split('-').map(Number)
 
-                const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === _targetHeapId)]
-                const endList = end.children as HTMLElement[]
-                const recGroup = Array.from(endList).map((node: HTMLElement) => {
-                  const styleBlock = getComputedStyle(node)
-                  const rect = node.getBoundingClientRect()
+                  const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === _targetHeapId)]
+                  const endList = end.children as HTMLElement[]
+                  const recGroup = Array.from(endList).map((node: HTMLElement) => {
+                    const styleBlock = getComputedStyle(node)
+                    const rect = node.getBoundingClientRect()
 
-                  return {
-                    width: rect.width,
-                    height: rect.height,
-                    marginRight: Number.parseInt(styleBlock.marginRight),
-                  }
-                })
-
-                const extraPolygonWidth = recGroup
-                  .slice(targetHeapIndexStart, targetHeapIndexEnd)
-                  .reduce((acc, cur) => acc + cur.width + cur.marginRight, 0)
-                const offsetX = recGroup
-                  .slice(0, targetHeapIndexStart)
-                  .reduce((acc, cur) => acc + cur.width + cur.marginRight, 0)
-
-                const [svg] = line(start, endList[0], {
-                  lineType: LineType.right2bottom,
-                  options: {
-                    offsetX: offsetX + extraPolygonWidth,
-                  },
-                }, {
-                  wrapper: wrapper.value,
-                  pointTo: 'edge',
-                  modifier: {
-                    pointEnd(p) {
-                      return [
-                        p[0]
-                        - recGroup[0].width / 2
-                        + offsetX + extraPolygonWidth / 2,
-                        p[1] + 3,
-                      ]
-                    },
-                    ...ele.modifier,
-                  },
-                })
-
-                const commonStyle = ele.moved ? { opacity: 0.3 } : {}
-
-                _linkers.push({
-                  style: svg.style,
-                  path: {
-                    d: svg.path.d,
-                    style: commonStyle,
-                  },
-                  polygon: {
-                    transform: svg.polygon.transform,
-                    style: commonStyle,
-                  },
-                  extraPolygon: {
-                    points: `0,0 ${extraPolygonWidth},0 ${extraPolygonWidth},3 0,3`,
-                    transform: `translate(${Number.parseInt(svg.style.width as string) - extraPolygonWidth - 9}, ${recGroup[0].height})`,
-                  },
-                })
-              }
-              else {
-                // stack ---> heap by collection
-                const _targetHeapId = +targetHeapId
-                const targetHeapIndex = +targetHeapIndexOrRange
-
-                const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === _targetHeapId)].children[targetHeapIndex - 1]
-                const [svg] = line(start, end, LineType.right2bottom, { wrapper: wrapper.value, pointTo: 'edge' })
-
-                const commonStyle = ele.moved ? { opacity: 0.3 } : {}
-
-                _linkers.push({
-                  style: svg.style,
-                  path: {
-                    d: svg.path.d,
-                    style: commonStyle,
-                  },
-                  polygon: {
-                    transform: svg.polygon.transform,
-                    style: commonStyle,
-                  },
-                })
-              }
-            }
-            else if (ele.point2.includes('.')) {
-              // stack ---> stack by scope.key
-              const [targetScopeName, targetFrameKey] = ele.point2.split('.')
-
-              const targetScopeIndex = memory.stack.findIndex(frame => frame.name === targetScopeName)
-              const [targetFrame, targetFrameIndex] = findElementAndIndex(memory.stack[targetScopeIndex].body, variable => variable.key === targetFrameKey)!
-
-              const end = pointer.value[targetScopeName][targetFrameIndex]
-              const [svg] = line(start, end, LineType.right2right, {
-                wrapper: wrapper.value,
-                pointTo: 'edge',
-                modifier: {
-                  pointStart(p, pkg) {
-                    if (validPointTo(targetFrame.point2)) {
-                      return [p[0], p[1] + pkg.endHeight * 0.25]
+                    return {
+                      width: rect.width,
+                      height: rect.height,
+                      marginRight: Number.parseInt(styleBlock.marginRight),
                     }
-                    return p
-                  },
-                },
-              })
+                  })
 
-              _linkers.push({
-                style: svg.style,
-                path: {
-                  d: svg.path.d,
-                },
-                polygon: {
-                  transform: svg.polygon.transform,
-                },
-              })
+                  const extraPolygonWidth = recGroup
+                    .slice(targetHeapIndexStart, targetHeapIndexEnd)
+                    .reduce((acc, cur) => acc + cur.width + cur.marginRight, 0)
+                  const offsetX = recGroup
+                    .slice(0, targetHeapIndexStart)
+                    .reduce((acc, cur) => acc + cur.width + cur.marginRight, 0)
+
+                  const [svg] = line(start, endList[0], {
+                    lineType: LineType.right2bottom,
+                    options: {
+                      offsetX: offsetX + extraPolygonWidth,
+                    },
+                  }, {
+                    wrapper: wrapper.value,
+                    pointTo: 'edge',
+                    modifier: {
+                      pointEnd(p) {
+                        return [
+                          p[0]
+                          - recGroup[0].width / 2
+                          + offsetX + extraPolygonWidth / 2,
+                          p[1] + 3,
+                        ]
+                      },
+                      ...ele.modifier,
+                    },
+                  })
+
+                  const commonStyle = ele.moved ? { opacity: 0.3 } : {}
+
+                  _linkers.push({
+                    style: svg.style,
+                    path: {
+                      d: svg.path.d,
+                      style: commonStyle,
+                    },
+                    polygon: {
+                      transform: svg.polygon.transform,
+                      style: commonStyle,
+                    },
+                    extraPolygon: {
+                      points: `0,0 ${extraPolygonWidth},0 ${extraPolygonWidth},3 0,3`,
+                      transform: `translate(${Number.parseInt(svg.style.width as string) - extraPolygonWidth - 9}, ${recGroup[0].height})`,
+                    },
+                  })
+                }
+                else {
+                // stack ---> heap by collection
+                  const _targetHeapId = +targetHeapId
+                  const targetHeapIndex = +targetHeapIndexOrRange
+
+                  const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === _targetHeapId)].children[targetHeapIndex - 1]
+                  const [svg] = line(start, end, LineType.right2bottom, { wrapper: wrapper.value, pointTo: 'edge' })
+
+                  const commonStyle = ele.moved ? { opacity: 0.3 } : {}
+
+                  _linkers.push({
+                    style: svg.style,
+                    path: {
+                      d: svg.path.d,
+                      style: commonStyle,
+                    },
+                    polygon: {
+                      transform: svg.polygon.transform,
+                      style: commonStyle,
+                    },
+                  })
+                }
+              }
             }
+          })
+        });
+
+        (memory.heap ?? []).forEach((hp, _hpIndex) => {
+          if (!validPointTo(hp.point2)) {
+            return
           }
-        })
-      });
-
-      (memory.heap ?? []).forEach((hp, _hpIndex) => {
-        if (!validPointTo(hp.point2)) {
-          return
-        }
-        if (typeof hp.point2 === 'string') {
+          if (typeof hp.point2 === 'string') {
           // heap ---> stack by scope.key
-          const [targetScopeName, targetFrameKey] = hp.point2.split('.')
+            const [targetScopeName, targetFrameKey] = hp.point2.split('.')
 
-          const targetScopeIndex = memory.stack.findIndex(frame => frame.name === targetScopeName)
-          const [targetFrame, targetFrameIndex] = findElementAndIndex(memory.stack[targetScopeIndex].body, variable => variable.key === targetFrameKey)!
+            const targetScopeIndex = memory.stack.findIndex(frame => frame.name === targetScopeName)
+            const [targetFrame, targetFrameIndex] = findElementAndIndex(memory.stack[targetScopeIndex].body, variable => variable.key === targetFrameKey)!
 
-          const start = pointer.value[targetScopeName][targetFrameIndex]
-          const end = heapBlock.value[_hpIndex]
+            const start = pointer.value[targetScopeName][targetFrameIndex]
+            const end = heapBlock.value[_hpIndex]
 
-          const isTargetFrameValidPointer = validPointTo(targetFrame.point2)
-          const isCurrentHeapBeingPointAt = memory.stack.some(frame => frame.body.some(variable => variable.point2 === hp.id))
+            const isTargetFrameValidPointer = validPointTo(targetFrame.point2)
+            const isCurrentHeapBeingPointAt = memory.stack.some(frame => frame.body.some(variable => variable.point2 === hp.id))
 
-          const [svg] = line(start, end, LineType.right2bottom2left, {
-            wrapper: wrapper.value,
-            reverse: true,
-            pointTo: 'edge',
-            startFrom: 'edge',
-            modifier: {
-              pointStart(p, pkg) {
-                if (isTargetFrameValidPointer) {
-                  return [p[0], p[1] + pkg.startHeight * 0.25]
-                }
-                return p
-              },
-              pointEnd(p, pkg) {
-                if (isCurrentHeapBeingPointAt) {
-                  return [p[0], p[1] + pkg.endHeight * 0.25]
-                }
-                return p
-              },
-            },
-          })
-
-          _linkers.push({
-            style: svg.style,
-            path: {
-              d: svg.path.d,
-            },
-            polygon: {
-              transform: svg.polygon.transform,
-            },
-          })
-        }
-        else if (typeof hp.point2 === 'number') {
-          // heap ---> heap by id
-          const start = heapBlock.value[_hpIndex]
-          const end = heapBlock.value[memory.heap.findIndex(_hp => _hp.id === hp.point2)]
-
-          const [svg] = line(start, end, LineType.right2right, {
-            wrapper: wrapper.value,
-            pointTo: 'edge',
-          })
-
-          _linkers.push({
-            style: svg.style,
-            path: {
-              d: svg.path.d,
-            },
-            polygon: {
-              transform: svg.polygon.transform,
-            },
-          })
-        }
-        else if (Array.isArray(hp.point2)) {
-          // heap ---> multi heap by id
-          const start = heapBlock.value[_hpIndex]
-
-          let offsetX = 60
-          let offsetY = 60
-          hp.point2.forEach((targetHeapId, i) => {
-            const end = heapBlock.value[memory.heap.findIndex(_hp => _hp.id === targetHeapId)]
-
-            const [svg] = line(start.children[i], end, {
-              lineType: LineType.bottom2right,
-              options: {
-                offsetX,
-                offsetY,
-              },
-            }, {
+            const [svg] = line(start, end, LineType.right2bottom2left, {
               wrapper: wrapper.value,
+              reverse: true,
               pointTo: 'edge',
+              startFrom: 'edge',
+              modifier: {
+                pointStart(p, pkg) {
+                  if (isTargetFrameValidPointer) {
+                    return [p[0], p[1] + pkg.startHeight * 0.25]
+                  }
+                  return p
+                },
+                pointEnd(p, pkg) {
+                  if (isCurrentHeapBeingPointAt) {
+                    return [p[0], p[1] + pkg.endHeight * 0.25]
+                  }
+                  return p
+                },
+              },
             })
-
-            offsetX += 30
-            offsetY += 30
 
             _linkers.push({
               style: svg.style,
@@ -343,11 +303,70 @@ watch(
                 transform: svg.polygon.transform,
               },
             })
-          })
-        }
-      })
+          }
+          else if (typeof hp.point2 === 'number') {
+          // heap ---> heap by id
+            const start = heapBlock.value[_hpIndex]
+            const end = heapBlock.value[memory.heap.findIndex(_hp => _hp.id === hp.point2)]
 
-      linkers.value = _linkers
+            const [svg] = line(start, end, LineType.right2right, {
+              wrapper: wrapper.value,
+              pointTo: 'edge',
+            })
+
+            _linkers.push({
+              style: svg.style,
+              path: {
+                d: svg.path.d,
+              },
+              polygon: {
+                transform: svg.polygon.transform,
+              },
+            })
+          }
+          else if (Array.isArray(hp.point2)) {
+          // heap ---> multi heap by id
+            const start = heapBlock.value[_hpIndex]
+
+            let offsetX = 60
+            let offsetY = 60
+            hp.point2.forEach((targetHeapId, i) => {
+              const end = heapBlock.value[memory.heap.findIndex(_hp => _hp.id === targetHeapId)]
+
+              const [svg] = line(start.children[i], end, {
+                lineType: LineType.bottom2right,
+                options: {
+                  offsetX,
+                  offsetY,
+                },
+              }, {
+                wrapper: wrapper.value,
+                pointTo: 'edge',
+              })
+
+              offsetX += 30
+              offsetY += 30
+
+              _linkers.push({
+                style: svg.style,
+                path: {
+                  d: svg.path.d,
+                },
+                polygon: {
+                  transform: svg.polygon.transform,
+                },
+              })
+            })
+          }
+        })
+      }
+
+      if (_linkers.length) {
+        linkers.value = _linkers
+      }
+    }
+    catch (e) {
+      console.error(e)
     }
   },
   {
@@ -383,21 +402,26 @@ watch(
                 <td>{{ ele.key }}</td>
 
                 <!-- null -->
-                <td v-if="ele.point2 === 'null'">
+                <td v-if="ele.point2 === 'null'" :ref="el => joinPointer((el as HTMLElement), frame.name, frameIndex)">
                   <div :class="$style.pointToNullValue">
                     <div />
                   </div>
                 </td>
 
                 <!-- null_error -->
-                <td v-else-if="ele.point2 === 'null_error'">
+                <td v-else-if="ele.point2 === 'null_error'" :ref="el => joinPointer((el as HTMLElement), frame.name, frameIndex)">
                   <div :class="[$style.pointToNullValue, $style.pointToNullValueError]">
                     <div />
                   </div>
                 </td>
 
                 <!-- pointer with detail -->
-                <td v-else-if="(detailMode && ele.detail) || ele.forceShowDetail">
+                <td
+                  v-else-if="(detailMode && ele.detail) || ele.forceShowDetail"
+                  :ref="el => {
+                    ele.forceAsRef && joinPointer(el as HTMLElement, frame.name, frameIndex)
+                  }"
+                >
                   <UnwrapPointer
                     :resolve-ref="el => joinPointer(el, frame.name, frameIndex)"
                     :detail="ele.detail"
@@ -452,7 +476,7 @@ watch(
                 ref="heapBlock"
                 :class="$style.arrayValue"
               >
-                <span v-for="p in hp.point2" :key="p" :class="$style.pointer" class="!px-2" />
+                <span v-for="p in hp.point2 as number[]" :key="p" :class="$style.pointer" class="!px-2" />
               </td>
 
               <!-- pointer to stack -->

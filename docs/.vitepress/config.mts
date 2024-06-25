@@ -49,6 +49,7 @@ const rustList = [
     items: [
       { text: '5.1 定义和实例化结构体', link: 'defining-and-instantiating-structs' },
       { text: '5.2 一个使用结构体的例子', link: 'an-example-program-using-structs' },
+      { text: '5.3 方法', link: 'method-syntax' },
     ],
   },
 ]

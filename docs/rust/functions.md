@@ -5,7 +5,8 @@ import {
   IsCompile,
   IsCompileText,
   RadioHolder,
-  Radio
+  Radio,
+  Input
 } from '../components/quiz'
 </script>
 

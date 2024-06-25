@@ -578,7 +578,7 @@ fn main() {
 }
 ```
 
-<IsCompiled
+<IsCompile
   :answer="{
     compiled: true,
     result: '2'
@@ -612,7 +612,7 @@ fn main() {
 }
 ```
 
-<IsCompiled
+<IsCompile
   :answer="{
     compiled: true,
     result: '2 3'
