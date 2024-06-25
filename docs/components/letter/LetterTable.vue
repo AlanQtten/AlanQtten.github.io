@@ -102,22 +102,22 @@ watch([collapsing, tableCollapse], () => {
           <td>{{ letter.var }}</td>
 
           <td v-if="letter.operation === 'g'">
-            <div class="[transform:rotateX(180deg)] i-material-symbols:subdirectory-arrow-right" />
+            <div class="[transform:rotateX(180deg)] iconify material-symbols--subdirectory-arrow-right" />
           </td>
           <td v-else-if="letter.operation === 'l'">
-            <div class="i-material-symbols:subdirectory-arrow-right" />
+            <div class="iconify material-symbols--subdirectory-arrow-right" />
           </td>
           <td v-else-if="letter.operation === 'b'">
-            <div class="i-material-symbols:arrow-forward-rounded" />
+            <div class="iconify material-symbols--arrow-forward-rounded" />
           </td>
           <td v-else-if="letter.operation === 'r'">
-            <div class="i-material-symbols:refresh" />
+            <div class="iconify material-symbols--refresh" />
           </td>
           <td v-else-if="letter.operation === 'c'">
-            <div class="i-material-symbols:recycling" />
+            <div class="iconify material-symbols--recycling" />
           </td>
           <td v-else-if="letter.operation === 'e'">
-            <div class="i-material-symbols:exit-to-app" />
+            <div class="iconify material-symbols--exit-to-app" />
           </td>
 
           <td>

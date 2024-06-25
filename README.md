@@ -2,7 +2,7 @@
 
 ```bash
 # just in case
-rm -rf ./docs/.vitepress/cache 
+rm -rf ./docs/.vitepress/cache
 rm -rf node_modules
 ```
 

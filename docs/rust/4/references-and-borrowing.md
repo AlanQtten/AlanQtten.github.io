@@ -610,14 +610,14 @@ v.push(4);` })"
 
 让我们逐行观察：
 
-1. 在`let mut v = (...)`后，变量`v`被初始化了（使用<i class="inline-block [transform:rotateX(180deg)] i-material-symbols:subdirectory-arrow-right" />来表示）。它获取了<R plus /><W plus /><O plus />权限（加号表示获取了权限）。
-2. 在`let num = &v[2]`后，`v`中的数据被`num`借用了（使用<i class="inline-block i-material-symbols:arrow-forward-rounded" />表示）。以下三件事发生了：
+1. 在`let mut v = (...)`后，变量`v`被初始化了（使用<i class="inline-block [transform:rotateX(180deg)] iconify material-symbols--subdirectory-arrow-right" />来表示）。它获取了<R plus /><W plus /><O plus />权限（加号表示获取了权限）。
+2. 在`let num = &v[2]`后，`v`中的数据被`num`借用了（使用<i class="iconify material-symbols--arrow-forward-rounded" />表示）。以下三件事发生了：
    - 借用移除了v的<W slash /><O slash />权限（划线表示权限的失去）。`v`不再能被写入或拥有，但仍然可以读取。
    - 变量`num`获取了<R /><O />权限。由于它并没有使用`let mut`声明，所以`num`是不可写的（<W />权限的丢失使用短线<W empty/>表示）。
    - **路径**`*num`获取了<R />权限。
 3. 在`println!(...)`后，`num`不再被使用了，其对`v`的借用也结束了。因此：
-   - `v`重新获得了<W /><O />权限（使用<i class="inline-block i-material-symbols:refresh" />表示）。
-   - `num`和`*num`失去了所有的权限（使用<i class="inline-block i-material-symbols:subdirectory-arrow-right" />表示）。
+   - `v`重新获得了<W /><O />权限（使用<i class="iconify material-symbols--refresh" />表示）。
+   - `num`和`*num`失去了所有的权限（使用<i class="iconify material-symbols--subdirectory-arrow-right" />表示）。
 4. 在`v.push(4)`后，`v`不再被使用了，它失去了它的所有权限。
 
 接着，让我们探索这个图表的更多细节。首先，为什么会同时有`num`和`*num`？因为通过引用访问数据和操作引用本身是不同的。比如，如果我们使用`let mut`定义了一个数字的引用：

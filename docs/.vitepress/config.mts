@@ -2,7 +2,6 @@ import process from 'node:process'
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 import markDownItTaskLists from 'markdown-it-task-lists'
-import UnoCss from 'unocss/vite'
 import { transformerMetaWordHighlight } from '@shikijs/transformers'
 import transformerFlag from '../transformers/transformerFlag'
 
@@ -119,11 +118,6 @@ export default withMermaid(defineConfig({
     codeTransformers: [
       transformerMetaWordHighlight(),
       transformerFlag,
-    ],
-  },
-  vite: {
-    plugins: [
-      UnoCss(),
     ],
   },
 }))
