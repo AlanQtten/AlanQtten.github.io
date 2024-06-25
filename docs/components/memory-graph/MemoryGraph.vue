@@ -35,6 +35,7 @@ interface Frame {
     detail: Detail
     forceShowDetail?: boolean
     forceAsRef?: boolean
+    pointerWrap?: [string, string]
   }>
 }
 
@@ -145,9 +146,13 @@ watch(
                 })
               }
               else if (typeof ele.point2 === 'number') {
-              // stack ---> heap by id
+                // stack ---> heap by id
+                let holdStart = start
+                if (ele.pointerWrap) {
+                  holdStart = start.children[0].children[0] as HTMLElement
+                }
                 const end = heapBlock.value[memory.heap.findIndex(hp => hp.id === ele.point2)]
-                const [svg] = line(start, end, LineType.right2left, { wrapper: wrapper.value, pointTo: 'edge' })
+                const [svg] = line(holdStart, end, LineType.right2left, { wrapper: wrapper.value, pointTo: 'edge' })
                 const commonStyle: CSSProperties = ele.moved ? { opacity: 0.3 } : {}
 
                 _linkers.push({
@@ -166,7 +171,7 @@ watch(
                 const [targetHeapId, targetHeapIndexOrRange] = ele.point2.split('.')
 
                 if (targetHeapIndexOrRange.includes('-')) {
-                // stack ---> heap by collection slice
+                  // stack ---> heap by collection slice
                   const _targetHeapId = +targetHeapId
                   const [targetHeapIndexStart, targetHeapIndexEnd] = targetHeapIndexOrRange.split('-').map(Number)
 
@@ -230,7 +235,7 @@ watch(
                   })
                 }
                 else {
-                // stack ---> heap by collection
+                  // stack ---> heap by collection
                   const _targetHeapId = +targetHeapId
                   const targetHeapIndex = +targetHeapIndexOrRange
 
@@ -261,7 +266,7 @@ watch(
             return
           }
           if (typeof hp.point2 === 'string') {
-          // heap ---> stack by scope.key
+            // heap ---> stack by scope.key
             const [targetScopeName, targetFrameKey] = hp.point2.split('.')
 
             const targetScopeIndex = memory.stack.findIndex(frame => frame.name === targetScopeName)
@@ -305,7 +310,7 @@ watch(
             })
           }
           else if (typeof hp.point2 === 'number') {
-          // heap ---> heap by id
+            // heap ---> heap by id
             const start = heapBlock.value[_hpIndex]
             const end = heapBlock.value[memory.heap.findIndex(_hp => _hp.id === hp.point2)]
 
@@ -325,7 +330,7 @@ watch(
             })
           }
           else if (Array.isArray(hp.point2)) {
-          // heap ---> multi heap by id
+            // heap ---> multi heap by id
             const start = heapBlock.value[_hpIndex]
 
             let offsetX = 60
@@ -432,8 +437,13 @@ watch(
                 <td
                   v-else-if="ele.point2 || ele.point2 === 0"
                   :ref="el => joinPointer((el as HTMLElement), frame.name, frameIndex)"
-                  :class="$style.pointer"
-                />
+                >
+                  <span :class="$style.stackPointer">
+                    <span />
+                    <span v-if="ele.pointerWrap && ele.pointerWrap[0]">{{ ele.pointerWrap[0] }}</span>
+                    <span v-if="ele.pointerWrap && ele.pointerWrap[1]">{{ ele.pointerWrap[1] }}</span>
+                  </span>
+                </td>
 
                 <!-- array value -->
                 <td v-else-if="Array.isArray(ele.value)" :class="$style.arrayValue">
@@ -596,12 +606,32 @@ td.pointer.pointer {
   content: "";
   width: 8px;
   height: 8px;
-  background-color: var(--aq);
+  background-color: var(--aq-fill);
   border-radius: 50%;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+}
+
+.stackPointer {
+  display: flex;
+  align-items: center;
+}
+
+.stackPointer span:nth-child(1) {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background-color: var(--aq-fill);
+  border-radius: 50%;
+  order: 2;
+}
+.stackPointer span:nth-child(2) {
+  order: 1;
+}
+.stackPointer span:nth-child(3) {
+  order: 3;
 }
 
 .arrayValue {

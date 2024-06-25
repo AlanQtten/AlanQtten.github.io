@@ -73,6 +73,13 @@ const rustList = [
       { text: '5.3 方法', link: 'method-syntax' },
     ],
   }, 5),
+  folder({
+    text: '6. 枚举和模式匹配',
+    link: 'enums-and-pattern-matching',
+    items: [
+      { text: '6.1 定义枚举', link: 'defining-an-enum' },
+    ],
+  }, 6),
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
