@@ -78,6 +78,7 @@ const rustList = [
     link: 'enums-and-pattern-matching',
     items: [
       { text: '6.1 定义枚举', link: 'defining-an-enum' },
+      { text: '6.2 match: 流程控制结构', link: 'the-match-control-flow-construct' },
     ],
   }, 6),
 ]
