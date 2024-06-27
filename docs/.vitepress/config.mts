@@ -79,6 +79,8 @@ const rustList = [
     items: [
       { text: '6.1 定义枚举', link: 'defining-an-enum' },
       { text: '6.2 match: 流程控制结构', link: 'the-match-control-flow-construct' },
+      { text: '6.3 使用`if let`简化流程控制', link: 'concise-control-flow-with-if-let' },
+      { text: '6.4 所有权清单 #1', link: 'ownership-inventory-hash-1' },
     ],
   }, 6),
 ]
