@@ -83,6 +83,17 @@ const rustList = [
       { text: '6.4 所有权清单 #1', link: 'ownership-inventory-hash-1' },
     ],
   }, 6),
+  folder({
+    text: '7. 使用包、库和模块来管理不断增长的项目',
+    link: 'manage-growing-projects-with-packages-crates-and-modules',
+    items: [
+      { text: '7.1 包和库', link: 'packages-and-crates' },
+      // { text: '7.2 通过模块控制域和隐私', link: 'defining-modules-to-control-scope-and-privacy' },
+      // { text: '7.3 模块树元素的引用路径', link: 'paths-for-referring-to-an-item-in-the-module-tree' },
+      // { text: '7.4 使用`use`关键字将路径引入作用域', link: 'brining-paths-into-scope-with-the-use-keyword' },
+      // { text: '7.5 将模块分割为多个文件', link: 'separating-modules-into-different-files' },
+    ],
+  }, 7),
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
