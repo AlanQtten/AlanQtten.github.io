@@ -89,7 +89,7 @@ const rustList = [
     items: [
       { text: '7.1 包和库', link: 'packages-and-crates' },
       { text: '7.2 通过模块定义控制作用域和私有权', link: 'defining-modules-to-control-scope-and-privacy' },
-      // { text: '7.3 模块树元素的引用路径', link: 'paths-for-referring-to-an-item-in-the-module-tree' },
+      { text: '7.3 模块树元素的引用路径', link: 'paths-for-referring-to-an-item-in-the-module-tree' },
       // { text: '7.4 使用`use`关键字将路径引入作用域', link: 'brining-paths-into-scope-with-the-use-keyword' },
       // { text: '7.5 将模块分割为多个文件', link: 'separating-modules-into-different-files' },
     ],

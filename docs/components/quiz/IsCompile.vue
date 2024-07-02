@@ -11,7 +11,7 @@ const { answer } = defineProps<{
 
 type OnChange = (v: Value) => void
 
-const name = inject(nameSymbol)
+const name = inject(nameSymbol, '')
 const updateAnswer = inject<(v: Value) => void>(updateAnswerSymbol, () => {})
 const updateShowingAnswer = inject<(v: string) => void>(updateShowingAnswerSymbol, () => {})
 const defaultValue = ref<Value>(({ compiled: undefined, result: undefined }))
