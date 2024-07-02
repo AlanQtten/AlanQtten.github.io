@@ -46,7 +46,7 @@ main.rs
 <Quiz>
 <template #description>
 
-解析：包是最顶层的组织单元，它包含crete，而crate又包括了模块。
+解析：包是最顶层的组织单元，它包含crate，而crate又包括了模块。
 
 </template>
 <template #quiz>
