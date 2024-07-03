@@ -41,6 +41,7 @@ function folder(_f: Route, folderIndex: number) {
   return newF
 }
 
+// start at commit in Mar 22,2024 #6f8d38c
 const rustList = [
   folder({
     text: '3. 常规编程概念',
@@ -80,7 +81,7 @@ const rustList = [
       { text: '6.1 定义枚举', link: 'defining-an-enum' },
       { text: '6.2 match: 流程控制结构', link: 'the-match-control-flow-construct' },
       { text: '6.3 使用`if let`简化流程控制', link: 'concise-control-flow-with-if-let' },
-      { text: '6.4 所有权清单 #1', link: 'ownership-inventory-hash-1' },
+      { text: '6.4 所有权之旅 #1', link: 'ownership-inventory-hash-1' },
     ],
   }, 6),
   folder({
@@ -94,6 +95,16 @@ const rustList = [
       { text: '7.5 将模块分割为多个文件', link: 'separating-modules-into-different-files' },
     ],
   }, 7),
+  folder({
+    text: '8. 常用集合',
+    link: 'common-collections',
+    items: [
+      { text: '8.1 使用Vector创建强大的值列表', link: 'strong-lists-of-values-with-vectors' },
+      // { text: '8.2 使用String创建强大的utf-8字符串', link: 'strong-utf-8-encoded-text-with-strings' },
+      // { text: '8.3 使用Hash Map创建强大的kv结构', link: 'strong-keys-with-associated-values-in-hash-maps' },
+      // { text: '8.4 所有权之旅 #2', link: 'ownership-inventory-hash-2' },
+    ],
+  }, 8),
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]

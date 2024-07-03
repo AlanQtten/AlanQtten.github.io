@@ -9,9 +9,9 @@ import {
 } from "../../components/quiz"
 </script>
 
-# 所有权清单 #1
+# 所有权之旅 #1
 
-所有权清单是一个系列的测试，检查你对所有权在实际情景中的理解。这些情景都是源自StackOverflow上有关Rust的问题。你可以用这些问题测试自己目前对所有权的理解。
+所有权之旅是一个系列的测试，检查你对所有权在实际情景中的理解。这些情景都是源自StackOverflow上有关Rust的问题。你可以用这些问题测试自己目前对所有权的理解。
 
 ::: details 小测（6）
 <QuizProvider>

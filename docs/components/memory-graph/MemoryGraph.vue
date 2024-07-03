@@ -617,6 +617,7 @@ td.pointer.pointer {
 .stackPointer {
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .stackPointer span:nth-child(1) {
