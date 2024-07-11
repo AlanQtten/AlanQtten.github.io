@@ -101,7 +101,7 @@ const rustList = [
     items: [
       { text: '8.1 使用Vector创建强大的值列表', link: 'strong-lists-of-values-with-vectors' },
       { text: '8.2 使用String创建强大的UTF-8字符串', link: 'strong-utf-8-encoded-text-with-strings' },
-      // { text: '8.3 使用Hash Map创建强大的kv结构', link: 'strong-keys-with-associated-values-in-hash-maps' },
+      { text: '8.3 使用Hash Map创建强大的kv结构', link: 'strong-keys-with-associated-values-in-hash-maps' },
       // { text: '8.4 所有权之旅 #2', link: 'ownership-inventory-hash-2' },
     ],
   }, 8),
