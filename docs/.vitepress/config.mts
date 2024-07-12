@@ -105,6 +105,15 @@ const rustList = [
       { text: '8.4 所有权之旅 #2', link: 'ownership-inventory-hash-2' },
     ],
   }, 8),
+  folder({
+    text: '9. 错误处理',
+    link: 'error-handling',
+    items: [
+      { text: '9.1 对不可恢复的错误panic!', link: 'unrecoverable-errors-with-panic' },
+      // { text: '9.2 对可恢复的错误使用Result', link: 'recoverable-errors-with-result' },
+      // { text: '9.3 panic还是不panic', link: 'to-panic-or-not-to-panic' },
+    ],
+  }, 9),
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
