@@ -110,7 +110,7 @@ const rustList = [
     link: 'error-handling',
     items: [
       { text: '9.1 对不可恢复的错误panic!', link: 'unrecoverable-errors-with-panic' },
-      // { text: '9.2 对可恢复的错误使用Result', link: 'recoverable-errors-with-result' },
+      { text: '9.2 对可恢复的错误使用Result', link: 'recoverable-errors-with-result' },
       // { text: '9.3 panic还是不panic', link: 'to-panic-or-not-to-panic' },
     ],
   }, 9),
