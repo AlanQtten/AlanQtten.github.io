@@ -7,7 +7,7 @@ import iconSetup from './icon'
 
 import './global-var.css'
 import './global-style.css'
-import './tailwind.postcss'
+import './tailwind.css'
 
 /** @type {import('vitepress').Theme} */
 export default {
