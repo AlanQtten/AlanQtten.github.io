@@ -3,8 +3,7 @@ const { addIconSelectors } = require('@iconify/tailwind')
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    './docs/**/*.{js,ts,vue}',
-    './docs/**/*.md',
+    './docs/**/*.{js,ts,vue,md}',
   ],
   theme: {
     colors: {
