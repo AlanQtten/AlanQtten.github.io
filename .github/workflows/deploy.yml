@@ -42,7 +42,7 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       - name: Install dependencies
-        run: pnpm install --shamefully-hoist # or pnpm install / yarn install / bun install
+        run: pnpm install # or pnpm install / yarn install / bun install
       - name: Build with VitePress
         run: |
           pnpm run build # or pnpm build / yarn build / bun run build

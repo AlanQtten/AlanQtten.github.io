@@ -1,6 +1,5 @@
 import process from 'node:process'
 import { defineConfig } from 'vitepress'
-import { withMermaid } from 'vitepress-plugin-mermaid'
 import markDownItTaskLists from 'markdown-it-task-lists'
 import { transformerMetaWordHighlight } from '@shikijs/transformers'
 import transformerFlag from '../transformers/transformerFlag'
@@ -119,7 +118,7 @@ const rustList = [
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
 
 // https://vitepress.dev/reference/site-config
-export default withMermaid(defineConfig({
+export default defineConfig({
   title: 'blog',
   description: 'blog',
   themeConfig: {
@@ -161,4 +160,4 @@ export default withMermaid(defineConfig({
       transformerFlag,
     ],
   },
-}))
+})

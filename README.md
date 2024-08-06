@@ -9,7 +9,7 @@ rm -rf node_modules
 # run
 
 ```bash
-pnpm install --shamefully-hoist
+pnpm install
 pnpm dev
 ```
 

@@ -1,3 +1,15 @@
 .highlighted-word {
   background-color: #46480f;
 }
+
+:root .show-while-dark-mode {
+  display: none;
+}
+
+:root.dark .show-while-dark-mode {
+  display: block;
+}
+
+:root.dark .hide-while-dark-mode {
+  display: none;
+}
