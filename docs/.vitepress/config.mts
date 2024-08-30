@@ -113,6 +113,16 @@ const rustList = [
       { text: '9.3 panic还是不panic', link: 'to-panic-or-not-to-panic' },
     ],
   }, 9),
+  folder({
+    text: '10. 泛型，特性和生命周期',
+    link: 'generic-types-traits-and-lifetimes',
+    items: [
+      { text: '10.1 泛型数据类型', link: 'generic-data-types' },
+      // { text: '10.2 特性：定义共享行为', link: 'traits-defining-shared-behavior' },
+      // { text: '10.3 通过生命周期校验引用', link: 'validating-references-with-lifetimes' },
+      // { text: '10.4 所有权之旅 #3', link: 'ownership-inventory-hash-3' },
+    ],
+  }, 10),
 ]
 
 type NavItem = NonNullable<NonNullable<Parameters<typeof defineConfig>[0]['themeConfig']>['nav']>[number]
