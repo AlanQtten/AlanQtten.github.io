@@ -13,6 +13,7 @@ module.exports = {
         900: '#ff0000',
         800: 'var(--aq-error)',
       },
+      'transparent': 'transparent',
     },
   },
   plugins: [

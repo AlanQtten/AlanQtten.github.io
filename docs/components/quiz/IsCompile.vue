@@ -1,13 +1,23 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import { inject, onMounted, ref } from 'vue'
+import { inject, onMounted, ref, computed } from 'vue'
 import { disabledSymbol, nameSymbol, onChangeSymbol, updateAnswerSymbol, updateShowingAnswerSymbol, valueSymbol } from './quiz'
 
 interface Value { compiled?: boolean, result?: string }
 
-const { answer } = defineProps<{
-  answer: Value
+const { answer, textarea } = defineProps<{
+  answer: Value,
+  textarea?: boolean | {
+    rows?: number
+  }
 }>()
+
+const textareaRows = computed(() => {
+  if (typeof textarea === 'boolean') {
+    return 3
+  }
+  return textarea?.rows ?? 3
+})
 
 type OnChange = (v: Value) => void
 
@@ -73,13 +83,26 @@ onMounted(() => {
     </label>
   </div>
 
-  <input
-    v-if="injectValue?.compiled"
-    type="text"
-    :value="injectValue?.result"
-    :disabled="disabled"
-    placeholder="请输入编译结果"
-    class="block"
-    @input="handleInputChange"
-  >
+  <template v-if="injectValue?.compiled">
+    <textarea
+      v-if="textarea"
+      type="text"
+      :value="injectValue?.result"
+      :disabled="disabled"
+      placeholder="请输入编译结果"
+      class="block bg-transparent resize-none w-full"
+      @input="handleInputChange"
+      :rows="textareaRows"
+    />
+
+    <input
+      v-else
+      type="text"
+      :value="injectValue?.result"
+      :disabled="disabled"
+      placeholder="请输入编译结果"
+      class="block"
+      @input="handleInputChange"
+    >
+  </template>
 </template>
