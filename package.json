@@ -20,7 +20,7 @@
     "@vueuse/core": "^10.9.0",
     "classnames": "^2.5.1",
     "markdown-it-task-lists": "^2.1.1",
-    "shiki": "^1.6.4",
+    "shiki": "^1.16.2",
     "simple-calculate": "0.0.3",
     "vue": "^3.4.38"
   },
@@ -29,7 +29,7 @@
     "@iconify-json/material-symbols": "^1.1.81",
     "@iconify/tailwind": "^1.1.1",
     "@mermaid-js/mermaid-cli": "^10.9.1",
-    "@shikijs/transformers": "^1.6.4",
+    "@shikijs/transformers": "^1.16.2",
     "@types/node": "^20.12.12",
     "autoprefixer": "^10.4.19",
     "eslint": "^9.3.0",
