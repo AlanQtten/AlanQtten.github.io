@@ -10,6 +10,7 @@ const blogList = [
   { text: '一个计算器', link: 'a-calculator' },
   { text: 'import和require', link: 'import-and-require' },
   { text: '岛', link: 'island' },
+  { text: '一个有趣的选择列', link: 'fun-select-col' },
 ]
 
 const projects = [
