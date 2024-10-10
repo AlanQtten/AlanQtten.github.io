@@ -120,7 +120,7 @@ const rustList = [
     items: [
       { text: '10.1 泛型数据类型', link: 'generic-data-types' },
       { text: '10.2 特性：定义共享行为', link: 'traits-defining-shared-behavior' },
-      // { text: '10.3 通过生命周期校验引用', link: 'validating-references-with-lifetimes' },
+      { text: '10.3 通过生命周期校验引用', link: 'validating-references-with-lifetimes' },
       // { text: '10.4 所有权之旅 #3', link: 'ownership-inventory-hash-3' },
     ],
   }, 10),
