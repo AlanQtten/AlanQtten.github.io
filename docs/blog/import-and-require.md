@@ -7,7 +7,7 @@
 很自然而然地会想到`esm`和`cjs`，期望最终的效果是
 ```js
 // usage in esm
-import { a, b } from 'lib'
+import { a as ma, b as mb } from 'lib'
 
 // usage in cjs
 const { a, b } = require('lib')
@@ -33,21 +33,23 @@ const { a, b } = require('lib')
 如果利用类似`rollup`的工具打包后，那么此时的情况如下
 ```js
 // source code
-export const a = () => {}
-export const b = () => {}
+export function a() {}
+export function b() {}
 export default function dft() {}
+```
 
+```js
 // usage in esm
-import dft, { a, b } from "lib"
+import mDft, { a as ma, b as mb } from 'lib'
 
 // usage in cjs
-const { default as dft, a, b } = require('lib')
+const { default: dft, a, b } = require('lib')
 ```
 
 这样的写法倒也说不上麻烦，但是似乎和我对常见库的印象有些不相符，比如`dayjs`这个库, 我记得他的使用方式是十分一致的
 ```js
 // usage in esm
-import dayjs from "dayjs"
+import mDayjs from 'dayjs'
 
 // usage in cjs
 const dayjs = require('dayjs')
@@ -63,7 +65,7 @@ const dayjs = require('dayjs')
 ```json
 {
   "name": "dayjs",
-  "main": "index.min.js", // point to cjs file
+  "main": "index.min.js" // point to cjs file
 }
 ```
 
@@ -81,19 +83,20 @@ const dayjs = require('dayjs')
 
 2. 在研究`dayjs`打包时也研究了一下以前作为初学者望而生怯的那段代码，现在理解起来也感觉十分简单了😎不过还是惊叹于这段代码的才华，就放在下面让自己时常看看吧
 ```js
+/* eslint-disable no-restricted-globals */
+
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined'
     ? module.exports = factory()
     : typeof define === 'function' && define.amd
       ? define(factory)
       : (
-          global = typeof globalThis !== 'undefined' 
-            ? globalThis 
-            : global || self, 
+          global = typeof globalThis !== 'undefined'
+            ? globalThis
+            : global || self,
           global.dayjs = factory()
         )
-}(this, (() => {
+}(this, () => {
   // ...
-})))
-
+}))
 ```

@@ -1,7 +1,6 @@
 import type { Theme } from 'vitepress'
 import DefaultTheme from 'vitepress/theme'
 
-import StrongHr from '../../components/hr/StrongHr.vue'
 import Thinking from '../../components/thinking/Thinking.vue'
 import iconSetup from './icon'
 
@@ -15,7 +14,6 @@ export default {
   enhanceApp({ app }) {
     iconSetup()
 
-    app.component('StrongHr', StrongHr)
     app.component('Thinking', Thinking)
   },
 } satisfies Theme

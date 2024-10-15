@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { Ref } from 'vue'
-import { inject, onMounted, ref, computed } from 'vue'
+import { computed, inject, onMounted, ref } from 'vue'
 import { disabledSymbol, nameSymbol, onChangeSymbol, updateAnswerSymbol, updateShowingAnswerSymbol, valueSymbol } from './quiz'
 
 interface Value { compiled?: boolean, result?: string }
 
 const { answer, textarea } = defineProps<{
-  answer: Value,
+  answer: Value
   textarea?: boolean | {
     rows?: number
   }
@@ -91,8 +91,8 @@ onMounted(() => {
       :disabled="disabled"
       placeholder="请输入编译结果"
       class="block bg-transparent resize-none w-full"
-      @input="handleInputChange"
       :rows="textareaRows"
+      @input="handleInputChange"
     />
 
     <input

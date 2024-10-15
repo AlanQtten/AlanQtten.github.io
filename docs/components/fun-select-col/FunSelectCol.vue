@@ -4,7 +4,7 @@ import { ref } from 'vue'
 const dataList = ref(Array.from({ length: 10 }, (_, i) => ({ id: i, name: `name${i}`, code: `code${i}` })))
 const selectedIds = ref<number[]>([])
 
-function toggleSelectAll(e) {
+function toggleSelectAll(e: any) {
   const selectAll = e.target.checked
 
   if (selectAll) {
@@ -15,7 +15,7 @@ function toggleSelectAll(e) {
   }
 }
 
-function toggleSelect(id) {
+function toggleSelect(id: number) {
   if (selectedIds.value.includes(id)) {
     selectedIds.value = selectedIds.value.filter(selectedId => selectedId !== id)
   }

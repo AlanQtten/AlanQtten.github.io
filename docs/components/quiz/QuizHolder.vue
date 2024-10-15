@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, provide, ref } from 'vue'
-import objectEqual from '../../utils/object-equal'
 import arrayEqual from '../../utils/array-equal'
+import objectEqual from '../../utils/object-equal'
 import {
   disabledSymbol,
   nameSymbol,
@@ -27,15 +27,15 @@ provide(nameSymbol, formItemName)
 const answer = ref<any>(null)
 const showingAnswer = ref('')
 
-function internalUpdateAnswer(_answer) {
+function internalUpdateAnswer(_answer: any) {
   answer.value = _answer
 }
 
-function internalUpdateShowingAnswer(_showingAnswer) {
+function internalUpdateShowingAnswer(_showingAnswer: string) {
   showingAnswer.value = _showingAnswer
 }
 
-const inputAnswer = ref('')
+const inputAnswer = ref<Answer>('')
 const freezeAnswer = ref()
 function handleAnswer() {
   if (!inputAnswer.value)

@@ -1,5 +1,5 @@
 export function countOfIsland(map: number[], x: number, y: number) {
-  const grid = Array(y).fill(0).map((zero, index) => {
+  const grid = Array.from({ length: y }, (zero, index) => {
     return map.slice(index * x, index * x + x)
   })
 

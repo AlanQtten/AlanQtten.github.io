@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, watchEffect } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
+import { computed, ref, watchEffect } from 'vue'
 
 import { countOfIsland } from './utils'
 
@@ -10,11 +10,11 @@ const y = ref(0)
 const map = ref<number[]>([])
 
 function reload() {
-  map.value = Array(x.value * y.value)
-    .fill(0)
-    .map(() => {
-      return Math.random() - 0.5 < 0 ? 1 : 0
-    })
+  map.value = Array.from({
+    length: x.value * y.value,
+  }, () => {
+    return Math.random() - 0.5 < 0 ? 1 : 0
+  })
 }
 
 const islandCount = computed(() => {

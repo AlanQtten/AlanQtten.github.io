@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { defineModel, ref, watch } from 'vue'
 import { calculate, preCheck } from 'simple-calculate'
+import { defineModel, ref, watch } from 'vue'
 
 const input = defineModel<string>()
 const result = ref()
@@ -35,6 +35,7 @@ watch(input, () => {
   }
   catch (error) {
     result.value = ''
+    console.error(error)
   }
 })
 </script>

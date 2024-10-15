@@ -1,13 +1,13 @@
 <script lang="ts">
 import type { Component, VNode } from 'vue'
-import { defineComponent, h, ref, useCssModule, watchEffect } from 'vue'
-import { codeToHast } from 'shiki'
 import cx from 'classnames'
+import { codeToHast } from 'shiki'
+import { defineComponent, h, ref, useCssModule, watchEffect } from 'vue'
+import transformerFlag from '../../transformers/transformerFlag'
 import { O, R, W } from '../letter'
 import DoubleLetter from '../letter/DoubleLetter.vue'
-import transformerFlag from '../../transformers/transformerFlag'
-import transformerPerm from './transformerPerm'
 import { lineIndexSymbol, propsMergeSymbol } from './constant'
+import transformerPerm from './transformerPerm'
 
 export function pushInMiddle<T>(arr: T[], pusher: (p: { before: T, after: T }) => T | T[] | false) {
   const l = arr.length

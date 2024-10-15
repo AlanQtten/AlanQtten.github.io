@@ -1,4 +1,4 @@
-function arrayEqual(a: any[], b: any[]): boolean {
+function arrayEqual(a: any, b: any[]): boolean {
   if (a === b)
     return true
   if (a == null || b == null)

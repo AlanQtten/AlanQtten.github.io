@@ -16,4 +16,4 @@ const W = defineLetter('W', '#399cf2')
 const O = defineLetter('O', 'var(--aq-error)')
 const F = defineLetter('F', '#5ed100')
 
-export { R, W, O, F }
+export { F, O, R, W }

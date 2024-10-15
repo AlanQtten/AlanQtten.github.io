@@ -66,7 +66,7 @@ const internalLetterChart = computed(() => {
 
     return {
       ...per,
-      P: typeof per.P === 'string' ? Array(3).fill(per.P) : per.P,
+      P: typeof per.P === 'string' ? Array.from({ length: 3 }).fill(per.P) : per.P,
       collapsable: eleIndex > startCollapseIndex,
     }
   })

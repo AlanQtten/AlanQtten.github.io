@@ -1,5 +1,4 @@
 import { cloneVNode, defineComponent, h } from 'vue'
-import StrongHr from '../hr/StrongHr.vue'
 
 export default defineComponent({
   setup(props, { slots }) {
@@ -13,7 +12,9 @@ export default defineComponent({
       for (let i = 0; i < l; i++) {
         _nodes.push(cloneVNode(nodes[i], { questionMark: i + 1 }))
         if (i < l - 1) {
-          _nodes.push(h(StrongHr))
+          _nodes.push(h('hr', {
+            class: '!border-t !border-aq',
+          }))
         }
       }
 

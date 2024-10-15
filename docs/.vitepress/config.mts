@@ -1,7 +1,7 @@
 import process from 'node:process'
-import { defineConfig } from 'vitepress'
-import markDownItTaskLists from 'markdown-it-task-lists'
 import { transformerMetaWordHighlight } from '@shikijs/transformers'
+import markDownItTaskLists from 'markdown-it-task-lists'
+import { defineConfig } from 'vitepress'
 import transformerFlag from '../transformers/transformerFlag'
 import { rustList } from './rust-list'
 

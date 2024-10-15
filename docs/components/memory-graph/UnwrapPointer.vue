@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref } from 'vue'
 import type { Point2 } from './MemoryGraph.vue'
+import { ref } from 'vue'
 
 export interface Detail {
   title: string

@@ -7,4 +7,3 @@ hero:
   tagline: some blog about...
 
 ---
-

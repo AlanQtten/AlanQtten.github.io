@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import type { CSSProperties, Ref } from 'vue'
+import type { Options } from './line'
+import type { Detail } from './UnwrapPointer.vue'
 import { inject, ref, watch } from 'vue'
 import findElementAndIndex from '../../utils/findElementAndIndex'
-import type { Detail } from './UnwrapPointer.vue'
+import { line, LineType } from './line'
 import UnwrapPointer from './UnwrapPointer.vue'
-import type { Options } from './line'
-import { LineType, line } from './line'
 
 export type Point2 = 'null' | 'null_error' | number | string | number[] | [string, number][]
 interface Linker {

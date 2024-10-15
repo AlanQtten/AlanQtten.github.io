@@ -5,6 +5,4 @@
 
 但这种方案不支持ie，且chrome也只保留了对`<img />`的支持
 
-
-
 [`x-mixed-replace` demo](https://github.com/AlanQtten/x-mixed-replace)
