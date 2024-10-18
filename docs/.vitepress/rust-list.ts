@@ -113,4 +113,16 @@ export const rustList = [
       { text: '11.3 组织测试结构', link: 'test-organization' },
     ],
   }, 11),
+  folder({
+    text: '12. 一个IO项目：构建一个命令行程序',
+    link: 'an-io-project-building-a-command-line-program',
+    items: [
+      { text: '12.1 接收命令行参数', link: 'accepting-command-line-arguments' },
+      // { text: '12.2 读取文件', link: 'reading-a-file' },
+      // { text: '12.3 提高模块化和错误处理', link: 'refactoring-to-improve-modularity-and-error-handling' },
+      // { text: '12.4 通过测试驱动来开发功能', link: 'developing-the-library-s-functionality-with-test-driven-development' },
+      // { text: '12.5 环境变量', link: 'working-with-environment' },
+      // { text: '12.6 用错误输出流取代标准输出流', link: 'writing-error-messages-to-standard-error-instead-of-standard-output' },
+    ],
+  }, 12),
 ]
