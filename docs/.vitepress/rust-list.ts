@@ -110,7 +110,7 @@ export const rustList = [
     items: [
       { text: '11.1 如何编写测试', link: 'how-to-write-tests' },
       { text: '11.2 控制测试的运行', link: 'controlling-how-tests-are-run' },
-      // { text: '11.3 测试的文件结构', link: 'test-organization' },
+      { text: '11.3 组织测试结构', link: 'test-organization' },
     ],
   }, 11),
 ]
