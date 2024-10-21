@@ -727,6 +727,8 @@ error: test failed, to rerun pass `--lib`
 
 现在你了解了各种书写测试的方式，让我们来看看我们运行测试时发生了什么，以及`cargo test`命令的不同选项。
 
+::: details 小测（2）
+
 <QuizProvider>
 <Quiz>
 <template #description>
@@ -813,3 +815,5 @@ fn test() {
 </template>
 </Quiz>
 </QuizProvider>
+
+:::
