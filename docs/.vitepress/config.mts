@@ -1,11 +1,13 @@
+import type { Route } from './types'
 import process from 'node:process'
 import { transformerMetaWordHighlight } from '@shikijs/transformers'
 import markDownItTaskLists from 'markdown-it-task-lists'
 import { defineConfig } from 'vitepress'
 import transformerFlag from '../transformers/transformerFlag'
 import { rustList } from './rust-list'
+import { findFirstAvailableLink } from './utils'
 
-const blogList = [
+const blogList: Route[] = [
   { text: '关于x-mixed-replace', link: 'x-mixed-replace' },
   { text: '--ff和--no-ff', link: 'ff-and-no-ff' },
   { text: '一个计算器', link: 'a-calculator' },
@@ -14,7 +16,7 @@ const blogList = [
   { text: '一个有趣的选择列', link: 'fun-select-col' },
 ]
 
-const projects = [
+const projects: Route[] = [
   { text: 'list', link: 'list' },
 ]
 
@@ -27,9 +29,9 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: 'blog', link: `/blog/${blogList[0].link}`, activeMatch: '/blog/' },
-      { text: 'project', link: `/project/${projects[0].link}`, activeMatch: '/project/' },
-      { text: 'rust', link: `/rust/${rustList[0].items[0].link}`, activeMatch: '/rust/' },
+      { text: 'blog', link: `/blog/${findFirstAvailableLink(blogList)}`, activeMatch: '/blog/' },
+      { text: 'project', link: `/project/${findFirstAvailableLink(projects)}`, activeMatch: '/project/' },
+      { text: 'rust', link: `/rust/${findFirstAvailableLink(rustList)}`, activeMatch: '/rust/' },
       process.env.NODE_ENV !== 'production' && { text: 'playground', link: '/playground/playground' },
     ].filter(Boolean) as NavItem[],
 
