@@ -122,7 +122,7 @@ export const rustList = [
       { text: '12.3 提高模块化程序和错误处理', link: 'refactoring-to-improve-modularity-and-error-handling' },
       { text: '12.4 通过测试驱动来开发功能', link: 'developing-the-library-s-functionality-with-test-driven-development' },
       { text: '12.5 添加环境变量', link: 'working-with-environment-variables' },
-      // { text: '12.6 用错误输出流取代标准输出流', link: 'writing-error-messages-to-standard-error-instead-of-standard-output' },
+      { text: '12.6 用标准错误流取代标准输出流', link: 'writing-error-messages-to-standard-error-instead-of-standard-output' },
     ],
   }, 12),
 ]
