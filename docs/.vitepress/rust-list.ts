@@ -151,16 +151,16 @@ export const rustList = [
       { text: '用标准错误流取代标准输出流', link: 'writing-error-messages-to-standard-error-instead-of-standard-output' },
     ],
   }, 12),
-  // folder({
-  //   text: '函数式编程：迭代器和闭包',
-  //   link: 'functional-language-features-iterators-and-closures',
-  //   items: [
-  //     { text: '闭包：捕获环境的匿名函数', link: 'closures-anonymous-functions-that-capture-their-environment' },
-  //     { text: '使用迭代器处理一系列元素', link: 'processing-a-series-of-items-with-iterators' },
-  //     { text: '优化I/O工程', link: 'improving-our-io-project' },
-  //     { text: '性能比较：循环 vs 迭代器', link: 'comparing-performance-loops-vs-iterators' },
-  //   ],
-  // }, 13),
+  folder({
+    text: '函数式编程：迭代器和闭包',
+    link: 'functional-language-features-iterators-and-closures',
+    items: [
+      { text: '闭包：捕获环境的匿名函数', link: 'closures-anonymous-functions-that-capture-their-environment' },
+      // { text: '使用迭代器处理一系列元素', link: 'processing-a-series-of-items-with-iterators' },
+      // { text: '优化I/O工程', link: 'improving-our-io-project' },
+      // { text: '性能比较：循环 vs 迭代器', link: 'comparing-performance-loops-vs-iterators' },
+    ],
+  }, 13),
   // folder({
   //   text: '更多关于Cargo和Crates.io的内容',
   //   link: 'more-about-cargo-and-crates-io',
