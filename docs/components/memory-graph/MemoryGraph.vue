@@ -26,7 +26,7 @@ interface Linker {
 }
 interface Frame {
   name: string
-  body: Array<{
+  body?: Array<{
     key: string
     value: string | string[]
     point2: Point2
@@ -80,14 +80,14 @@ watch(
 
     try {
       memory.stack.forEach((frame) => {
-        frame.body.forEach((ele, frameIndex) => {
+        frame.body?.forEach((ele, frameIndex) => {
           if (validPointTo(ele.point2) && typeof ele.point2 === 'string' && !/^\d+\./.test(ele.point2) && ele.point2.includes('.')) {
             const start = pointerValue[frame.name][frameIndex]
             // stack ---> stack by scope.key
             const [targetScopeName, targetFrameKey] = ele.point2.split('.')
 
             const targetScopeIndex = memory.stack.findIndex(frame => frame.name === targetScopeName)
-            const [targetFrame, targetFrameIndex] = findElementAndIndex(memory.stack[targetScopeIndex].body, variable => variable.key === targetFrameKey)!
+            const [targetFrame, targetFrameIndex] = findElementAndIndex(memory.stack[targetScopeIndex].body!, variable => variable.key === targetFrameKey)!
 
             const end = pointer.value[targetScopeName][targetFrameIndex]
 
@@ -119,7 +119,7 @@ watch(
 
       if (heapEl?.length) {
         memory.stack.forEach((frame) => {
-          frame.body.forEach((ele, frameIndex) => {
+          frame.body?.forEach((ele, frameIndex) => {
             if (validPointTo(ele.point2)) {
               const start = pointerValue[frame.name][frameIndex]
 
@@ -270,13 +270,13 @@ watch(
             const [targetScopeName, targetFrameKey] = hp.point2.split('.')
 
             const targetScopeIndex = memory.stack.findIndex(frame => frame.name === targetScopeName)
-            const [targetFrame, targetFrameIndex] = findElementAndIndex(memory.stack[targetScopeIndex].body, variable => variable.key === targetFrameKey)!
+            const [targetFrame, targetFrameIndex] = findElementAndIndex(memory.stack[targetScopeIndex].body!, variable => variable.key === targetFrameKey)!
 
             const start = pointer.value[targetScopeName][targetFrameIndex]
             const end = heapBlock.value[_hpIndex]
 
             const isTargetFrameValidPointer = validPointTo(targetFrame.point2)
-            const isCurrentHeapBeingPointAt = memory.stack.some(frame => frame.body.some(variable => variable.point2 === hp.id))
+            const isCurrentHeapBeingPointAt = memory.stack.some(frame => frame.body?.some(variable => variable.point2 === hp.id))
 
             const [svg] = line(start, end, LineType.right2bottom2left, {
               wrapper: wrapper.value,
@@ -457,6 +457,8 @@ watch(
               </tr>
             </tbody>
           </table>
+
+          <span v-if="!frame.body?.length">（空帧）</span>
         </div>
       </div>
 
