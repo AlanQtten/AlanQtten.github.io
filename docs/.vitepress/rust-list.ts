@@ -161,17 +161,17 @@ export const rustList = [
       { text: '性能比较：循环 vs 迭代器', link: 'comparing-performance-loops-vs-iterators' },
     ],
   }, 13),
-  // folder({
-  //   text: '更多关于Cargo和Crates.io的内容',
-  //   link: 'more-about-cargo-and-crates-io',
-  //   items: [
-  //     { text: '通过配置文件来定制化构建', link: 'customizing-builds-with-release-profiles' },
-  //     { text: '将Crate发布到Crates.io', link: 'publishing-a-crate-to-crates-io' },
-  //     { text: 'Cargo工作区', link: 'cargo-workspaces' },
-  //     { text: '使用cargo install从Crates.io安装二进制文件', link: 'installing-binaries-from-crates-io-with-cargo-install' },
-  //     { text: '使用自定义命令扩展Cargo', link: 'extending-cargo-with-custom-commands' },
-  //   ],
-  // }, 14),
+  folder({
+    text: '更多关于Cargo和Crates.io的内容',
+    link: 'more-about-cargo-and-crates-io',
+    items: [
+      { text: '通过配置文件来定制化构建', link: 'customizing-builds-with-release-profiles' },
+      // { text: '将Crate发布到crates.io', link: 'publishing-a-crate-to-crates-io' },
+      // { text: 'Cargo工作区', link: 'cargo-workspaces' },
+      // { text: '使用cargo install从Crates.io安装二进制文件', link: 'installing-binaries-from-crates-io-with-cargo-install' },
+      // { text: '使用自定义命令扩展Cargo', link: 'extending-cargo-with-custom-commands' },
+    ],
+  }, 14),
   // folder({
   //   text: '智能指针',
   //   link: 'smart-pointers',
