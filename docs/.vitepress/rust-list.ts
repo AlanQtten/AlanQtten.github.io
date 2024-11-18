@@ -167,7 +167,7 @@ export const rustList = [
     items: [
       { text: '通过配置文件来定制化构建', link: 'customizing-builds-with-release-profiles' },
       { text: '将Crate发布到crates.io', link: 'publishing-a-crate-to-crates-io' },
-      // { text: 'Cargo工作区', link: 'cargo-workspaces' },
+      { text: 'Cargo工作空间', link: 'cargo-workspaces' },
       // { text: '使用cargo install从Crates.io安装二进制文件', link: 'installing-binaries-from-crates-io-with-cargo-install' },
       // { text: '使用自定义命令扩展Cargo', link: 'extending-cargo-with-custom-commands' },
     ],
