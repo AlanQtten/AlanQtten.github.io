@@ -178,7 +178,7 @@ export const rustList = [
     items: [
       { text: '使用Box<T>来引用堆内数据', link: 'using-box-t-to-point-to-data-on-the-heap' },
       { text: '通过 Deref Trait将普通引用变为智能指针', link: 'treating-smart-pointers-like-regular-references-with-the-deref-trait' },
-      // { text: '通过Drop Trait来运行清理代码', link: 'running-code-on-cleanup-with-the-drop-trait' },
+      { text: '通过 Drop Trait来运行清理代码', link: 'running-code-on-cleanup-with-the-drop-trait' },
       // { text: 'Rc<T>，引用计数指针', link: 'rc-t-the-reference-counted-smart-pointer' },
       // { text: 'RefCell<T>和内部可变性模式', link: 'ref-cell-t-and-the-interior-mutability-pattern' },
       // { text: '循环引用会引发内存泄露', link: 'circular-references-can-leak-memory' },
