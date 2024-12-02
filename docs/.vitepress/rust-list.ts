@@ -1,9 +1,17 @@
 import type { Route } from './types'
 
+function beautifyText(text: string) {
+  if (text.includes('<T>')) {
+    return text.replace('<T>', '&lt;T&gt;')
+  }
+
+  return text
+}
+
 function folder(_f: Route, folderIndex: number, subIndex?: number) {
   const newF = {
     ..._f,
-    text: `${folderIndex ? `${folderIndex}.` : ''}${subIndex !== undefined ? subIndex + 1 : ''} ${_f.text}`,
+    text: `${folderIndex ? `${folderIndex}.` : ''}${subIndex !== undefined ? subIndex + 1 : ''} ${beautifyText(_f.text)}`,
     link: `${folderIndex}/${_f.link}`,
   }
 

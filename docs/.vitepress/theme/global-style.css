@@ -13,3 +13,7 @@
 :root.dark .hide-while-dark-mode {
   display: none;
 }
+
+* {
+  font-variant-ligatures: none;
+}
