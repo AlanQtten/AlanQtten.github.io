@@ -189,7 +189,7 @@ export const rustList = [
       { text: '通过 Drop Trait来运行清理代码', link: 'running-code-on-cleanup-with-the-drop-trait' },
       { text: 'Rc<T>，引用计数指针', link: 'rc-t-the-reference-counted-smart-pointer' },
       { text: 'RefCell<T>和内部可变性模式', link: 'ref-cell-t-and-the-interior-mutability-pattern' },
-      // { text: '循环引用会引发内存泄露', link: 'circular-references-can-leak-memory' },
+      { text: '循环引用有内存泄露的风险', link: 'references-circular-can-leak-memory' },
     ],
   }, 15),
   // folder({
