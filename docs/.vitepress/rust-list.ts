@@ -192,16 +192,16 @@ export const rustList = [
       { text: '循环引用有内存泄露的风险', link: 'references-circular-can-leak-memory' },
     ],
   }, 15),
-  // folder({
-  //   text: '无畏并发',
-  //   link: 'fearless-concurrency',
-  //   items: [
-  //     { text: '使用线程来同时运行代码', link: 'using-threads-to-run-code-simultaneously' },
-  //     { text: '使用信息传递在线程间传递数据', link: 'using-message-passing-to-transfer-data-between-threads' },
-  //     { text: '共享状态并发模式', link: 'shared-state-concurrency' },
-  //     { text: '通过Sync和Send Traits实现可扩展的并发', link: 'extensible-concurrency-with-the-sync-and-send-traits' },
-  //   ],
-  // }, 16),
+  folder({
+    text: '无畏并发',
+    link: 'fearless-concurrency',
+    items: [
+      { text: '使用线程来同时运行代码', link: 'using-threads-to-run-code-simultaneously' },
+      // { text: '使用信息传递在线程间传递数据', link: 'using-message-passing-to-transfer-data-between-threads' },
+      // { text: '共享状态并发模式', link: 'shared-state-concurrency' },
+      // { text: '通过Sync和Send Traits实现可扩展的并发', link: 'extensible-concurrency-with-the-sync-and-send-traits' },
+    ],
+  }, 16),
   // folder({
   //   text: 'Async和Await',
   //   link: 'async-and-await',
