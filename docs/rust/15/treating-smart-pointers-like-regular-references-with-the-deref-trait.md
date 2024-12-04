@@ -239,7 +239,7 @@ fn main() {
     compiled: true,
     result: 'deref\nderef\n0 -1'
   }"
-  textarea="{
+  :textarea="{
     rows: 3
   }"
 />
