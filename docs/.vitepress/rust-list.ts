@@ -199,7 +199,7 @@ export const rustList = [
       { text: '使用线程来同时运行代码', link: 'using-threads-to-run-code-simultaneously' },
       { text: '使用信息传递在线程间传递数据', link: 'using-message-passing-to-transfer-data-between-threads' },
       { text: '并发中的状态共享', link: 'shared-state-concurrency' },
-      // { text: '通过Sync和Send Traits实现可扩展的并发', link: 'extensible-concurrency-with-the-sync-and-send-traits' },
+      { text: '通过 Sync 和 Send Traits实现可扩展的并发', link: 'extensible-concurrency-with-the-sync-and-send-traits' },
     ],
   }, 16),
   // folder({
