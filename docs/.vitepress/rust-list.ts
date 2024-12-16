@@ -202,18 +202,18 @@ export const rustList = [
       { text: '通过 Sync 和 Send Traits实现可扩展的并发', link: 'extensible-concurrency-with-the-sync-and-send-traits' },
     ],
   }, 16),
-  // folder({
-  //   text: 'Async和Await',
-  //   link: 'async-and-await',
-  //   items: [
-  //     { text: 'Futures和Async语法', link: 'futures-and-async-syntax' },
-  //     { text: '通过Async并发', link: 'concurrency-with-async' },
-  //     { text: '处理任意数量的Futures', link: 'working-with-any-number-of-futures' },
-  //     { text: '流', link: 'streams' },
-  //     { text: '深入Async Trait', link: 'digging-into-the-traits-for-async' },
-  //     { text: 'Futures，Tasks和Threads', link: 'futures-tasks-and-threads' },
-  //   ],
-  // }, 17),
+  folder({
+    text: 'Async和Await',
+    link: 'async-and-await',
+    items: [
+      { text: 'Futures和Async语法', link: 'futures-and-async-syntax' },
+      // { text: '通过Async并发', link: 'concurrency-with-async' },
+      // { text: '处理任意数量的Futures', link: 'working-with-any-number-of-futures' },
+      // { text: '流', link: 'streams' },
+      // { text: '深入Async Trait', link: 'digging-into-the-traits-for-async' },
+      // { text: 'Futures，Tasks和Threads', link: 'futures-tasks-and-threads' },
+    ],
+  }, 17),
   // folder({
   //   text: 'Rust 的面向对象编程特性',
   //   link: 'object-oriented-programming-features-of-rust',
