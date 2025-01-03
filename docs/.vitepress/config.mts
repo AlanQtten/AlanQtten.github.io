@@ -14,6 +14,7 @@ const blogList: Route[] = [
   { text: 'import和require', link: 'import-and-require' },
   { text: '岛', link: 'island' },
   { text: '一个有趣的选择列', link: 'fun-select-col' },
+  { text: '一些配色', link: 'some-color' },
 ]
 
 const projects: Route[] = [
