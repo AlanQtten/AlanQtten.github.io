@@ -1,9 +1,10 @@
 import type { Theme } from 'vitepress'
-import DefaultTheme from 'vitepress/theme'
+import DefaultTheme from 'vitepress/theme-without-fonts'
 
 import Thinking from '../../components/thinking/Thinking.vue'
 import iconSetup from './icon'
 
+import './fonts/index.css'
 import './global-var.css'
 import './global-style.css'
 import './tailwind.css'

@@ -14,6 +14,7 @@
   display: none;
 }
 
-* {
-  font-variant-ligatures: none;
+:root {
+  --vp-font-family-base: JetBrains Mono; /* normal text font */
+  --vp-font-family-mono: JetBrains Mono; /* code font */
 }

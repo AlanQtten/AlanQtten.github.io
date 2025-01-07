@@ -66,4 +66,22 @@ export default defineConfig({
       transformerFlag,
     ],
   },
+  transformHead({ assets }) {
+    // 相应地调整正则表达式以匹配字体
+    const myFontFile = assets.find(fileName => /\.woff2$/.test(fileName))
+    if (myFontFile) {
+      return [
+        [
+          'link',
+          {
+            rel: 'preload',
+            href: myFontFile,
+            as: 'font',
+            type: 'font/woff2',
+            crossorigin: '',
+          },
+        ],
+      ]
+    }
+  },
 })
