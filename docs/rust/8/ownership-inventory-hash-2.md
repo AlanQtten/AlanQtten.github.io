@@ -2,10 +2,9 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
-  CheckboxHolder,
   Checkbox,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -38,12 +37,12 @@ fn remove_zeros(v: &mut Vec<u32>) {
 
 如果你要编译这个函数，你会收到以下哪一个错误？
 
-<RadioHolder>
-<Radio label="v.iter()不能在可变引用上调用" />
-<Radio label="v的存活时长不足以调用v.remove(i)" />
-<Radio label="i仍存活时，t不能被解引用" />
-<Radio label="v.remove(i)不能将v借用为可变的" answer />
-</RadioHolder>
+<Radio>
+<Option label="v.iter()不能在可变引用上调用" />
+<Option label="v的存活时长不足以调用v.remove(i)" />
+<Option label="i仍存活时，t不能被解引用" />
+<Option label="v.remove(i)不能将v借用为可变的" answer />
+</Radio>
 </template>
 </Quiz>
 
@@ -89,8 +88,8 @@ error[E0502]: cannot borrow `*v` as mutable because it is also borrowed as immut
 1. 通过编译
 2. 程序的执行可能会引发未定义行为
 
-<CheckboxHolder>
-<Checkbox answer>
+<Checkbox>
+<Option answer>
 
 ```rust
 let mut v = vec![5, 5, 0];
@@ -98,25 +97,25 @@ remove_zeros(&mut v);
 println!("{:?}", v);
 ```
 
-</Checkbox>
-<Checkbox>
+</Option>
+<Option>
 
 ```rust
 let mut v = vec![1; 100];
 remove_zeros(&mut v);
 ```
 
-</Checkbox>
-<Checkbox answer>
+</Option>
+<Option answer>
 
 ```rust
 let mut v = vec![1, 2, 0, 3];
 remove_zeros(&mut v);
 ```
 
+</Option>
+<Option label="都不满足" />
 </Checkbox>
-<Checkbox label="都不满足" />
-</CheckboxHolder>
 </template>
 </Quiz>
 
@@ -149,8 +148,8 @@ fn remove_zeros(v: &mut Vec<u32>) {
 2. 修复的函数保留了原始函数的意图
 3. 修复的函数没有引发不必要的性能问题
 
-<RadioHolder>
 <Radio>
+<Option>
 
 ```rust /Vec<i32>/
 fn remove_zeros(v: Vec<i32>) {
@@ -163,8 +162,8 @@ fn remove_zeros(v: Vec<i32>) {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust /.clone()/
 fn remove_zeros(v: &mut Vec<i32>) {
@@ -177,8 +176,8 @@ fn remove_zeros(v: &mut Vec<i32>) {
 }
 ```
 
-</Radio>
-<Radio answer>
+</Option>
+<Option answer>
 
 <!-- TODO: highlight v[i] -->
 ```rust /i in (0 .. v.len()).rev()/
@@ -192,9 +191,9 @@ fn remove_zeros(v: &mut Vec<i32>) {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust
 fn remove_zeros(v: &Vec<i32>) -> Vec<i32> {
@@ -208,8 +207,8 @@ fn remove_zeros(v: &Vec<i32>) -> Vec<i32> {
 }
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 </template>
 </Quiz>
 
@@ -234,11 +233,11 @@ fn reverse(v: &mut Vec<String>) {
 
 如果你要编译这个函数，你会收到以下哪一个错误？
 
-<RadioHolder>
-<Radio label="不能通过v[i]和v[n - i - 1]对v进行重复可变借用" answer />
-<Radio label="v本身是可变借用，不能通过v.len()对v进行不可变借用" />
-<Radio label="不能通过v[i]对一个可变的vector创建可变借用" />
-</RadioHolder>
+<Radio>
+<Option label="不能通过v[i]和v[n - i - 1]对v进行重复可变借用" answer />
+<Option label="v本身是可变借用，不能通过v.len()对v进行不可变借用" />
+<Option label="不能通过v[i]对一个可变的vector创建可变借用" />
+</Radio>
 </template>
 </Quiz>
 
@@ -280,8 +279,8 @@ error[E0499]: cannot borrow `*v` as mutable more than once at a time
 1. 通过编译
 2. 程序的执行可能会引发未定义行为
 
-<CheckboxHolder>
 <Checkbox>
+<Option>
 
 ```rust
 let mut v = vec![String::from("a"), String::from("b")];
@@ -289,8 +288,8 @@ reverse(&mut v);
 println!("{:?}", v);
 ```
 
-</Checkbox>
-<Checkbox>
+</Option>
+<Option>
 
 ```rust
 let mut v = vec![String::from("a"), String::from("b")];
@@ -299,17 +298,17 @@ reverse(&mut v);
 println!("{x}");
 ```
 
-</Checkbox>
-<Checkbox>
+</Option>
+<Option>
 
 ```rust
 let mut v = vec![String::from("a"), String::from("b")];
 reverse(&mut v);
 ```
 
+</Option>
+<Option label="都不满足" answer />
 </Checkbox>
-<Checkbox label="都不满足" answer />
-</CheckboxHolder>
 </template>
 </Quiz>
 
@@ -338,8 +337,8 @@ fn reverse(v: &mut Vec<String>) {
 2. 修复的函数保留了原始函数的意图
 3. 修复的函数没有引发不必要的性能问题
 
-<RadioHolder>
 <Radio>
+<Option>
 
 ```rust {4-7}
 fn reverse(v: &mut Vec<String>) {
@@ -353,8 +352,8 @@ fn reverse(v: &mut Vec<String>) {
 }
 ```
 
-</Radio>
-<Radio answer>
+</Option>
+<Option answer>
 
 ```rust {4-6}
 fn reverse(v: &mut Vec<String>) {
@@ -367,8 +366,8 @@ fn reverse(v: &mut Vec<String>) {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust /Vec<String>/ /let mut v2 = Vec::new();/ /v.push(v.pop().unwrap());/
 fn reverse(v: &Vec<String>) -> Vec<String> {
@@ -381,9 +380,9 @@ fn reverse(v: &Vec<String>) -> Vec<String> {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust /let mut v2 = v.clone();/
 fn reverse(v: &Vec<String>) -> Vec<String> {
@@ -395,8 +394,8 @@ fn reverse(v: &Vec<String>) -> Vec<String> {
 }
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 </template>
 </Quiz>
 </QuizProvider>

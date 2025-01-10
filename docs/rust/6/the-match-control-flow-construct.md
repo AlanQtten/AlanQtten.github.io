@@ -6,8 +6,8 @@ import {
   Quiz,
   IsCompileText,
   IsCompile,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 
 </script>
@@ -417,12 +417,12 @@ impl<T> Option<T> {
 
 下面哪一个句子对这个函数的行为描述地最正确？
 
-<RadioHolder>
-<Radio label="如果self内的对象存在，那么返回一个由包裹它的新option，如果不存在，返回other" />
-<Radio label="如果self内的对象存在，那么对它的引用，如果不存在，返回other" />
-<Radio label="如果self内的对象存在，返回它，如果不存在，返回other" answer />
-<Radio label="如果self内部没有值，那么将other插入self" />
-</RadioHolder>
+<Radio>
+<Option label="如果self内的对象存在，那么返回一个由包裹它的新option，如果不存在，返回other" />
+<Option label="如果self内的对象存在，那么对它的引用，如果不存在，返回other" />
+<Option label="如果self内的对象存在，返回它，如果不存在，返回other" answer />
+<Option label="如果self内部没有值，那么将other插入self" />
+</Radio>
 
 </template>
 </Quiz>
@@ -488,11 +488,11 @@ fn decr_twice_v2(n: u32) -> Option<u32> {
 
 这两个函数什么情况下行为相同：
 
-<RadioHolder>
-<Radio label="所有输入都相同" answer />
-<Radio label="没有输入能让他们相同" />
-<Radio label="一部分输入相同" />
-</RadioHolder>
+<Radio>
+<Option label="所有输入都相同" answer />
+<Option label="没有输入能让他们相同" />
+<Option label="一部分输入相同" />
+</Radio>
 
 </template>
 </Quiz>

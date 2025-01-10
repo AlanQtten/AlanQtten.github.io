@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
+  Option,
   IsCompile,
   IsCompileText
 } from "../../components/quiz"
@@ -221,10 +221,10 @@ if cond {
 }
 ```
 
-<RadioHolder>
-<Radio label="是" answer />
-<Radio label="否" />
-</RadioHolder>
+<Radio>
+<Option label="是" answer />
+<Option label="否" />
+</Radio>
 
 </template>
 </Quiz>
@@ -478,10 +478,10 @@ fn main() {
 }
 ```
 
-<RadioHolder>
-<Radio label="会" answer />
-<Radio label="不会" />
-</RadioHolder>
+<Radio>
+<Option label="会" answer />
+<Option label="不会" />
+</Radio>
 
 </template>
 </Quiz>

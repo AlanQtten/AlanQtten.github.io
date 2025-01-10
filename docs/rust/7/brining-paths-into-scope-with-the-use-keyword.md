@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
+  Option,
   Input
 } from "../../components/quiz"
 
@@ -258,12 +258,12 @@ use std::collections::*;
 
 以下哪一条对`use`关键字的描述最准确？
 
-<RadioHolder>
-<Radio label="use告诉编译器要使用什么元素，应该对其进行优化" />
-<Radio label="use缩减了元素冗长的引用路径" answer />
-<Radio label="use允许元素避开正常的权限规则" />
-<Radio label="use将一个元素的内容从一个模块复制到另一个" />
-</RadioHolder>
+<Radio>
+<Option label="use告诉编译器要使用什么元素，应该对其进行优化" />
+<Option label="use缩减了元素冗长的引用路径" answer />
+<Option label="use允许元素避开正常的权限规则" />
+<Option label="use将一个元素的内容从一个模块复制到另一个" />
+</Radio>
 
 </template>
 </Quiz>

@@ -7,7 +7,7 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
+  Option,
   IsCompileText,
   IsCompile
 } from "../../components/quiz"
@@ -180,12 +180,12 @@ error: could not compile `closure-example` (bin "closure-example") due to 1 prev
 
 以下哪一项是Rust可以推断闭包的参数/返回值类型，而无法推断顶层函数的参数/返回值类型的最佳理由
 
-<RadioHolder>
-<Radio label="任何赋值给变量的内容都可以被推断，而顶层函数不能被赋值给变量" />
-<Radio label="由于停机问题，Rust在数学上无法推断顶层函数的类型。" />
-<Radio label="为了向下兼容老版本的Rust" />
-<Radio label="顶层函数可能作为库对外接口的一部分，而闭包无法被直接暴露" />
-</RadioHolder>
+<Radio>
+<Option label="任何赋值给变量的内容都可以被推断，而顶层函数不能被赋值给变量" />
+<Option label="由于停机问题，Rust在数学上无法推断顶层函数的类型。" />
+<Option label="为了向下兼容老版本的Rust" />
+<Option label="顶层函数可能作为库对外接口的一部分，而闭包无法被直接暴露" />
+</Radio>
 
 </template>
 </Quiz>
@@ -208,12 +208,12 @@ f(s);
 
 下面哪一项对`f`和`s`的关系描述的最准确？
 
-<RadioHolder>
-<Radio label="f对s没有影响" />
-<Radio label="f会导致s被立刻销毁" />
-<Radio label="f读取了s，并丢弃了结果" />
-<Radio label="f捕获了当前环境的s" />
-</RadioHolder>
+<Radio>
+<Option label="f对s没有影响" />
+<Option label="f会导致s被立刻销毁" />
+<Option label="f读取了s，并丢弃了结果" />
+<Option label="f捕获了当前环境的s" />
+</Radio>
 
 </template>
 </Quiz>
@@ -699,11 +699,11 @@ fn for_each_mut<T, F: ___(&mut T)>(v: &mut Vec<T>, mut f: F) {
 
 下面哪一个trait填入空白处最合适？
 
-<RadioHolder>
-<Radio label="Fn" />
-<Radio label="FnMut" answer />
-<Radio label="FnOnce" />
-</RadioHolder>
+<Radio>
+<Option label="Fn" />
+<Option label="FnMut" answer />
+<Option label="FnOnce" />
+</Radio>
 
 </template>
 </Quiz>
@@ -734,11 +734,11 @@ impl<F: ___(i32)> -> <i32> Analyzer<F> {
 
 下面哪一个trait填入空白处最合适？
 
-<RadioHolder>
-<Radio label="Fn" answer />
-<Radio label="FnMut" />
-<Radio label="FnOnce" />
-</RadioHolder>
+<Radio>
+<Option label="Fn" answer />
+<Option label="FnMut" />
+<Option label="FnOnce" />
+</Radio>
 
 </template>
 </Quiz>

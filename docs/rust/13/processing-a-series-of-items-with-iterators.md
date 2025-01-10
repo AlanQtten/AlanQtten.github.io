@@ -3,7 +3,7 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
+  Option,
   IsCompileText,
   IsCompile
 } from "../../components/quiz"
@@ -231,12 +231,12 @@ mod tests {
 
 下面哪一项是迭代器被称为惰性的原因？
 
-<RadioHolder>
-<Radio label="除非你调用了从迭代器中提炼元素的方法，否则迭代器不会产生任何影响" answer />
-<Radio label="一个迭代器只会对给定数量的元素进行迭代" />
-<Radio label="一个迭代器会在迭代中获取系列元素的所有权" />
-<Radio label="一个迭代器会在迭代中创建元素的备份" />
-</RadioHolder>
+<Radio>
+<Option label="除非你调用了从迭代器中提炼元素的方法，否则迭代器不会产生任何影响" answer />
+<Option label="一个迭代器只会对给定数量的元素进行迭代" />
+<Option label="一个迭代器会在迭代中获取系列元素的所有权" />
+<Option label="一个迭代器会在迭代中创建元素的备份" />
+</Radio>
 
 </template>
 </Quiz>
@@ -267,10 +267,10 @@ for x in iter {
 }
 ```
 
-<RadioHolder>
-<Radio label="是" answer />
-<Radio label="否" />
-</RadioHolder>
+<Radio>
+<Option label="是" answer />
+<Option label="否" />
+</Radio>
 
 </template>
 </Quiz>

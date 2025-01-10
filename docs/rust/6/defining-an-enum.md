@@ -8,8 +8,8 @@ import {
   Quiz,
   IsCompile,
   IsCompileText,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -443,12 +443,12 @@ enum Result2<T, E> {
 
 枚举`Result2`更符合Rust的语言习惯，下面哪一项声明**不是**合理的原因？
 
-<RadioHolder>
-<Radio label="结构体的ok和err可能同时为None，而枚举至少有一个不为None" />
-<Radio label="结构体包括了Option类型，其目的仅为包裹结构体" />
-<Radio label="语法上来说，枚举比结构体更简洁" />
-<Radio label="结构体在运行时使用的内存比枚举多" />
-</RadioHolder>
+<Radio>
+<Option label="结构体的ok和err可能同时为None，而枚举至少有一个不为None" />
+<Option label="结构体包括了Option类型，其目的仅为包裹结构体" />
+<Option label="语法上来说，枚举比结构体更简洁" />
+<Option label="结构体在运行时使用的内存比枚举多" />
+</Radio>
 
 </template>
 </Quiz>

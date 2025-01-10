@@ -3,7 +3,7 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
+  Option,
   Input
 } from "../../components/quiz"
 </script>
@@ -300,12 +300,12 @@ b = { path = "../b" }
 
 在*a/lib.rs*里，要使用哪个路径引用`f`？
 
-<RadioHolder>
-<Radio label="b::f" answer />
-<Radio label="crates::b::f" />
-<Radio label="workspace::b::f" />
-<Radio label="super::b::f" />
-</RadioHolder>
+<Radio>
+<Option label="b::f" answer />
+<Option label="crates::b::f" />
+<Option label="workspace::b::f" />
+<Option label="super::b::f" />
+</Radio>
 
 </template>
 </Quiz>

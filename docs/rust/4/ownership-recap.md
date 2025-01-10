@@ -7,9 +7,8 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
   Checkbox,
-  CheckboxHolder
+  Option
 } from "../../components/quiz"
 
 </script>
@@ -567,36 +566,36 @@ drop(v); /*[!flag_error L3]*/
 
 下面哪一个函数签名和这个功能最贴切？
 
-<RadioHolder>
 <Radio>
+<Option>
 
 ```rust
 fn round_all(v: &Vec<f32>) -> Vec<f32>;
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn round_all(v: Vec<f32>);
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn round_all(v: &Vec<f32>);
 ```
 
-</Radio>
-<Radio answer>
+</Option>
+<Option answer>
 
 ```rust
 fn round_all(v: &mut Vec<f32>);
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>
@@ -615,36 +614,36 @@ fn round_all(v: &mut Vec<f32>);
 
 下面哪一个函数签名和这个功能最贴切？
 
-<RadioHolder>
 <Radio>
+<Option>
 
 ```rust
 fn find_contains(haystack: &Vec<String>, needle: &str) -> &[String];
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn find_contains(haystack: &[String], needle: &str) -> Vec<String>;
 ```
 
-</Radio>
-<Radio answer>
+</Option>
+<Option answer>
 
 ```rust
 fn find_contains(haystack: &[String], needle: &str) -> Vec<&String>;
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn find_contains(haystack: &Vec<String>, needle: String) -> Vec<String>;
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>
@@ -681,12 +680,12 @@ fn main() {
 
 哪一个选项最好地描述了`split_at_mut`实现的可能性？
 
-<RadioHolder>
-<Radio label="split_at_mut是特殊的编译器原语，无法在语言内部实现" />
-<Radio label="split_at_mut使用了不安全代码，禁用了借用检查器对可变引用安全性的检查" />
-<Radio label="split_at_mut调用了一个无法被Rust分析的C库" />
-<Radio label="split_at_mut使用了不安全的代码，通过裸指针避开了借用检查器" answer />
-</RadioHolder>
+<Radio>
+<Option label="split_at_mut是特殊的编译器原语，无法在语言内部实现" />
+<Option label="split_at_mut使用了不安全代码，禁用了借用检查器对可变引用安全性的检查" />
+<Option label="split_at_mut调用了一个无法被Rust分析的C库" />
+<Option label="split_at_mut使用了不安全的代码，通过裸指针避开了借用检查器" answer />
+</Radio>
 </template>
 </Quiz>
 
@@ -726,12 +725,12 @@ let s_ref = &/*[!perm R.{"collapse":true}]*/s;` })'
 
 哪一个选项最准确地解释了为什么`*s_ref`没有<O />（拥有）权限？
 
-<RadioHolder>
-<Radio label="所有权意味着可读取，而读取*s_ref会导致使用空指针" />
-<Radio label="所有权意味着修改，而修改*s_ref会导致使用空指针" />
-<Radio label="所有权意味着借用，而借用*s_ref会导致重复释放" />
-<Radio label="所有权意味着移动，而将一个引用移出会导致重复释放" answer />
-</RadioHolder>
+<Radio>
+<Option label="所有权意味着可读取，而读取*s_ref会导致使用空指针" />
+<Option label="所有权意味着修改，而修改*s_ref会导致使用空指针" />
+<Option label="所有权意味着借用，而借用*s_ref会导致重复释放" />
+<Option label="所有权意味着移动，而将一个引用移出会导致重复释放" answer />
+</Radio>
 
 </template>
 </Quiz>
@@ -746,12 +745,12 @@ let s_ref = &/*[!perm R.{"collapse":true}]*/s;` })'
 
 现有一系列Rust程序，都不包含`unsafe`的代码。选择以下对这些程序被借用检查器通过/拒绝描述正确的选项：
 
-<CheckboxHolder>
-<Checkbox label="借用检查器有时会拒绝不含未定义行为的程序" answer />
-<Checkbox label="借用检查器有时会接收包含未定义行为的程序" />
-<Checkbox label="借用检查器总会通过不包含未定义行为的程序" />
-<Checkbox label="借用检查器总会拒绝包含未定义行为的程序" answer />
-</CheckboxHolder>
+<Checkbox>
+<Option label="借用检查器有时会拒绝不含未定义行为的程序" answer />
+<Option label="借用检查器有时会接收包含未定义行为的程序" />
+<Option label="借用检查器总会通过不包含未定义行为的程序" />
+<Option label="借用检查器总会拒绝包含未定义行为的程序" answer />
+</Checkbox>
 
 </template>
 </Quiz>
@@ -775,10 +774,10 @@ fn extract(b: &Box<i32>) -> i32 {
 
 如果借用检查器没有拒绝这个函数。请判断是否存在输入会让这个函数引发未定义行为：
 
-<RadioHolder>
-<Radio label="会" answer />
-<Radio label="不会" />
-</RadioHolder>
+<Radio>
+<Option label="会" answer />
+<Option label="不会" />
+</Radio>
 
 </template>
 </Quiz>
@@ -812,10 +811,10 @@ fn transfer_string(strs: &mut (String, String)) {
 
 如果借用检查器没有拒绝这个函数。请判断是否存在输入会让这个函数引发未定义行为：
 
-<RadioHolder>
-<Radio label="会" />
-<Radio label="不会" answer />
-</RadioHolder>
+<Radio>
+<Option label="会" />
+<Option label="不会" answer />
+</Radio>
 
 </template>
 </Quiz>

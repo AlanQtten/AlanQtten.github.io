@@ -7,10 +7,9 @@ import {
   Quiz,
   QuizProvider,
   Input,
-  RadioHolder,
   Radio,
-  CheckboxHolder,
   Checkbox,
+  Option,
   IsCompile,
   IsCompileText
 } from '../../components/quiz'
@@ -393,12 +392,12 @@ fn main() {
 
 以下哪一项最好地解释了为什么`v`没有在`get_first`调用结束后被释放？
 
-<RadioHolder>
-<Radio label="在调用get_first之后，v仍然被println所使用" />
-<Radio label="vr没有在get_first内被修改" />
-<Radio label="get_first返回了i32类型，没有返回集合本身" />
-<Radio label="vr是一个引用类型，并没有其指向集合的所有权" answer />
-</RadioHolder>
+<Radio>
+<Option label="在调用get_first之后，v仍然被println所使用" />
+<Option label="vr没有在get_first内被修改" />
+<Option label="get_first返回了i32类型，没有返回集合本身" />
+<Option label="vr是一个引用类型，并没有其指向集合的所有权" answer />
+</Radio>
 
 </template>
 </Quiz>
@@ -954,12 +953,12 @@ println!("{}", s);` })'
 
 在使用/* here */标记的位置，路径s的权限是什么？请选择
 
-<CheckboxHolder>
-<Checkbox label="R" />
-<Checkbox label="W" />
-<Checkbox label="O" />
-<Checkbox label="没有任何权限" answer />
-</CheckboxHolder>
+<Checkbox>
+<Option label="R" />
+<Option label="W" />
+<Option label="O" />
+<Option label="没有任何权限" answer />
+</Checkbox>
 </template>
 </Quiz>
 
@@ -1021,12 +1020,12 @@ fn main() {
 />
 
 下面哪种说法最准确地描述了为什么`strs`丢失、重新获得了<W />权限？
-<RadioHolder>
-<Radio label="get_first返回了一个指向strs关联数据的不可变引用，所以first的生命周期内strs是不可读的" answer />
-<Radio label="在strs.push(..)之前，strs不需要读权限，所以它在这一步才收回了读权限" />
-<Radio label="由于first指向strs，所以只有在嵌套的域内（比如if）才是可变的" />
-<Radio label="strs在把不可变引用&strs传递给get_first期间是不可读的" />
-</RadioHolder>
+<Radio>
+<Option label="get_first返回了一个指向strs关联数据的不可变引用，所以first的生命周期内strs是不可读的" answer />
+<Option label="在strs.push(..)之前，strs不需要读权限，所以它在这一步才收回了读权限" />
+<Option label="由于first指向strs，所以只有在嵌套的域内（比如if）才是可变的" />
+<Option label="strs在把不可变引用&strs传递给get_first期间是不可读的" />
+</Radio>
 </template>
 </Quiz>
 
@@ -1072,12 +1071,12 @@ println!("{}", v1[0]); /*[!flag_error L1]*/
 
 下面哪一个选项最准确地描述了这个程序发生的未定义行为的种类？
 
-<RadioHolder>
-<Radio label="在第二行，v1被移动到了v2" />
-<Radio label="v2拥有了堆中的集合数据，v1没有拥有" />
-<Radio label="在第三行的push后，v1指向了空指针" />
-<Radio label="v1[0]读取了v1，其指向了已经失效的内存" answer />
-</RadioHolder>
+<Radio>
+<Option label="在第二行，v1被移动到了v2" />
+<Option label="v2拥有了堆中的集合数据，v1没有拥有" />
+<Option label="在第三行的push后，v1指向了空指针" />
+<Option label="v1[0]读取了v1，其指向了已经失效的内存" answer />
+</Radio>
 </template>
 </Quiz>
 </QuizProvider>
@@ -1252,8 +1251,8 @@ error[E0596]: cannot borrow `*v` as mutable, as it is behind a `&` reference
 
 假设编译器**没有编译失败**。选择以下可能导致未定义行为的程序，或选择“都不会”
 
-<CheckboxHolder>
 <Checkbox>
+<Option>
 
 ```rust
 let v = vec![1, 2, 3];
@@ -1262,8 +1261,8 @@ give_and_take(&v, 4);
 println!("{}", v2[0]);
 ```
 
-</Checkbox>
-<Checkbox>
+</Option>
+<Option>
 
 ```rust
 let v = vec![1, 2, 3];
@@ -1272,8 +1271,8 @@ let k = give_and_take(&v, 4);
 println!("{}", k);
 ```
 
-</Checkbox>
-<Checkbox answer>
+</Option>
+<Option answer>
 
 ```rust
 let v = vec![1, 2, 3];
@@ -1282,9 +1281,9 @@ give_and_take(&v, 4);
 println!("{}", n);
 ```
 
+</Option>
+<Option label="都不会" />
 </Checkbox>
-<Checkbox label="都不会" />
-</CheckboxHolder>
 </template>
 </Quiz>
 </QuizProvider>

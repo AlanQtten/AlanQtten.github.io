@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  CheckboxHolder,
   Checkbox,
+  Option,
   IsCompileText,
   IsCompile
 } from "../../components/quiz"
@@ -186,12 +186,12 @@ fn main() {
 
 以下哪一个操作填入下划线处后会导致`s`被释放？
 
-<CheckboxHolder>
-<Checkbox label="drop(s);" answer />
-<Checkbox label="s.drop();" />
-<Checkbox label="(|_| ())(s);" answer />
-<Checkbox label="{ s };" answer />
-</CheckboxHolder>
+<Checkbox>
+<Option label="drop(s);" answer />
+<Option label="s.drop();" />
+<Option label="(|_| ())(s);" answer />
+<Option label="{ s };" answer />
+</Checkbox>
 
 </template>
 </Quiz>

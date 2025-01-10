@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
+  Option,
   Input
 } from "../../components/quiz"
 
@@ -53,11 +53,11 @@ main.rs
 
 以下哪一项是正确的包含关系？“A>B”表示“A包含B”
 
-<RadioHolder>
-<Radio label="包>crate>模块" answer />
-<Radio label="模块>crate>包" />
-<Radio label="crate>包>模块" />
-</RadioHolder>
+<Radio>
+<Option label="包>crate>模块" answer />
+<Option label="模块>crate>包" />
+<Option label="crate>包>模块" />
+</Radio>
 
 </template>
 </Quiz>

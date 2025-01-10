@@ -4,10 +4,9 @@ import {
   Quiz,
   IsCompileText,
   IsCompile,
-  CheckboxHolder,
   Checkbox,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 
 </script>
@@ -233,12 +232,12 @@ fn main() {
 
 请选择下面哪些对trait实现说法是正确的
 
-<CheckboxHolder>
-<Checkbox label="你可以为一个本地类型实现一个外部trait" answer />
-<Checkbox label="你可以为一个外部类型实现一个外部trait" />
-<Checkbox label="你可以为一个本地类型实现一个本地trait" answer />
-<Checkbox label="你可以为一个外部类型实现一个本地trait" answer />
-</CheckboxHolder>
+<Checkbox>
+<Option label="你可以为一个本地类型实现一个外部trait" answer />
+<Option label="你可以为一个外部类型实现一个外部trait" />
+<Option label="你可以为一个本地类型实现一个本地trait" answer />
+<Option label="你可以为一个外部类型实现一个本地trait" answer />
+</Checkbox>
 
 </template>
 </Quiz>
@@ -461,12 +460,12 @@ fn main() {
 
 如果书写下面的泛型约束，来获得应有的类型检查？
 
-<RadioHolder>
-<Radio label="不需要约束" />
-<Radio label="Clone + Display + Debug" />
-<Radio label="Clone" />
-<Radio label="Clone + Display" answer />
-</RadioHolder>
+<Radio>
+<Option label="不需要约束" />
+<Option label="Clone + Display + Debug" />
+<Option label="Clone" />
+<Option label="Clone + Display" answer />
+</Radio>
 
 </template>
 </Quiz>

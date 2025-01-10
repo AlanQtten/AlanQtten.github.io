@@ -2,8 +2,8 @@
 import {
   Quiz,
   QuizProvider,
-  RadioHolder,
   Radio,
+  Option,
   IsCompile,
   IsCompileText
 } from '../../components/quiz'
@@ -262,12 +262,12 @@ error: could not compile `chapter10` (bin "chapter10") due to 1 previous error
 
 以下哪种错误是通过生命周期可以避免的？
 
-<RadioHolder>
-<Radio label="没有为对象分配足够的内存" />
-<Radio label="没有预先检查错误的可能性就使用了一个算式的结果" />
-<Radio label="在一个对象的内存被释放后使用了它" answer />
-<Radio label="数据下标越界" />
-</RadioHolder>
+<Radio>
+<Option label="没有为对象分配足够的内存" />
+<Option label="没有预先检查错误的可能性就使用了一个算式的结果" />
+<Option label="在一个对象的内存被释放后使用了它" answer />
+<Option label="数据下标越界" />
+</Radio>
 
 </template>
 </Quiz>
@@ -533,12 +533,12 @@ where
 
 如果一个引用的生命周期为`'static`，那么表示：
 
-<RadioHolder>
-<Radio label="引用的数据是可以被修改的" />
-<Radio label="引用的数据存储在内存的静态区域" />
-<Radio label="引用的数据永远不会被销毁" answer />
-<Radio label="引用的数据不是动态的" />
-</RadioHolder>
+<Radio>
+<Option label="引用的数据是可以被修改的" />
+<Option label="引用的数据存储在内存的静态区域" />
+<Option label="引用的数据永远不会被销毁" answer />
+<Option label="引用的数据不是动态的" />
+</Radio>
 
 </template>
 </Quiz>
@@ -563,37 +563,37 @@ fn baz(f: Foo) -> &i32 { /* ... */ }
 
 Rust会接收这样的函数签名吗？如果接收，它推导出的函数类型是什么样子的？
 
-<RadioHolder>
-<Radio label="Rust会拒绝这个函数签名" />
 <Radio>
+<Option label="Rust会拒绝这个函数签名" />
+<Option>
 
 ```rust
 fn baz(f: Foo) -> &i32
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn baz<'a>(f: Foo<'a>) -> &i32
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn baz<'a>(f: Foo) -> &'a i32
 ```
 
-</Radio>
-<Radio answer>
+</Option>
+<Option answer>
 
 ```rust
 fn baz<'a>(f: Foo<'a>) -> &'a i32
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>
@@ -619,44 +619,44 @@ fn baz(f: &Foo) -> &i32 { /* ... */ }
 
 Rust会接收这样的函数签名吗？如果接收，它推导出的函数类型是什么样子的？
 
-<RadioHolder>
-<Radio label="Rust会拒绝这个函数签名" answer />
 <Radio>
+<Option label="Rust会拒绝这个函数签名" answer />
+<Option>
 
 ```rust
 fn baz(f: &Foo) -> &i32
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn baz<'a>(f: &Foo<'a>) -> &'a i32
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn baz<'a>(f: &'a Foo) -> &'a i32
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn baz<'a, 'b>(f: &'a Foo<'b>) -> &'a i32
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn baz<'a, 'b>(f: &'a Foo<'b>) -> &'b i32
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>

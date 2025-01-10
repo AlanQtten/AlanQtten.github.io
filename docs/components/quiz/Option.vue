@@ -3,10 +3,11 @@ import type { Ref } from 'vue'
 import { inject, onMounted, ref } from 'vue'
 import { disabledSymbol, nameSymbol, onChangeSymbol, valueSymbol } from './quiz'
 
-const { value, answer } = defineProps<{
+const { value, answer, inputType = 'radio' } = defineProps<{
   label?: string
   value: string
   answer?: boolean
+  inputType?: 'radio' | 'checkbox'
 }>()
 
 const name = inject<string>(nameSymbol)
@@ -20,7 +21,7 @@ const groupValue = inject<Ref<GroupValue>>(valueSymbol, defaultGroupValue)
 const onChange = inject<OnChange>(onChangeSymbol, () => {})
 const disabled = inject<boolean>(disabledSymbol)
 
-function handleCheckboxChange(e: Event) {
+function handleChange(e: Event) {
   const _groupValue = groupValue.value ?? []
 
   const updateValue = (e.target as HTMLInputElement).value
@@ -43,12 +44,12 @@ onMounted(() => {
 <template>
   <label class="flex items-center gap-4">
     <input
-      type="checkbox"
+      :type="inputType"
       :value="value"
       :checked="groupValue?.includes(value)"
       :name="name"
       :disabled="disabled"
-      @change="handleCheckboxChange"
+      @change="handleChange"
     >
 
     <span v-if="label">{{ label }}</span>

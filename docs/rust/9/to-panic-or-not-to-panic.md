@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz";
 
 </script>
@@ -140,10 +140,10 @@ fn parse_flag_v2(flag: &str) -> String {
 }
 ```
 
-<RadioHolder>
-<Radio label="parse_flag_v1" answer />
-<Radio label="parse_flag_v2" />
-</RadioHolder>
+<Radio>
+<Option label="parse_flag_v1" answer />
+<Option label="parse_flag_v2" />
+</Radio>
 </template>
 </Quiz>
 </QuizProvider>

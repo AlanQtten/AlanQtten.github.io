@@ -2,10 +2,9 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
-  CheckboxHolder,
-  Checkbox
+  Checkbox,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -362,12 +361,12 @@ async fn print_letters() {
 
 在运行`print_letters().await`后，以下哪些输出可能是正确的？
 
-<CheckboxHolder>
-<Checkbox label="CBA" answer />
-<Checkbox label="ABC" />
-<Checkbox label="BCA" />
-<Checkbox label="ACB" />
-</CheckboxHolder>
+<Checkbox>
+<Option label="CBA" answer />
+<Option label="ABC" />
+<Option label="BCA" />
+<Option label="ACB" />
+</Checkbox>
 
 </template>
 </Quiz>
@@ -405,12 +404,12 @@ async fn print_letters() {
 
 在运行`print_letters().await`后，以下哪些输出可能是正确的？
 
-<CheckboxHolder>
-<Checkbox label="CADB" answer />
-<Checkbox label="ACBD" answer />
-<Checkbox label="ABCD" answer />
-<Checkbox label="DABC" />
-</CheckboxHolder>
+<Checkbox>
+<Option label="CADB" answer />
+<Option label="ACBD" answer />
+<Option label="ABCD" answer />
+<Option label="DABC" />
+</Checkbox>
 
 </template>
 </Quiz>
@@ -435,12 +434,12 @@ println!("{}", n.unwrap());
 
 执行这段代码会发生什么？
 
-<RadioHolder>
-<Radio label="程序打印0，且进入了死循环" />
-<Radio label="程序会panic" />
-<Radio label="程序不会打印任何东西，且进入了死循环" />
-<Radio label="程序打印0，且退出了" answer />
-</RadioHolder>
+<Radio>
+<Option label="程序打印0，且进入了死循环" />
+<Option label="程序会panic" />
+<Option label="程序不会打印任何东西，且进入了死循环" />
+<Option label="程序打印0，且退出了" answer />
+</Radio>
 
 </template>
 </Quiz>

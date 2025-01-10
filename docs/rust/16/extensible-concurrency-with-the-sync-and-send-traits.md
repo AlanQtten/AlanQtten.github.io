@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -69,12 +69,12 @@ impl DbConnection {
 
 你的数据库不支持单个连接的并发查询。`DbConnection`应该实现以下哪些标记trait?
 
-<RadioHolder>
-<Radio label="Send" />
-<Radio label="Send和Sync都不需要" />
-<Radio label="Send和Sync" />
-<Radio label="Sync" />
-</RadioHolder>
+<Radio>
+<Option label="Send" />
+<Option label="Send和Sync都不需要" />
+<Option label="Send和Sync" />
+<Option label="Sync" />
+</Radio>
 
 </template>
 </Quiz>

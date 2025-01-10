@@ -4,8 +4,8 @@ import {
   Quiz,
   IsCompile,
   IsCompileText,
-  RadioHolder,
   Radio,
+  Option,
   Input
 } from '../../components/quiz'
 </script>
@@ -335,12 +335,12 @@ error: could not compile `functions` due to previous error
 2. 声明
 3. 语法块
 
-<RadioHolder>
-<Radio label="只有2" />
-<Radio label="2和3" />
-<Radio label="只有1" />
-<Radio label="1和3" answer />
-</RadioHolder>
+<Radio>
+<Option label="只有2" />
+<Option label="2和3" />
+<Option label="只有1" />
+<Option label="1和3" answer />
+</Radio>
 
 </template>
 </Quiz>

@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
+  Option,
   IsCompile,
   IsCompileText
 } from "../../components/quiz"
@@ -240,12 +240,12 @@ Rust会自动添加两次解引用（一次为了可变引用，一次为了Box�
 
 Rust中构造函数的关键字是什么？
 
-<RadioHolder>
-<Radio label="constructor" />
-<Radio label="new" />
-<Radio label="类型的名字" />
-<Radio label="都不是" answer />
-</RadioHolder>
+<Radio>
+<Option label="constructor" />
+<Option label="new" />
+<Option label="类型的名字" />
+<Option label="都不是" answer />
+</Radio>
 
 </template>
 </Quiz>
@@ -1071,12 +1071,12 @@ impl Vec<i32> {
 
 如果你试图编译表达式`v.len()`，下面哪一个选项对即将发生的事描述最准？
 
-<RadioHolder>
-<Radio label="编译通过，因为&self可以接收任意类型的引用" />
-<Radio label="编译通过，因为&mut的引用被隐式的重新借用成为了&引用" answer />
-<Radio label="编译不通过，v没有被显式地解引用" />
-<Radio label="编译不通过，&mut Vec<i32>和&Vec<i32>不是同一种类型" />
-</RadioHolder>
+<Radio>
+<Option label="编译通过，因为&self可以接收任意类型的引用" />
+<Option label="编译通过，因为&mut的引用被隐式的重新借用成为了&引用" answer />
+<Option label="编译不通过，v没有被显式地解引用" />
+<Option label="编译不通过，&mut Vec<i32>和&Vec<i32>不是同一种类型" />
+</Radio>
 
 </template>
 </Quiz>
@@ -1099,12 +1099,12 @@ impl Point {
 }
 ```
 
-<RadioHolder>
-<Radio label="incr_v1" />
-<Radio label="incr_v2" answer />
-<Radio label="都是" />
-<Radio label="都不是" />
-</RadioHolder>
+<Radio>
+<Option label="incr_v1" />
+<Option label="incr_v2" answer />
+<Option label="都是" />
+<Option label="都不是" />
+</Radio>
 
 </template>
 </Quiz>

@@ -30,7 +30,7 @@ export default defineComponent({
       const nodes = slots.default?.()
 
       return nodes?.map((node, i) =>
-        cloneVNode(node, { value: String.fromCharCode(65 + i) }),
+        cloneVNode(node, { value: String.fromCharCode(65 + i), inputType: 'checkbox' }),
       )
     }
   },

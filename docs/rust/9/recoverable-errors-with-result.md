@@ -3,7 +3,7 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
+  Option,
   IsCompileText,
   IsCompile
 } from "../../components/quiz"
@@ -140,12 +140,12 @@ fn main() {
 
 哪一个声明对`File::open`返回`Result`而不是`Option`的原因描述的最准确？
 
-<RadioHolder>
-<Radio label="因为Result以与底层系统调用相同的方式表示错误" />
-<Radio label="因为Result可以表示为什么操作失败了，而文件的开启可能会因为很多原因失败" />
-<Radio label="因为Result在运行时表示错误时，比Option占用的字节少" />
-<Radio label="因为Result表示了失败的可能性，而Option无法表示失败" />
-</RadioHolder>
+<Radio>
+<Option label="因为Result以与底层系统调用相同的方式表示错误" />
+<Option label="因为Result可以表示为什么操作失败了，而文件的开启可能会因为很多原因失败" />
+<Option label="因为Result在运行时表示错误时，比Option占用的字节少" />
+<Option label="因为Result表示了失败的可能性，而Option无法表示失败" />
+</Radio>
 </template>
 </Quiz>
 </QuizProvider>
@@ -371,8 +371,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
 假设一个表达式`e`返回了`Result<T, E>`，那么哪段代码是`e?`的最好翻译？
 
-<RadioHolder>
-<Radio answer>
+<Radio>
+<Option answer>
 
 ```rust
 match e {
@@ -381,8 +381,8 @@ match e {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 match e {
@@ -391,8 +391,8 @@ match e {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 if let Err(err) = e {
@@ -400,15 +400,15 @@ if let Err(err) = e {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 e.unwrap()
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 </template>
 </Quiz>
 

@@ -3,7 +3,7 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
+  Option,
   Input
 } from "../../components/quiz"
 
@@ -161,12 +161,12 @@ fn add(self, s: &str) -> String {
 
 使用`a + b`和`a.push_str(b)`来拼接字符串有什么区别？
 
-<RadioHolder>
-<Radio label="push_str消费了b的所有权，+没有" />
-<Radio label="它们没有任何区别，是同一个方法的别名" />
-<Radio label="+消费了a的所有权，push_str没有" answer />
-<Radio label="push_str在运行时的效率比+好" />
-</RadioHolder>
+<Radio>
+<Option label="push_str消费了b的所有权，+没有" />
+<Option label="它们没有任何区别，是同一个方法的别名" />
+<Option label="+消费了a的所有权，push_str没有" answer />
+<Option label="push_str在运行时的效率比+好" />
+</Radio>
 
 </template>
 </Quiz>
@@ -367,12 +367,12 @@ for c in "Зд".chars() {
 <template #quiz>
 以下哪一个描述最好地解释了Rust不允许字符串使用下标索引的原因？
 
-<RadioHolder>
-<Radio label="下标不安全，可能会导致分段错误（segfault）或缓冲区溢出（buffer overflow）" />
-<Radio label="对字符串使用下标是存在歧义的，因为字符串代表了多个维度的连续数据" answer />
-<Radio label="对字符串使用下标会让Rust的使用太过简单，Rust开发者需要困难度来作为工作保障" />
-<Radio label="对字符串使用下标的效率很低，因为它们没有终点，长度很难高效计算" />
-</RadioHolder>
+<Radio>
+<Option label="下标不安全，可能会导致分段错误（segfault）或缓冲区溢出（buffer overflow）" />
+<Option label="对字符串使用下标是存在歧义的，因为字符串代表了多个维度的连续数据" answer />
+<Option label="对字符串使用下标会让Rust的使用太过简单，Rust开发者需要困难度来作为工作保障" />
+<Option label="对字符串使用下标的效率很低，因为它们没有终点，长度很难高效计算" />
+</Radio>
 </template>
 </Quiz>
 
@@ -386,12 +386,12 @@ for c in "Зд".chars() {
 
 以下哪一条对字符串切片`&str`和字节切片`&[u8]`的区别描述最准确？
 
-<RadioHolder>
-<Radio label="&str可以从String类型构建，而&[u8]只能从Vec类型构建" />
-<Radio label="&str指向的字节总是可以被解释为UTF-8，而&[u8]只是字节序列" />
-<Radio label="&str不能被进一步切片，而&[u8]可以" />
-<Radio label="&str永远指向程序二进制存储的数据，而&[u8]可以存储任何位置的数据" />
-</RadioHolder>
+<Radio>
+<Option label="&str可以从String类型构建，而&[u8]只能从Vec类型构建" />
+<Option label="&str指向的字节总是可以被解释为UTF-8，而&[u8]只是字节序列" />
+<Option label="&str不能被进一步切片，而&[u8]可以" />
+<Option label="&str永远指向程序二进制存储的数据，而&[u8]可以存储任何位置的数据" />
+</Radio>
 </template>
 </Quiz>
 </QuizProvider>

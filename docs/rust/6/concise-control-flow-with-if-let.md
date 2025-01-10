@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 </script>
 # 使用`if let`简化流程控制
@@ -81,10 +81,10 @@ fn print_range_max(loc: &location) {
 }
 ```
 
-<RadioHolder>
-<Radio label="match" />
-<Radio label="if let" answer />
-</RadioHolder>
+<Radio>
+<Option label="match" />
+<Option label="if let" answer />
+</Radio>
 
 </template>
 </Quiz>
@@ -111,10 +111,10 @@ fn print_range_max(loc: &location) -> i32 {
 }
 ```
 
-<RadioHolder>
-<Radio label="match" answer />
-<Radio label="if let" />
-</RadioHolder>
+<Radio>
+<Option label="match" answer />
+<Option label="if let" />
+</Radio>
 
 </template>
 </Quiz>

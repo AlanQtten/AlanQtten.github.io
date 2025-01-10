@@ -4,8 +4,8 @@ import {
   Quiz,
   IsCompileText,
   IsCompile,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 
 </script>
@@ -285,12 +285,12 @@ fn area(rectangle: Rectangle) -> u32 {
 
 下面哪一个选项对`Display`和`Debug`特性的区别描述的最正确？
 
-<RadioHolder>
-<Radio label="Display不能被结构体实现，而Debug可以" />
-<Radio label="Display供最终用户使用，而Debug供内部用户使用" answer />
-<Radio label="没有区别，Display和Debug是同一个特性的不同别名" />
-<Radio label="Display是为了将内容输出到终端，而Debug是为了在调试器中看到值" />
-</RadioHolder>
+<Radio>
+<Option label="Display不能被结构体实现，而Debug可以" />
+<Option label="Display供最终用户使用，而Debug供内部用户使用" answer />
+<Option label="没有区别，Display和Debug是同一个特性的不同别名" />
+<Option label="Display是为了将内容输出到终端，而Debug是为了在调试器中看到值" />
+</Radio>
 </template>
 </Quiz>
 </QuizProvider>

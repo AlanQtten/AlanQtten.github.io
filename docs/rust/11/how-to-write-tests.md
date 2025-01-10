@@ -3,7 +3,7 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
+  Option,
   Input
 } from "../../components/quiz"
 
@@ -761,8 +761,8 @@ fn f(x: usize) -> Result<usize, String>;
 
 如果你希望断言`f(0)`返回`Err(_)`。下面哪一个代码片段是**错误**的？
 
-<RadioHolder>
-<Radio answer>
+<Radio>
+<Option answer>
 
 ```rust
 #[test]
@@ -772,9 +772,9 @@ fn test() -> Result<usize, String> {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust
 #[test]
@@ -784,9 +784,9 @@ fn test() {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust
 #[test]
@@ -798,9 +798,9 @@ fn test() {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust
 #[test]
@@ -809,8 +809,8 @@ fn test() {
 }
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>

@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 
 </script>
@@ -134,12 +134,12 @@ crate
 
 以下哪一项**不是**使用模块的好处？
 
-<RadioHolder>
-<Radio label="模块包含了无需被使用者了解的实现细节" />
-<Radio label="模块提供了作用域来避免各个代码片段间的命名冲突" />
-<Radio label="模块提高了同一模块中相互依赖代码的性能" answer />
-<Radio label="模块将代码按照关联性分组，使得开发者可以更容易地在大型项目中工作" />
-</RadioHolder>
+<Radio>
+<Option label="模块包含了无需被使用者了解的实现细节" />
+<Option label="模块提供了作用域来避免各个代码片段间的命名冲突" />
+<Option label="模块提高了同一模块中相互依赖代码的性能" answer />
+<Option label="模块将代码按照关联性分组，使得开发者可以更容易地在大型项目中工作" />
+</Radio>
 
 </template>
 </Quiz>

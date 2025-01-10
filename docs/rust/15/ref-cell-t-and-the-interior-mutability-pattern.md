@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -353,12 +353,12 @@ c after = Cons(RefCell { value: 4 }, Cons(RefCell { value: 15 }, Nil))
 
 以下哪一项对Rust中*内部可变性*的概念描述得最准确？
 
-<RadioHolder>
-<Radio label="它允许了数据结构内部的值可以被修改" />
-<Radio label="它允许通过不可变引用修改值" answer />
-<Radio label="它使用了借用检查器来确保运行时的内存安全" />
-<Radio label="它将unsafe的代码包裹在了安全的API中" />
-</RadioHolder>
+<Radio>
+<Option label="它允许了数据结构内部的值可以被修改" />
+<Option label="它允许通过不可变引用修改值" answer />
+<Option label="它使用了借用检查器来确保运行时的内存安全" />
+<Option label="它将unsafe的代码包裹在了安全的API中" />
+</Radio>
 
 </template>
 </Quiz>
@@ -388,12 +388,12 @@ impl Api {
 
 假设`count`为`size`类型。这种情况下以下哪一种包裹最合适？
 
-<RadioHolder>
-<Radio label="Box<usize>" />
-<Radio label="Rc<usize>" />
-<Radio label="都不需要，usize就可以了" />
-<Radio label="RefCell<usize>" answer />
-</RadioHolder>
+<Radio>
+<Option label="Box<usize>" />
+<Option label="Rc<usize>" />
+<Option label="都不需要，usize就可以了" />
+<Option label="RefCell<usize>" answer />
+</Radio>
 
 </template>
 </Quiz>
@@ -426,16 +426,16 @@ let v = BadRefCell(UnsafeCell::new(vec![1, 2, 3]));
 
 以下哪一段API使用的代码违反了内存安全？
 
-<RadioHolder>
 <Radio>
+<Option>
 
 ```rust
 drop(v.borrow_mut());
 drop(v.borrow_mut());
 ```
 
-</Radio>
-<Radio answer>
+</Option>
+<Option answer>
 
 ```rust
 let v1 = v.borrow_mut();
@@ -444,8 +444,8 @@ v.borrow_mut().push(0);
 println!("{n}");
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 v.borrow_mut().push(0);
@@ -453,8 +453,8 @@ let n = v.borrow_mut()[0];
 println!("{n}");
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 let v1 = v.borrow_mut();
@@ -463,8 +463,8 @@ v1.push(0);
 v2.push(0);
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>

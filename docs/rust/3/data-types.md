@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
+  Option,
   IsCompile,
   IsCompileText
 } from "../../components/quiz"
@@ -170,20 +170,20 @@ fn main() {
 
 `i128`能表示的最大数为：
 
-<RadioHolder>
 <Radio>
+<Option>
 <span>2<sup>128</sup></span>
-</Radio>
-<Radio>
+</Option>
+<Option>
 <span>2<sup>128</sup> - 1</span>
-</Radio>
-<Radio>
+</Option>
+<Option>
 <span>2<sup>127</sup></span>
-</Radio>
-<Radio answer>
+</Option>
+<Option answer>
 <span>2<sup>127</sup> - 1</span>
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>
@@ -198,11 +198,11 @@ fn main() {
 
 如果`x: u8 = 0`，我们运行`x - 1`时会发生什么？
 
-<RadioHolder>
-<Radio label="程序一定会崩溃" />
-<Radio label="一定会返回255" />
-<Radio label="取决于编译的模式" answer />
-</RadioHolder>
+<Radio>
+<Option label="程序一定会崩溃" />
+<Option label="一定会返回255" />
+<Option label="取决于编译的模式" answer />
+</Radio>
 
 </template>
 </Quiz>

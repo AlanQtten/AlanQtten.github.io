@@ -6,7 +6,7 @@
     Quiz,
     QuizProvider,
     Radio,
-    RadioHolder,
+    Option,
     IsCompile,
     IsCompileText,
   } from "../../components/quiz";
@@ -511,11 +511,11 @@ fn main() {
 }
 ```
 
-<RadioHolder>
-<Radio label="s3比s2占用的字节更少" />
-<Radio label="s3和s2占用的字节一样" />
-<Radio label="s3比s2占用的字节更多" answer />
-</RadioHolder>
+<Radio>
+<Option label="s3比s2占用的字节更少" />
+<Option label="s3和s2占用的字节一样" />
+<Option label="s3比s2占用的字节更多" answer />
+</Radio>
 
 </template>
 </Quiz>

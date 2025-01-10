@@ -4,8 +4,8 @@ import {
   Quiz,
   IsCompileText,
   IsCompile,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -266,12 +266,12 @@ let mx: Mutex = Mutex::new();
 
 以下哪一点对Rust设计为了`Mutex<T>`而不是`Mutex`描述地最准确？
 
-<RadioHolder>
-<Radio label="避免在没有锁定互斥体的情况下访问互斥体保护的数据" answer />
-<Radio label="提高并发程序的执行效率" />
-<Radio label="避免互斥体保护的数据在线程间移动" />
-<Radio label="减少需要调用的互斥体方法数" />
-</RadioHolder>
+<Radio>
+<Option label="避免在没有锁定互斥体的情况下访问互斥体保护的数据" answer />
+<Option label="提高并发程序的执行效率" />
+<Option label="避免互斥体保护的数据在线程间移动" />
+<Option label="减少需要调用的互斥体方法数" />
+</Radio>
 
 </template>
 </Quiz>

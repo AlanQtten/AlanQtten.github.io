@@ -3,13 +3,12 @@ import { MemoryGraph, Wrapper } from '../../components/memory-graph'
 import {
   Quiz,
   QuizProvider,
-  RadioHolder,
-  Radio,
   Input,
   IsCompile,
   IsCompileText,
-  CheckboxHolder,
+  Radio,
   Checkbox,
+  Option
 } from '../../components/quiz'
 </script>
 
@@ -351,12 +350,12 @@ let b = a; /*[!flag L2]*/
 
 下述哪种说法最准确的描述了栈和堆的不同？
 
-<RadioHolder>
-  <Radio label="栈存储着可复制的数据，堆存储着不可复制的数据" />
-  <Radio label="栈存储着不可变的数据，堆存储着可变数据" />
-  <Radio label="栈存储着和某个特定函数关联的数据，堆存储着与函数生命周期无关的数据" answer />
-  <Radio label="栈可以存储指向堆的指针，而堆只能存储非指针数据" />
-</RadioHolder>
+<Radio>
+<Option label="栈存储着可复制的数据，堆存储着不可复制的数据" />
+<Option label="栈存储着不可变的数据，堆存储着可变数据" />
+<Option label="栈存储着和某个特定函数关联的数据，堆存储着与函数生命周期无关的数据" answer />
+<Option label="栈可以存储指向堆的指针，而堆只能存储非指针数据" />
+</Radio>
 
 </template>
 </Quiz>
@@ -776,12 +775,12 @@ fn add_suffix(mut name: String) -> String {
 <template #quiz>
 下面哪一个选项【不是】未定义行为？
 
-<RadioHolder>
-  <Radio value="A" label="栈帧中存储着一个空指针" answer />
-  <Radio value="B" label="释放同一片内存两次" />
-  <Radio value="C" label="在if()中使用非bool类型的值" />
-  <Radio value="D" label="使用一个空指针" />
-</RadioHolder>
+<Radio>
+<Option value="A" label="栈帧中存储着一个空指针" answer />
+<Option value="B" label="释放同一片内存两次" />
+<Option value="C" label="在if()中使用非bool类型的值" />
+<Option value="D" label="使用一个空指针" />
+</Radio>
 </template>
 </Quiz>
 
@@ -864,10 +863,10 @@ fn move_a_box(b: Box<i32>) {
 下面有四个被Rust编译器拒绝的程序，想象一下如果Rust允许这些代码编译通过。请选择哪些代码会导致未定义行为，或选择“都不会”
 
 <div class="flex flex-col">
-<CheckboxHolder>
-<Checkbox label="都不会" />
-
 <Checkbox>
+<Option label="都不会" />
+
+<Option>
 
 ```rust
 let b = Box::new(0);
@@ -876,9 +875,9 @@ println!("{}", b);
 move_a_box(b2);
 ```
 
-</Checkbox>
+</Option>
 
-<Checkbox answer>
+<Option answer>
 
 ```rust
 let b = Box::new(0);
@@ -886,9 +885,9 @@ let b2 = b;
 move_a_box(b);
 ```
 
-</Checkbox>
+</Option>
 
-<Checkbox answer>
+<Option answer>
 
 ```rust
 let b = Box::new(0);
@@ -896,9 +895,9 @@ move_a_box(b);
 let b2 = b;
 ```
 
-</Checkbox>
+</Option>
 
-<Checkbox answer>
+<Option answer>
 
 ```rust
 let b = Box::new(0);
@@ -906,8 +905,8 @@ move_a_box(b);
 println!("{}", b)
 ```
 
+</Option>
 </Checkbox>
-</CheckboxHolder>
 </div>
 
 </template>

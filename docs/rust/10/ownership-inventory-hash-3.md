@@ -2,10 +2,9 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
-  CheckboxHolder,
   Checkbox,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -34,12 +33,12 @@ fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
 
 如果你试图编译这段代码，你会收到以下哪一个错误？
 
-<RadioHolder>
-<Radio label="T的生命周期必须大于&[T]" />
-<Radio label="不能通过表达式&elems[n]移动共享引用" />
-<Radio label="不能通过clone移动共享引用" />
-<Radio label="不能通过sort将elems借用为可变的" answer />
-</RadioHolder>
+<Radio>
+<Option label="T的生命周期必须大于&[T]" />
+<Option label="不能通过表达式&elems[n]移动共享引用" />
+<Option label="不能通过clone移动共享引用" />
+<Option label="不能通过sort将elems借用为可变的" answer />
+</Radio>
 
 </template>
 </Quiz>
@@ -78,8 +77,8 @@ error[E0596]: cannot borrow `*elems` as mutable, as it is behind a `&` reference
 1. 通过编译
 2. 程序的执行可能会引发未定义行为
 
-<CheckboxHolder>
 <Checkbox>
+<Option>
 
 ```rust
 let v = vec![5, 4, 3, 2, 1];
@@ -87,17 +86,17 @@ find_nth(&v, 0);
 println!("{}", v[0]);
 ```
 
-</Checkbox>
-<Checkbox label="都不满足" answer />
-<Checkbox>
+</Option>
+<Option label="都不满足" answer />
+<Option>
 
 ```rust
 let v = vec![5, 4, 3, 2, 1];
 find_nth(&v, 10);
 ```
 
-</Checkbox>
-<Checkbox>
+</Option>
+<Option>
 
 ```rust
 let v = vec![5, 4, 3, 2, 1];
@@ -106,8 +105,8 @@ find_nth(&v, 0);
 println!("{}", n);
 ```
 
+</Option>
 </Checkbox>
-</CheckboxHolder>
 
 </template>
 </Quiz>
@@ -137,8 +136,8 @@ fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
 2. 修复的函数保留了原始函数的意图
 3. 修复的函数没有引发不必要的性能问题
 
-<RadioHolder>
 <Radio>
+<Option>
 
 ```rust /let mut elems = elems.to_vec();/
 fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
@@ -149,8 +148,8 @@ fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust /T: Ord/ /mut elems: Vec<T>/ /elems.remove(n);/ /return t;/
 fn find_nth<T: Ord>(mut elems: Vec<T>, n: usize) -> T {
@@ -160,8 +159,8 @@ fn find_nth<T: Ord>(mut elems: Vec<T>, n: usize) -> T {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 <!-- TODO: highlight word in some line -->
 
 ```rust /elems: &mut/
@@ -172,8 +171,8 @@ fn find_nth<T: Ord + Clone>(elems: &mut [T], n: usize) -> T {
 }
 ```
 
-</Radio>
-<Radio answer>
+</Option>
+<Option answer>
 
 ```rust
 fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
@@ -184,8 +183,8 @@ fn find_nth<T: Ord + Clone>(elems: &[T], n: usize) -> T {
 }
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>
@@ -224,12 +223,12 @@ impl TestResult {
 
 如果你试图编译这段代码，你会收到以下哪一个错误？
 
-<RadioHolder>
-<Radio label="在apply_curve中，不能将self借用为不可变来调用get_curve" />
-<Radio label="在apply_curve中，*score不能被修改" />
-<Radio label="在get_curve中，不能将本地变量self.curve作为引用返回" />
-<Radio label="在apply_curve中，不能将self.scores借用为可变来调用iter_mut" answer />
-</RadioHolder>
+<Radio>
+<Option label="在apply_curve中，不能将self借用为不可变来调用get_curve" />
+<Option label="在apply_curve中，*score不能被修改" />
+<Option label="在get_curve中，不能将本地变量self.curve作为引用返回" />
+<Option label="在apply_curve中，不能将self.scores借用为可变来调用iter_mut" answer />
+</Radio>
 
 </template>
 </Quiz>
@@ -285,8 +284,8 @@ error[E0502]: cannot borrow `self.scores` as mutable because it is also borrowed
 1. 通过编译
 2. 程序的执行可能会引发未定义行为
 
-<CheckboxHolder>
 <Checkbox>
+<Option>
 
 ```rust
 let mut result = TestResult {
@@ -298,9 +297,9 @@ result.apply_curve();
 println!("{}", x);
 ```
 
-</Checkbox>
-<Checkbox label="都不满足" answer />
-<Checkbox>
+</Option>
+<Option label="都不满足" answer />
+<Option>
 
 ```rust
 let mut result = TestResult {
@@ -310,8 +309,8 @@ let mut result = TestResult {
 result.apply_curve();
 ```
 
-</Checkbox>
-<Checkbox>
+</Option>
+<Option>
 
 ```rust
 let mut result = TestResult {
@@ -322,8 +321,8 @@ result.apply_curve();
 println!("{:?}", result.scores);
 ```
 
+</Option>
 </Checkbox>
-</CheckboxHolder>
 
 </template>
 </Quiz>
@@ -368,8 +367,8 @@ impl TestResult {
 2. 修复的函数保留了原始函数的意图
 3. 修复的函数没有引发不必要的性能问题
 
-<RadioHolder>
-<Radio answer>
+<Radio>
+<Option answer>
 
 ```rust /self.curve/
 pub fn apply_curve(&mut self) {
@@ -381,8 +380,8 @@ pub fn apply_curve(&mut self) {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust /.iter()/
 pub fn apply_curve(&mut self) {
@@ -394,8 +393,8 @@ pub fn apply_curve(&mut self) {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust /.as_ref()/
 pub fn apply_curve(&mut self) {
@@ -407,8 +406,8 @@ pub fn apply_curve(&mut self) {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust /.clone()/
 pub fn apply_curve(&mut self) {
@@ -420,8 +419,8 @@ pub fn apply_curve(&mut self) {
 }
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>

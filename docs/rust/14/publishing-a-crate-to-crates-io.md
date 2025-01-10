@@ -3,7 +3,7 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
+  Option,
 } from "../../components/quiz"
 </script>
 
@@ -102,11 +102,11 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 假设你想发布一个库，且你希望在*lib.rs*文件的最上方为整个库书写文档。注释语法该使用以下哪个前缀开头：
 
-<RadioHolder>
-<Radio label="//!" answer />
-<Radio label="//" />
-<Radio label="///" />
-</RadioHolder>
+<Radio>
+<Option label="//!" answer />
+<Option label="//" />
+<Option label="///" />
+</Radio>
 
 </template>
 </Quiz>
@@ -144,10 +144,10 @@ fn test_add_world() {
 
 运行`cargo test`，有任何测试会失败吗？
 
-<RadioHolder>
-<Radio label="有" answer />
-<Radio label="没有" />
-</RadioHolder>
+<Radio>
+<Option label="有" answer />
+<Option label="没有" />
+</Radio>
 
 </template>
 </Quiz>
@@ -380,12 +380,12 @@ $ cargo yank --vers 1.0.1 --undo
 
 如果你发布了一个库`footer`的版本`v0.1.0`。运行了`cargo publish`后，你意识到其中一个函数是有漏洞的。以下哪一个对覆盖这个已发布的`v0.1.0`版本的crate的描述最正确？
 
-<RadioHolder>
-<Radio label="运行cargo yank和cargo publish" />
-<Radio label="运行cargo publish --overwrite-published" />
-<Radio label="无法覆盖一个已发布的crate版本" answer />
-<Radio label="登录到Crates.io删除v0.1.0版本的crate" />
-</RadioHolder>
+<Radio>
+<Option label="运行cargo yank和cargo publish" />
+<Option label="运行cargo publish --overwrite-published" />
+<Option label="无法覆盖一个已发布的crate版本" answer />
+<Option label="登录到Crates.io删除v0.1.0版本的crate" />
+</Radio>
 
 </template>
 </Quiz>
@@ -404,12 +404,12 @@ $ cargo yank --vers 1.0.1 --undo
 
 以下哪一个步骤**不是**发布crate到Crates.io的必须步骤？
 
-<RadioHolder>
-<Radio label="为这个crate的每一个公共函数添加文档" answer />
-<Radio label="在Cargo.toml的[package]小节中添加证书" />
-<Radio label="注册、登录Crates.io" />
-<Radio label="为crate选择一个没有在Crates.io上被注册的名字" />
-</RadioHolder>
+<Radio>
+<Option label="为这个crate的每一个公共函数添加文档" answer />
+<Option label="在Cargo.toml的[package]小节中添加证书" />
+<Option label="注册、登录Crates.io" />
+<Option label="为crate选择一个没有在Crates.io上被注册的名字" />
+</Radio>
 
 </template>
 </Quiz>

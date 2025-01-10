@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
+  Option,
   IsCompileText,
   IsCompile
 } from "../../components/quiz"
@@ -176,12 +176,12 @@ fn find_until(v: &Vec<i32>, n: i32, til: usize) -> Option<usize> {
 }
 ```
 
-<RadioHolder>
-<Radio label="find_until(&vec![1, 2, 3], 0, 0)" />
-<Radio label="find_until(&vec![1, 2, 3], 3, 3)" />
-<Radio label="find_until(&vec![1, 2, 3], 1, 4)" />
-<Radio label="find_until(&vec![1, 2, 3], 4, 4)" answer />
-</RadioHolder>
+<Radio>
+<Option label="find_until(&vec![1, 2, 3], 0, 0)" />
+<Option label="find_until(&vec![1, 2, 3], 3, 3)" />
+<Option label="find_until(&vec![1, 2, 3], 1, 4)" />
+<Option label="find_until(&vec![1, 2, 3], 4, 4)" answer />
+</Radio>
 </template>
 </Quiz>
 

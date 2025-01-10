@@ -3,8 +3,8 @@ import {
   QuizProvider,
   Quiz,
   Input,
-  RadioHolder,
   Radio,
+  Option
 } from "../../components/quiz"
 
 </script>
@@ -137,12 +137,12 @@ RUST_BACKTRACE=1 cargo run
 
 以下哪个理由**不是**一个好的使用panic的理由？
 
-<RadioHolder>
-<Radio label="程序需要尽快停止" />
-<Radio label="程序到达了一个错误的状态，需要通知调用的程序" answer />
-<Radio label="程序会引发一个危险的操作" />
-<Radio label="程序到达了一个不可恢复的错误节点" />
-</RadioHolder>
+<Radio>
+<Option label="程序需要尽快停止" />
+<Option label="程序到达了一个错误的状态，需要通知调用的程序" answer />
+<Option label="程序会引发一个危险的操作" />
+<Option label="程序到达了一个不可恢复的错误节点" />
+</Radio>
 </template>
 </Quiz>
 </QuizProvider>

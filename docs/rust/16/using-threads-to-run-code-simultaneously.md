@@ -4,8 +4,8 @@ import {
   Quiz,
   IsCompileText,
   IsCompile,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -355,12 +355,12 @@ note: function requires argument type to outlive `'static`
 
 以下哪一个描述对“function requires argument type to outlive \`'static`”的解释最正确？
 
-<RadioHolder>
-<Radio label="传递给thread::spawn的闭包不允许有任何参数" />
-<Radio label="闭包只能捕获&'static str类型的字符串常量" />
-<Radio label="Rust无法了解线程运行的时长，所以线程的捕获需要永远存活" answer />
-<Radio label="vector v包括的值没有达到'static的生命周期" />
-</RadioHolder>
+<Radio>
+<Option label="传递给thread::spawn的闭包不允许有任何参数" />
+<Option label="闭包只能捕获&'static str类型的字符串常量" />
+<Option label="Rust无法了解线程运行的时长，所以线程的捕获需要永远存活" answer />
+<Option label="vector v包括的值没有达到'static的生命周期" />
+</Radio>
 
 </template>
 </Quiz>

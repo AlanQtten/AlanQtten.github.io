@@ -3,7 +3,7 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
+  Option,
 } from "../../components/quiz"
 </script>
 
@@ -59,11 +59,11 @@ opt-level = 1
 
 如果你运行`cargo build`且不附加任何参数，默认会使用下面哪一个配置？
 
-<RadioHolder>
-<Radio label="build" />
-<Radio label="dev" answer />
-<Radio label="release" />
-</RadioHolder>
+<Radio>
+<Option label="build" />
+<Option label="dev" answer />
+<Option label="release" />
+</Radio>
 
 </template>
 </Quiz>

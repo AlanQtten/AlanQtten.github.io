@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
-  Radio
+  Radio,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -231,12 +231,12 @@ enum Either<A, B> {
 
 如果你想在一个非async的代码中等待一个future，你需要做什么？
 
-<RadioHolder>
-<Radio label="将这个future传递给Rust内置的async运行时" />
-<Radio label="将这个future包裹在async代码块中并使用.await" />
-<Radio label="直接在这个future后使用.await" />
-<Radio label="将这个future传递给第三方的async运行时" answer />
-</RadioHolder>
+<Radio>
+<Option label="将这个future传递给Rust内置的async运行时" />
+<Option label="将这个future包裹在async代码块中并使用.await" />
+<Option label="直接在这个future后使用.await" />
+<Option label="将这个future传递给第三方的async运行时" answer />
+</Radio>
 
 </template>
 </Quiz>
@@ -257,39 +257,39 @@ async fn calculate(nums: &[i32]) -> i32 {
 }
 ```
 
-<RadioHolder>
-<Radio answer>
+<Radio>
+<Option answer>
 
 ```rust
 fn calculate<'a>(nums: &'a [i32]) -> impl Future<Output = i32> + 'a;
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust
 fn calculate<'a>(nums: &'a [i32], output: &mut impl Future<Output = i32> + 'a);
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust
 fn calculate() -> impl for<'a> Future<Input = &'a [i32], Output = i32> + 'a;
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust
 fn calculate(nums: &'_ [i32]) -> i32 as Future;
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>

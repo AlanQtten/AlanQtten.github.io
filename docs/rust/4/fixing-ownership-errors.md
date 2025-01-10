@@ -7,9 +7,8 @@ import {
   Quiz,
   QuizProvider,
   Radio,
-  RadioHolder,
   Checkbox,
-  CheckboxHolder,
+  Option,
   IsCompile,
   IsCompileText
 } from "../../components/quiz"
@@ -229,12 +228,12 @@ fn stringify_name_with_title(name: &Vec<String>) -> String {
 <template #quiz>
 下面哪种做法无法修复“函数返回栈引用”这种错误？
 
-<RadioHolder>
-<Radio label="延长栈帧的生命周期" answer />
-<Radio label="调用者提供一个可变的槽" />
-<Radio label="获取返回值的所有权" />
-<Radio label="使用引用计数指针" />
-</RadioHolder>
+<Radio>
+<Option label="延长栈帧的生命周期" answer />
+<Option label="调用者提供一个可变的槽" />
+<Option label="获取返回值的所有权" />
+<Option label="使用引用计数指针" />
+</Radio>
 </template>
 </Quiz>
 
@@ -271,8 +270,8 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
 
 下面是四种针对这个程序的修复，哪一个修复和原程序的语义最接近？四个选项不同的部分已被高亮显示
 
-<RadioHolder>
 <Radio>
+<Option>
 
 ```rust /name: &mut String/
 fn award_phd(name: &mut String) {
@@ -280,9 +279,9 @@ fn award_phd(name: &mut String) {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust /&*name/
 fn award_phd(name: &String) -> String {
@@ -292,9 +291,9 @@ fn award_phd(name: &String) -> String {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio answer>
+<Option answer>
 
 ```rust /name.clone()/
 fn award_phd(name: &String) -> String {
@@ -304,9 +303,9 @@ fn award_phd(name: &String) -> String {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust /mut name: &String/
 fn award_phd(mut name: &String) -> String {
@@ -315,8 +314,8 @@ fn award_phd(mut name: &String) -> String {
 }
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>
@@ -353,8 +352,8 @@ er^ror[E0594]: cannot assign to `*n`, which is behind a `&` reference
 
 下面是四种针对这个程序的修复，哪一个修复和原程序的语义最接近？四个选项不同的部分已被高亮显示
 
-<RadioHolder>
 <Radio>
+<Option>
 
 ```rust /mut n/ /&mut v.clone()/
 fn round_in_place(v: &Vec<f32>) {
@@ -364,9 +363,9 @@ fn round_in_place(v: &Vec<f32>) {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio answer>
+<Option answer>
 
 ```rust /&mut Vec<f32>/
 fn round_in_place(v: &mut Vec<f32>) {
@@ -376,9 +375,9 @@ fn round_in_place(v: &mut Vec<f32>) {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust /-> Vec<f32>/ /let mut / / = Vec::new();/ /.push(n.round());/ /v2/
 ```rust
@@ -391,9 +390,9 @@ fn round_in_place(v: &Vec<f32>) -> Vec<f32> {
 }
 ```
 
-</Radio>
+</Option>
 
-<Radio>
+<Option>
 
 ```rust /mut v: Vec<f32>/
 fn round_in_place(mut v: Vec<f32>) {
@@ -403,8 +402,8 @@ fn round_in_place(mut v: Vec<f32>) {
 }
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 </template>
 </Quiz>
 </QuizProvider>
@@ -905,12 +904,12 @@ unsafe { *x += *y ; } // 除非你非常清楚自己在做什么，否则别这�
 
 下面哪一个描述最正确地解释了为什么`i32`可以在不移动的情况下复制，而`String`不行？
 
-<RadioHolder>
-<Radio label="i32是Rust中的一种原始类型，而String不是" />
-<Radio label="String拥有了堆中的数据，而i32没有" answer />
-<Radio label="String可以被存放在堆中，而i32只能被存放在栈中" />
-<Radio label="i32占有的内存比String小" />
-</RadioHolder>
+<Radio>
+<Option label="i32是Rust中的一种原始类型，而String不是" />
+<Option label="String拥有了堆中的数据，而i32没有" answer />
+<Option label="String可以被存放在堆中，而i32只能被存放在栈中" />
+<Option label="i32占有的内存比String小" />
+</Radio>
 </template>
 </Quiz>
 
@@ -933,12 +932,12 @@ println!("{s2}");
 
 下面哪一个描述最正确地描述了如果允许这个程序编译，可能出现的未定义行为？
 
-<RadioHolder>
-<Radio label="这个程序不存在未定义行为" />
-<Radio label="字符串在程序结束时会被释放两次" answer />
-<Radio label="println中读取s2的行为使用了被释放的内存" />
-<Radio label="解引用*s_ref使用了被释放的内存" />
-</RadioHolder>
+<Radio>
+<Option label="这个程序不存在未定义行为" />
+<Option label="字符串在程序结束时会被释放两次" answer />
+<Option label="println中读取s2的行为使用了被释放的内存" />
+<Option label="解引用*s_ref使用了被释放的内存" />
+</Radio>
 
 </template>
 </Quiz>
@@ -968,12 +967,12 @@ fn main() {
 
 下面哪一个描述最正确地描述了如果允许这个程序编译，可能出现的未定义行为？
 
-<RadioHolder>
-<Radio label="v[i - 1]读取了被释放的内存" />
-<Radio label="&mut v[i]创建了指向释放内存的指针" />
-<Radio label="这个程序不存在未定义行为" answer />
-<Radio label="赋值*n使用了被释放的内存" />
-</RadioHolder>
+<Radio>
+<Option label="v[i - 1]读取了被释放的内存" />
+<Option label="&mut v[i]创建了指向释放内存的指针" />
+<Option label="这个程序不存在未定义行为" answer />
+<Option label="赋值*n使用了被释放的内存" />
+</Radio>
 
 </template>
 </Quiz>
@@ -1011,8 +1010,8 @@ error[E0507]: cannot move out of `*name` which is behind a shared reference
 
 假设编译器**没有编译失败**。选择以下可能导致未定义行为的程序，或选择“都不会”
 
-<CheckboxHolder>
-<Checkbox answer>
+<Checkbox>
+<Option answer>
 
 ```rust
 let name = String::from("Ferris");
@@ -1020,9 +1019,9 @@ award_phd(&name);
 println!("{}", name);
 ```
 
-</Checkbox>
+</Option>
 
-<Checkbox answer>
+<Option answer>
 
 ```rust
 let name = String::from("Ferris");
@@ -1031,19 +1030,19 @@ award_phd(&name);
 println!("{}", name_ref);
 ```
 
-</Checkbox>
+</Option>
 
-<Checkbox answer>
+<Option answer>
 
 ```rust
 let name = String::from("Ferris");
 award_phd(&name);
 ```
 
-</Checkbox>
+</Option>
 
-<Checkbox label="都不会" />
-</CheckboxHolder>
+<Option label="都不会" />
+</Checkbox>
 
 </template>
 </Quiz>

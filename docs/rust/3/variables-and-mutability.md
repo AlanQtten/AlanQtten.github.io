@@ -2,8 +2,8 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
+  Option,
   IsCompile,
   IsCompileText,
   Input
@@ -93,12 +93,12 @@ The value of x is: 6
 
 以下哪一项对“变量x是不可变的”的描述最正确？
 
-<RadioHolder>
-<Radio label="x在赋值后不能被修改" answer />
-<Radio label="在定义后，x最多只能被修改一次" />
-<Radio label="x储存在内存中一片不可被修改的区域" />
-<Radio label="你不能创建x的引用" />
-</RadioHolder>
+<Radio>
+<Option label="x在赋值后不能被修改" answer />
+<Option label="在定义后，x最多只能被修改一次" />
+<Option label="x储存在内存中一片不可被修改的区域" />
+<Option label="你不能创建x的引用" />
+</Radio>
 
 </template>
 </Quiz>
@@ -166,16 +166,21 @@ const THREE_HOURS_IN_SECONDS: u32 = 60 * 60 * 3;
 ::: details 小测（2）
 <QuizProvider>
 <Quiz>
+<template #description>
+
+解析：`const`声明的变量可以在全局使用，`let`声明的变量只能在函数内使用。
+
+</template>
 <template #quiz>
 
 下面对于`let`和`const`的区别的描述哪一个最正确？
 
-<RadioHolder>
-<Radio label="如果一个常量没有使用大写蛇形命名法，编译器会报错" />
-<Radio label="它们只是声明变量的不同方式，语义相同" />
-<Radio label="const可以在全局声明，let只能在函数中声明" />
-<Radio label="const只能赋值为字面量，不能用表达式赋值" />
-</RadioHolder>
+<Radio>
+<Option label="如果一个常量没有使用大写蛇形命名法，编译器会报错" />
+<Option label="它们只是声明变量的不同方式，语义相同" />
+<Option label="const可以在全局声明，let只能在函数中声明" />
+<Option label="const只能赋值为字面量，不能用表达式赋值" />
+</Radio>
 
 </template>
 </Quiz>

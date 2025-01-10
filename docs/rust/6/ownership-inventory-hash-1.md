@@ -2,10 +2,9 @@
 import {
   QuizProvider,
   Quiz,
-  RadioHolder,
   Radio,
-  CheckboxHolder,
   Checkbox,
+  Option
 } from "../../components/quiz"
 </script>
 
@@ -40,12 +39,12 @@ fn make_separator(user_str: &str) -> &str {
 
 如果你试图编译这段代码，你会收到以下哪一个错误？
 
-<RadioHolder>
-<Radio label="函数make_separator不能返回两个不同的引用" />
-<Radio label="不能返回对本地变量default的引用" answer />
-<Radio label="函数make_separator不能返回对&str的引用" />
-<Radio label="user_str的生命周期不够长" />
-</RadioHolder>
+<Radio>
+<Option label="函数make_separator不能返回两个不同的引用" />
+<Option label="不能返回对本地变量default的引用" answer />
+<Option label="函数make_separator不能返回对&str的引用" />
+<Option label="user_str的生命周期不够长" />
+</Radio>
 
 </template>
 </Quiz>
@@ -88,31 +87,31 @@ error[E0515]: cannot return a reference to local variable `default`
 1. 通过编译
 2. 程序的执行可能会引发未定义行为
 
-<CheckboxHolder>
-<Checkbox answer>
+<Checkbox>
+<Option answer>
 
 ```rust
 let s = make_separator("");
 ```
 
-</Checkbox>
-<Checkbox answer>
+</Option>
+<Option answer>
 
 ```rust
 println!("{}", make_separator("Hello world!"));
 ```
 
-</Checkbox>
-<Checkbox answer>
+</Option>
+<Option answer>
 
 ```rust
 let s = make_separator("");
 println!("{s}");
 ```
 
+</Option>
+<Option label="都不满足" />
 </Checkbox>
-<Checkbox label="都不满足" />
-</CheckboxHolder>
 
 </template>
 </Quiz>
@@ -148,8 +147,8 @@ fn make_separator(user_str: &str) -> &str {
 2. 修复的函数保留了原始函数的意图
 3. 修复的函数没有引发不必要的性能问题
 
-<RadioHolder>
-<Radio answer>
+<Radio>
+<Option answer>
 
 <!-- TODO: highlight word in some line -->
 ```rust {4} /String/ /user_str.to_string()/
@@ -163,8 +162,8 @@ fn make_separator(user_str: &str) -> String {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust /&user_str/
 fn make_separator(user_str: &str) -> &str {
@@ -177,8 +176,8 @@ fn make_separator(user_str: &str) -> &str {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust
 fn make_separator(user_str: String) -> String {
@@ -191,8 +190,8 @@ fn make_separator(user_str: String) -> String {
 }
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>
@@ -221,12 +220,12 @@ fn get_or_default(arg: &Option<String>) -> String {
 
 如果你试图编译这段代码，你会收到以下哪一个错误？
 
-<RadioHolder>
-<Radio label="无法在不解引用arg的情况下调用arg.is_none()" />
-<Radio label="arg的生命周期不够长" />
-<Radio label="s.clone()的生命周期不够长，不能被返回" />
-<Radio label="不能通过arg.unwrap()移动arg的所有权" answer />
-</RadioHolder>
+<Radio>
+<Option label="无法在不解引用arg的情况下调用arg.is_none()" />
+<Option label="arg的生命周期不够长" />
+<Option label="s.clone()的生命周期不够长，不能被返回" />
+<Option label="不能通过arg.unwrap()移动arg的所有权" answer />
+</Radio>
 
 </template>
 </Quiz>
@@ -272,16 +271,16 @@ error[E0507]: cannot move out of `*arg` which is behind a shared reference
 1. 通过编译
 2. 程序的执行可能会引发未定义行为
 
-<CheckboxHolder>
-<Checkbox answer>
+<Checkbox>
+<Option answer>
 
 ```rust
 let opt = Some(String::from("Rust"));
 get_or_default(&opt);
 ```
 
-</Checkbox>
-<Checkbox answer>
+</Option>
+<Option answer>
 
 ```rust
 let opt = Some(String::from("Rust"));
@@ -289,8 +288,8 @@ get_or_default(&opt);
 println!("{:?}", opt);
 ```
 
-</Checkbox>
-<Checkbox answer>
+</Option>
+<Option answer>
 
 ```rust
 let opt = Some(String::from("Rust"));
@@ -298,9 +297,9 @@ let s = get_or_default(&opt);
 println!("{}", s);
 ```
 
+</Option>
+<Option label="都不满足" />
 </Checkbox>
-<Checkbox label="都不满足" />
-</CheckboxHolder>
 
 </template>
 </Quiz>
@@ -335,8 +334,8 @@ fn get_or_default(arg: &Option<String>) -> String {
 2. 修复的函数保留了原始函数的意图
 3. 修复的函数没有引发不必要的性能问题
 
-<RadioHolder>
 <Radio>
+<Option>
 
 ```rust /&str/ /s.to_string()/
 fn get_or_default(arg: &Option<&str>) -> String {
@@ -348,8 +347,8 @@ fn get_or_default(arg: &Option<&str>) -> String {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust /&mut Option<String>/ /.as_mut()/
 fn get_or_default(arg: &mut Option<String>) -> String {
@@ -361,8 +360,8 @@ fn get_or_default(arg: &mut Option<String>) -> String {
 }
 ```
 
-</Radio>
-<Radio>
+</Option>
+<Option>
 
 ```rust /Option<String>/
 fn get_or_default(arg: Option<String>) -> String {
@@ -374,8 +373,8 @@ fn get_or_default(arg: Option<String>) -> String {
 }
 ```
 
-</Radio>
-<Radio answer>
+</Option>
+<Option answer>
 
 ```rust {2-4}
 fn get_or_default(arg: &Option<String>) -> String {
@@ -386,8 +385,8 @@ fn get_or_default(arg: &Option<String>) -> String {
 }
 ```
 
+</Option>
 </Radio>
-</RadioHolder>
 
 </template>
 </Quiz>

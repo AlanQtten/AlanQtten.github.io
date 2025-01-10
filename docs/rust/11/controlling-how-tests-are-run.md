@@ -3,7 +3,7 @@ import {
   QuizProvider,
   Quiz,
   Radio,
-  RadioHolder,
+  Option,
   Input
 } from "../../components/quiz"
 </script>
@@ -308,12 +308,12 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 
 如果你运行了没有任何参数的`cargo test`，在多次测试后下面哪一项可能不会正常工作？
 
-<RadioHolder>
-<Radio label="由于panic而失败" />
-<Radio label="使用标准输出打印字符串" />
-<Radio label="对同一个文件写入文本" answer />
-<Radio label="从同一个数据库读取数据" />
-</RadioHolder>
+<Radio>
+<Option label="由于panic而失败" />
+<Option label="使用标准输出打印字符串" />
+<Option label="对同一个文件写入文本" answer />
+<Option label="从同一个数据库读取数据" />
+</Radio>
 
 </template>
 </Quiz>
