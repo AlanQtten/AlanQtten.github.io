@@ -208,7 +208,7 @@ export const rustList = [
     items: [
       { text: 'Futures和Async语法', link: 'futures-and-async-syntax' },
       { text: '使用Async处理并发', link: 'concurrency-with-async' },
-      // { text: '处理任意数量的Futures', link: 'working-with-any-number-of-futures' },
+      { text: '处理任意数量的Futures', link: 'working-with-any-number-of-futures' },
       // { text: '流', link: 'streams' },
       // { text: '深入Async Trait', link: 'digging-into-the-traits-for-async' },
       // { text: 'Futures，Tasks和Threads', link: 'futures-tasks-and-threads' },
