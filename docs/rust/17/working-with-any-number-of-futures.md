@@ -149,7 +149,7 @@ Some errors have detailed explanations: E0277, E0308.
 For more information about an error, try `rustc --explain E0277`.
 ```
 
-这真是*一大堆*需要消化内容，我们来一一分解。第一部分告诉我们第一个async代码块（`src/main.rs:8:23: 20:10`）没有实现`Unpin`trait，建议使用`pin!`或者`Box::pin`来解决。本章后面的部分，我们会挖掘关于`Pin`和`Unpin`的更多细节。现在，你只需要采纳编译器的建议来解决问题！下面的代码里，我们更新了`features`的类型标注，使用`Pin`包裹了每一个`Box`。然后，我们使用`Box::pin`来“别”住future。
+这真是*一大堆*需要消化内容，我们来一一分解。第一部分告诉我们第一个async代码块（`src/main.rs:8:23: 20:10`）没有实现`Unpin`trait，建议使用`pin!`或者`Box::pin`来解决。本章后面的部分，我们会挖掘关于`Pin`和`Unpin`的更多细节。现在，你只需要采纳编译器的建议来解决问题！下面的代码里，我们更新了`features`的类型标注，使用`Pin`包裹了每一个`Box`。然后，我们使用`Box::pin`来固定住future。
 
 ```rust
         let futures: Vec<Pin<Box<dyn Future<Output = ()>>>> = vec![Box::pin(tx1_fut), Box::pin(rx_fut), Box::pin(tx_fut)];
@@ -172,7 +172,7 @@ received 'you'
 
 这里还有很多可以挖掘的细节。比如，使用`Pin<Box<T>>`会引入额外的消耗，因为需要将这些future通过`Box`放入堆中————而我们仅仅是为了处理类型问题。我们其实并不*需要*分配堆内存，毕竟：这些future对于函数来说都是本地的。就像前面提到的一样，`Pin`本身是一个包裹类型，我们通过它来满足`Vec`的单一类型要求————也是我们一开始使用`Box`的原因————而无需堆内存分配。我们也可以直接使用`Pin`来包裹future，即使用`std::pin::pin`宏。
 
-然而，我们还是需要显式指定被“别”住的引用类型；否则Rust不会知道要将它们解释为动态的trait对象，即我们需要赋给`Vec`的类型。因此我们需要在定义每一个future时调用`pin!`，然后将`futures`定义为一个`Vec`，其元素类型为被“别”住的对动态`Future`类型的可变引用：
+然而，我们还是需要显式指定被固定住的引用类型；否则Rust不会知道要将它们解释为动态的trait对象，即我们需要赋给`Vec`的类型。因此我们需要在定义每一个future时调用`pin!`，然后将`futures`定义为一个`Vec`，其元素类型为被固定住的对动态`Future`类型的可变引用：
 
 ```rust
         let tx1_fut = pin!(async move {
