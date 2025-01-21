@@ -214,17 +214,17 @@ export const rustList = [
       { text: 'Futures，Tasks和Threads', link: 'futures-tasks-and-threads' },
     ],
   }, 17),
-  // folder({
-  //   text: 'Rust 的面向对象编程特性',
-  //   link: 'object-oriented-programming-features-of-rust',
-  //   items: [
-  //     { text: '面向对象语言的特点', link: 'characteristics-of-object-oriented-languages' },
-  //     { text: '使用Trait对象来实现不同类型的值', link: 'using-trait-objects-that-allow-for-values-of-different-types' },
-  //     { text: '实现一个面向对象的设计模式', link: 'implementing-an-object-oriented-design-pattern' },
-  //     { text: '所有权之旅 #4', link: 'ownership-inventory-hash-4' },
-  //     { text: '设计的权衡', link: 'design-trade-offs' },
-  //   ],
-  // }, 18),
+  folder({
+    text: 'Rust中的面向对象编程',
+    link: 'object-oriented-programming-features-of-rust',
+    items: [
+      { text: '面向对象语言特性', link: 'characteristics-of-object-oriented-languages' },
+      // { text: '使用Trait对象来实现不同类型的值', link: 'using-trait-objects-that-allow-for-values-of-different-types' },
+      // { text: '实现一个面向对象的设计模式', link: 'implementing-an-object-oriented-design-pattern' },
+      // { text: '所有权之旅 #4', link: 'ownership-inventory-hash-4' },
+      // { text: '设计的权衡', link: 'design-trade-offs' },
+    ],
+  }, 18),
   // folder({
   //   text: '模式匹配',
   //   link: 'patterns-and-matching',
