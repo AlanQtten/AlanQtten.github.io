@@ -1,4 +1,5 @@
 import { cloneVNode, defineComponent, h } from 'vue'
+import Quiz from './QuizHolder.vue'
 
 export default defineComponent({
   setup(props, { slots }) {
@@ -9,8 +10,17 @@ export default defineComponent({
       const _nodes = []
       const l = nodes.length
 
+      let questionIndex = 0
       for (let i = 0; i < l; i++) {
-        _nodes.push(cloneVNode(nodes[i], { questionMark: i + 1 }))
+        if (nodes[i].type === Quiz) {
+          _nodes.push(cloneVNode(nodes[i], {
+            questionMark: ++questionIndex,
+          }))
+        }
+        else {
+          _nodes.push(nodes[i])
+        }
+
         if (i < l - 1) {
           _nodes.push(h('hr', {
             class: '!border-t !border-aq',
