@@ -230,8 +230,8 @@ export const rustList = [
     link: 'patterns-and-matching',
     items: [
       { text: '所有可以使用模式的地方', link: 'all-the-places-patterns-can-be-used' },
-      // { text: '可反驳性：模式是否可能匹配失败', link: 'refutability-whether-a-pattern-might-fail-to-match' },
-      // { text: '模式语法', link: 'pattern-syntax' },
+      { text: '可反驳性：模式是否可能匹配失败', link: 'refutability-whether-a-pattern-might-fail-to-match' },
+      { text: '模式语法', link: 'pattern-syntax' },
     ],
   }, 19),
   // folder({
