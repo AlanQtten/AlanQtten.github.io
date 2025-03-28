@@ -6,29 +6,38 @@ const { colors } = defineProps<{
   colors: [string, string]
 }>()
 
-const style = computed<CSSProperties>(() => {
+const rootStyle = computed<CSSProperties>(() => {
   return {
     height: '80px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: '0 16px',
-    fontWeight: 'bold',
     backgroundImage: `linear-gradient(90deg, ${colors[0]} 0%, ${colors[1]} 100%)`,
+    position: 'relative',
   }
 })
+
+const leftStyle: CSSProperties = {
+  position: 'absolute',
+  left: '16px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+}
+const rightStyle: CSSProperties = {
+  position: 'absolute',
+  right: '16px',
+  top: '50%',
+  transform: 'translateY(-50%)',
+}
 </script>
 
 <template>
-  <div :style="style" :class="$style.color">
+  <div :style="rootStyle" :class="$style.color">
     <span
-      :style="{ color: colors[1] }"
+      :style="{ color: colors[1], ...leftStyle }"
     >
       {{ colors[0] }}
     </span>
 
     <span
-      :style="{ color: colors[0] }"
+      :style="{ color: colors[0], ...rightStyle }"
     >
       {{ colors[1] }}
     </span>
@@ -40,13 +49,25 @@ const style = computed<CSSProperties>(() => {
   cursor: pointer;
   border-radius: 18px;
   transition: all 0.3s;
-  border: 2px solid var(--aq);
-  font-size: 24px;
+  font-size: 18px;
+  font-weight: 100;
+}
+
+.color span {
+  transition: transform 0.2s;
+  transform-origin: left center;
+}
+
+.color span:last-child {
+  transform-origin: right center;
 }
 
 .color:hover {
   border-radius: 40px;
-  border: 4px solid var(--aq);
-  font-size: 30px;
+  font-weight: 900;
+}
+
+.color:hover span {
+  transform: translateY(-50%) scale(2)!important;
 }
 </style>
