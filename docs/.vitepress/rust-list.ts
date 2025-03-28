@@ -234,17 +234,17 @@ export const rustList = [
       { text: '模式语法', link: 'pattern-syntax' },
     ],
   }, 19),
-  // folder({
-  //   text: '高级特性',
-  //   link: 'advanced-features',
-  //   items: [
-  //     { text: '不安全的Rust', link: 'unsafe-rust' },
-  //     { text: 'Traits增强', link: 'advanced-traits' },
-  //     { text: '类型增强', link: 'advanced-types' },
-  //     { text: '闭包和函数增强', link: 'advanced-functions-and-closures' },
-  //     { text: '宏', link: 'macros' },
-  //   ],
-  // }, 20),
+  folder({
+    text: '高级特性',
+    link: 'advanced-features',
+    items: [
+      { text: '不安全的Rust', link: 'unsafe-rust' },
+      // { text: 'Traits增强', link: 'advanced-traits' },
+      // { text: '类型增强', link: 'advanced-types' },
+      // { text: '闭包和函数增强', link: 'advanced-functions-and-closures' },
+      // { text: '宏', link: 'macros' },
+    ],
+  }, 20),
   // folder({
   //   text: '最后的项目：构建一个多线程Web服务器',
   //   link: 'final-project-building-a-multithreaded-web-server',
