@@ -33,6 +33,7 @@ function toggleSelect(id: number) {
           <input
             type="checkbox"
             :checked="selectedIds.length === dataList.length"
+            :indeterminate="selectedIds.length > 0 && selectedIds.length < dataList.length"
             @change="toggleSelectAll"
           >
         </th>
