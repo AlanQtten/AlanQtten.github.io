@@ -240,7 +240,7 @@ export const rustList = [
     items: [
       { text: '不安全的Rust', link: 'unsafe-rust' },
       { text: 'Traits进阶', link: 'advanced-traits' },
-      // { text: '类型增强', link: 'advanced-types' },
+      { text: '类型增强', link: 'advanced-types' },
       // { text: '闭包和函数增强', link: 'advanced-functions-and-closures' },
       // { text: '宏', link: 'macros' },
     ],
