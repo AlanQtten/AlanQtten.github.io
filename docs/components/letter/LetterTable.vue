@@ -102,22 +102,34 @@ watch([collapsing, tableCollapse], () => {
           <td>{{ letter.var }}</td>
 
           <td v-if="letter.operation === 'g'">
-            <div class="[transform:rotateX(180deg)] iconify material-symbols--subdirectory-arrow-right" />
+            <div>
+              <div class="[transform:rotateX(180deg)] iconify material-symbols--subdirectory-arrow-right" />
+            </div>
           </td>
           <td v-else-if="letter.operation === 'l'">
-            <div class="iconify material-symbols--subdirectory-arrow-right" />
+            <div>
+              <div class="iconify material-symbols--subdirectory-arrow-right" />
+            </div>
           </td>
           <td v-else-if="letter.operation === 'b'">
-            <div class="iconify material-symbols--arrow-forward-rounded" />
+            <div>
+              <div class="iconify material-symbols--arrow-forward-rounded" />
+            </div>
           </td>
           <td v-else-if="letter.operation === 'r'">
-            <div class="iconify material-symbols--refresh" />
+            <div>
+              <div class="iconify material-symbols--refresh" />
+            </div>
           </td>
           <td v-else-if="letter.operation === 'c'">
-            <div class="iconify material-symbols--recycling" />
+            <div>
+              <div class="iconify material-symbols--recycling" />
+            </div>
           </td>
           <td v-else-if="letter.operation === 'e'">
-            <div class="iconify material-symbols--exit-to-app" />
+            <div>
+              <div class="iconify material-symbols--exit-to-app" />
+            </div>
           </td>
 
           <td>
@@ -177,9 +189,17 @@ watch([collapsing, tableCollapse], () => {
   position: relative;
   z-index: 1;
 }
+.table tr {
+  height: 2rem;
+}
 .table td {
   padding: 0px 8px;
   text-align: center;
+}
+.table td>div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .table td:nth-child(1) {
   text-align: left;

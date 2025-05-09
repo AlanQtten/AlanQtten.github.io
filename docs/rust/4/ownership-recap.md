@@ -236,12 +236,12 @@ Rust会跟踪每一个变量的<R />（读取），<W />（写入），<O />（�
 }` })'
 />
 
-```rust
-fn main() {
+<ShikiCode
+  :init-code='() => ({ lang: "rust", code: `fn main() {
     let n = 0;
     /*[!perm_double R.W.{"collapse":true,"letterBProps":{"missing":true}}]*/n += 1;
-}
-```
+}` })'
+/>
 
 如果一个变量的所有权被**移动**或**借用**，那么它的所有权会发生改变。对一个不可复制的元素（比如`Box<T>`或者`String`）进行复制需要<R /><O />权限，且移动会抹除原变量的所有权限。这条规则避免了使用被移动的数据：
 
