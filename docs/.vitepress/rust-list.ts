@@ -242,7 +242,7 @@ export const rustList = [
       { text: 'Traits进阶', link: 'advanced-traits' },
       { text: '类型进阶', link: 'advanced-types' },
       { text: '闭包和函数进阶', link: 'advanced-functions-and-closures' },
-      // { text: '宏', link: 'macros' },
+      { text: '宏', link: 'macros' },
     ],
   }, 20),
   // folder({
