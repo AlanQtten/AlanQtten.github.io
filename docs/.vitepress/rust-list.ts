@@ -245,15 +245,15 @@ export const rustList = [
       { text: '宏', link: 'macros' },
     ],
   }, 20),
-  // folder({
-  //   text: '最后的项目：构建一个多线程Web服务器',
-  //   link: 'final-project-building-a-multithreaded-web-server',
-  //   items: [
-  //     { text: '构建一个单线程Web服务器', link: 'building-a-single-threaded-web-server' },
-  //     { text: '将单线程服务器转换为多线程服务器', link: 'turning-our-single-threaded-server-into-a-multithreaded-server' },
-  //     { text: '优雅的终止和清理', link: 'graceful-shutdown-and-cleanup' },
-  //   ],
-  // }, 21),
+  folder({
+    text: '最终项目：构建一个多线程Web服务器',
+    link: 'final-project-building-a-multithreaded-web-server',
+    items: [
+      { text: '构建一个单线程Web服务器', link: 'building-a-single-threaded-web-server' },
+      { text: '将单线程服务器转换为多线程服务器', link: 'turning-our-single-threaded-server-into-a-multithreaded-server' },
+      { text: '优雅的终止和清理', link: 'graceful-shutdown-and-cleanup' },
+    ],
+  }, 21),
   // folder({
   //   text: '实验结束',
   //   link: 'end-of-experiment',
