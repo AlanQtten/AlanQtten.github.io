@@ -28,22 +28,18 @@ function folder(_f: Route, folderIndex: number, subIndex?: number) {
 // 🚧
 // start at commit in Mar 22,2024 #6f8d38c
 export const rustList = [
-  // folder({
-  //   text: '实验介绍',
-  //   link: 'experiment-introduction',
-  // }, 0),
-  // folder({
-  //   text: 'Rust 程序设计语言',
-  //   link: 'the-rust-programming-language',
-  // }, 0),
-  // folder({
-  //   text: '前言',
-  //   link: 'foreword',
-  // }, 0),
-  // folder({
-  //   text: '介绍',
-  //   link: 'introduction',
-  // }, 0),
+  folder({
+    text: 'Rust 编程语言',
+    link: 'the-rust-programming-language',
+  }, 0),
+  folder({
+    text: '前言',
+    link: 'foreword',
+  }, 0),
+  folder({
+    text: '介绍',
+    link: 'introduction',
+  }, 0),
   // folder({
   //   text: '开始',
   //   link: 'getting-started',
