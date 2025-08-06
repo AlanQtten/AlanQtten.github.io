@@ -40,15 +40,15 @@ export const rustList = [
     text: '介绍',
     link: 'introduction',
   }, 0),
-  // folder({
-  //   text: '开始',
-  //   link: 'getting-started',
-  //   items: [
-  //     { text: '安装', link: 'installation' },
-  //     { text: 'Hello, World', link: 'hello-world' },
-  //     { text: 'Hello, Cargo', link: 'hello-cargo' },
-  //   ],
-  // }, 1),
+  folder({
+    text: '开始',
+    link: 'getting-started',
+    items: [
+      { text: '安装', link: 'installation' },
+      { text: 'Hello, World', link: 'hello-world' },
+      { text: '你好, Cargo', link: 'hello-cargo' },
+    ],
+  }, 1),
   // folder({
   //   text: '开发一个猜数游戏',
   //   link: 'programming-a-guessing-game',
