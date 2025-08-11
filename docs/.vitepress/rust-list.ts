@@ -49,10 +49,10 @@ export const rustList = [
       { text: '你好, Cargo', link: 'hello-cargo' },
     ],
   }, 1),
-  // folder({
-  //   text: '开发一个猜数游戏',
-  //   link: 'programming-a-guessing-game',
-  // }, 2),
+  folder({
+    text: '开发一个猜数游戏',
+    link: 'programming-a-guessing-game',
+  }, 2),
   folder({
     text: '常规编程概念',
     link: 'common-programming-concepts',

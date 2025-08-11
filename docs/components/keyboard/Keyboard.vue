@@ -1,7 +1,15 @@
 <script setup lang="ts">
-defineProps<{
-  value: string[]
+import { computed, defineProps, toRefs } from 'vue'
+
+const props = defineProps<{
+  value: string | string[]
 }>()
+
+const { value } = toRefs(props)
+
+const internalValue = computed(() => {
+  return Array.isArray(value) ? value : [value]
+})
 </script>
 
 <template>
@@ -9,7 +17,7 @@ defineProps<{
     class="inline-flex gap-2 whitespace-nowrap relative mx-1"
     :class="$style.wrapper"
   >
-    <span v-for="(key, index) in value" :key="index" class="border border-aq rounded px-1 relative">
+    <span v-for="(key, index) in internalValue" :key="index" class="border border-aq rounded px-1 relative">
       {{ key }}
     </span>
   </span>
