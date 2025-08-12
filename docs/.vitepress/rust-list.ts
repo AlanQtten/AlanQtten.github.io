@@ -250,21 +250,16 @@ export const rustList = [
       { text: '优雅的终止和清理', link: 'graceful-shutdown-and-cleanup' },
     ],
   }, 21),
-  // folder({
-  //   text: '实验结束',
-  //   link: 'end-of-experiment',
-  // }, 22),
-  // folder({
-  //   text: '附录',
-  //   link: 'appendix',
-  //   items: [
-  //     { text: '关键字', link: 'keywords' },
-  //     { text: '运算符和符号', link: 'operators-and-symbols' },
-  //     { text: '可派生的Traits', link: 'derivable-traits' },
-  //     { text: '实用工具', link: 'useful-development-tools' },
-  //     { text: '版本', link: 'editions' },
-  //     { text: '翻译', link: 'translations-of-the-book' },
-  //     { text: 'Rust的诞生和“Nightly Rust”', link: 'how-rust-is-made-and-nightly-rust' },
-  //   ],
-  // }, 23),
+  folder({
+    text: '附录',
+    link: 'appendix',
+    items: [
+      { text: '关键字', link: 'keywords' },
+      { text: '运算符和符号', link: 'operators-and-symbols' },
+      { text: '派生Trait', link: 'derivable-traits' },
+      { text: '实用开发工具', link: 'useful-development-tools' },
+      { text: '版本', link: 'editions' },
+      { text: 'Rust的诞生和“Nightly Rust”', link: 'how-rust-is-made-and-nightly-rust' },
+    ],
+  }, 22),
 ]
