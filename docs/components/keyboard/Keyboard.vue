@@ -5,16 +5,16 @@ const props = defineProps<{
   value: string | string[]
 }>()
 
-const { value } = toRefs(props)
+const { value: rawValue } = toRefs(props)
 
 const internalValue = computed(() => {
-  return Array.isArray(value) ? value : [value]
+  return Array.isArray(rawValue.value) ? rawValue.value : [rawValue.value]
 })
 </script>
 
 <template>
   <span
-    class="inline-flex gap-2 whitespace-nowrap relative mx-1"
+    class="inline-flex gap-2 whitespace-nowrap relative mx-2"
     :class="$style.wrapper"
   >
     <span v-for="(key, index) in internalValue" :key="index" class="border border-aq rounded px-1 relative">
