@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { calculate, preCheck } from 'simple-calculate'
-import { defineModel, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 
 const input = defineModel<string>()
 const result = ref()

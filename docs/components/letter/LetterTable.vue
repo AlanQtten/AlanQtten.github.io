@@ -2,19 +2,19 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { O, R, W } from './index'
 
-type PermissionHandle =
-  'p' // plus
-  | 'm' // minus
-  | 's' // slash
-  | 'e' // empty
+type PermissionHandle
+  = 'p' // plus
+    | 'm' // minus
+    | 's' // slash
+    | 'e' // empty
 
-type Operation =
-  'g' // gain
-  | 'l' // loose
-  | 'b' // borrow
-  | 'r' // regain
-  | 'c' // recycle
-  | 'e' // exit
+type Operation
+  = 'g' // gain
+    | 'l' // loose
+    | 'b' // borrow
+    | 'r' // regain
+    | 'c' // recycle
+    | 'e' // exit
 
 const props = defineProps<{
   defaultCollapse?: boolean

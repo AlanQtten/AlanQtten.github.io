@@ -8,7 +8,7 @@ function beautifyText(text: string) {
   return text
 }
 
-function folder(_f: Route, folderIndex: number, subIndex?: number) {
+function folder(_f: Route, folderIndex: number, subIndex?: number): Route {
   const newF = {
     ..._f,
     text: `${folderIndex ? `${folderIndex}.` : ''}${subIndex !== undefined ? subIndex + 1 : ''} ${beautifyText(_f.text)}`,
