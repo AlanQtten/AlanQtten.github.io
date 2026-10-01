@@ -1,9 +1,7 @@
+import fillZero from '../utils/fillZero'
+
 const dark = '#333'
 const light = '#fff'
-
-function leftFillZero(text: string | number): string {
-  return String(+text < 10 ? `0${text}` : text)
-}
 
 function refreshIcon(isDark?: boolean) {
   // var canvas = document.getElementById('myCanvas');
@@ -25,8 +23,8 @@ function refreshIcon(isDark?: boolean) {
   const contentColor = isDark ? dark : light
   ctx.fillStyle = contentColor
   const today = new Date()
-  ctx.fillText(leftFillZero(today.getMonth() + 1), 55, 55)
-  ctx.fillText(leftFillZero(today.getDate()), canvas.width - 55, canvas.height - 45)
+  ctx.fillText(fillZero(today.getMonth() + 1), 55, 55)
+  ctx.fillText(fillZero(today.getDate()), canvas.width - 55, canvas.height - 45)
 
   // 绘制斜线
   ctx.strokeStyle = contentColor
@@ -46,7 +44,7 @@ function refreshIcon(isDark?: boolean) {
   iconLink.href = canvas.toDataURL()
 }
 
-export default function iconSetup() {
+function iconSetup() {
   if (globalThis && globalThis.matchMedia) {
     const media = globalThis.matchMedia('(prefers-color-scheme: dark)')
 
@@ -57,3 +55,5 @@ export default function iconSetup() {
     refreshIcon(media.matches)
   }
 }
+
+iconSetup()

@@ -1,17 +1,4 @@
 {
-  "compilerOptions": {
-    "lib": ["ESNext", "DOM"],
-    "typeRoots": [
-      "./node_modules/@types"
-    ],
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true
-  },
-  "include": [
-    "docs/**/*.ts",
-    "docs/.vitepress/**/*.ts",
-    "docs/.vitepress/**/*.mts",
-    "types/**/*.d.ts"
-  ]
+  "files": [],
+  "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.node.json" }]
 }

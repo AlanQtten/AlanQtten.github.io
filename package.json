@@ -1,54 +1,59 @@
 {
   "name": "AlanQtten.github.io",
   "version": "1.0.0",
-  "packageManager": "pnpm@10.12.4",
   "description": "",
-  "author": "",
-  "license": "ISC",
   "keywords": [],
+  "license": "ISC",
+  "author": "",
+  "type": "module",
   "main": "index.js",
-  "engines": {
-    "node": "=22.3.0",
-    "pnpm": "=10.12.4"
-  },
   "scripts": {
     "dev": "vitepress dev docs",
+    "dev:react": "vite",
     "setup-mermaid": "node ./scripts/mermaid.setup.mjs",
     "build": "vitepress build docs",
     "test": "vitest"
   },
-  "peerDependencies": {
-    "@mermaid-js/mermaid-cli": "^10.9.1"
-  },
   "dependencies": {
+    "@mdx-js/react": "^3.1.1",
     "@shikijs/transformers": "3.22.0",
+    "@tanstack/react-router": "1.170.40",
     "@vueuse/core": "^10.9.0",
     "classnames": "^2.5.1",
     "markdown-it-task-lists": "^2.1.1",
-    "shiki": "3.22.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "simple-calculate": "0.0.3",
     "vue": "^3.5.13"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^6.7.3",
     "@iconify-json/material-symbols": "^1.1.81",
     "@iconify/tailwind": "^1.1.1",
+    "@mdx-js/rollup": "^3.1.1",
     "@mermaid-js/mermaid-cli": "^10.9.1",
-    "@types/node": "^20.12.12",
-    "autoprefixer": "^10.4.19",
-    "eslint": "^9.3.0",
-    "postcss": "^8.4.38",
-    "tailwindcss": "^3.4.10",
-    "typescript": "^5.6.3",
+    "@shikijs/rehype": "^4.4.3",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^24.12.0",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxfmt": "^0.71.0",
+    "oxlint": "^1.86.0",
+    "shiki": "3.22.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.1",
     "vitepress": "1.6.4",
     "vitest": "^1.6.0"
   },
-  "postcss": {
-    "plugins": {
-      "tailwindcss": {},
-      "autoprefixer": {}
-    }
+  "peerDependencies": {
+    "@mermaid-js/mermaid-cli": "^10.9.1"
   },
+  "engines": {
+    "node": "=24.12.0",
+    "pnpm": "=10.12.4"
+  },
+  "packageManager": "pnpm@10.12.4",
   "pnpm": {
     "overrides": {
       "@shikijs/types": "3.22.0",
